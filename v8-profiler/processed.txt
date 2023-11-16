@@ -1,117 +1,113 @@
-Statistical profiling result from isolate-0x559ea8b4a0e0-72671-v8.log, (761 ticks, 383 unaccounted, 0 excluded).
+Statistical profiling result from isolate-0x5590f8dcc0e0-74852-v8.log, (26207 ticks, 25817 unaccounted, 0 excluded).
 
  [Shared libraries]:
    ticks  total  nonlib   name
-     29    3.8%          /usr/lib/x86_64-linux-gnu/libc.so.6
-      2    0.3%          /home/linuxbrew/.linuxbrew/Cellar/gcc/13.2.0/lib/gcc/current/libstdc++.so.6.0.32
+     22    0.1%          /usr/lib/x86_64-linux-gnu/libc.so.6
+      1    0.0%          /home/linuxbrew/.linuxbrew/Cellar/gcc/13.2.0/lib/gcc/current/libstdc++.so.6.0.32
 
  [JavaScript]:
    ticks  total  nonlib   name
-      3    0.4%    0.4%  JS: *normalizeString node:path:66:25
-      1    0.1%    0.1%  RegExp: (\[[^[\]]*])
-      1    0.1%    0.1%  JS: ^validateString node:internal/validators:160:24
-      1    0.1%    0.1%  JS: ^set node:net:2301:6
-      1    0.1%    0.1%  JS: ^set /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/application.js:359:23
-      1    0.1%    0.1%  JS: ^pushAsyncContext node:internal/async_hooks:539:26
-      1    0.1%    0.1%  JS: ^onFinish node:_http_outgoing:1003:18
-      1    0.1%    0.1%  JS: ^normalizeString node:path:66:25
-      1    0.1%    0.1%  JS: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:177:16
-      1    0.1%    0.1%  JS: ^match /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:110:39
-      1    0.1%    0.1%  JS: ^get node:internal/streams/writable:855:8
-      1    0.1%    0.1%  JS: ^get node:internal/streams/readable:1212:18
-      1    0.1%    0.1%  JS: ^fresh /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/parseurl/index.js:153:16
-      1    0.1%    0.1%  JS: ^fastparse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/parseurl/index.js:95:20
-      1    0.1%    0.1%  JS: ^emit node:events:461:44
-      1    0.1%    0.1%  JS: ^destroyHooksExist node:internal/async_hooks:486:27
-      1    0.1%    0.1%  JS: ^Readable.read node:internal/streams/readable:421:35
-      1    0.1%    0.1%  JS: ^Module._findPath node:internal/modules/cjs/loader:564:28
-      1    0.1%    0.1%  JS: *popAsyncContext node:internal/async_hooks:553:25
-      1    0.1%    0.1%  JS: *nextTick node:internal/process/task_queues:103:18
-      1    0.1%    0.1%  JS: *fastparse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/parseurl/index.js:95:20
-      1    0.1%    0.1%  JS: *emitBeforeScript node:internal/async_hooks:509:26
-      1    0.1%    0.1%  JS: *Readable.removeListener node:internal/streams/readable:933:45
+      2    0.0%    0.0%  JS: ^isEncoding node:buffer:570:40
+      2    0.0%    0.0%  JS: ^Module._nodeModulePaths node:internal/modules/cjs/loader:734:37
+      1    0.0%    0.0%  RegExp: ^[\^_`a-zA-Z\-0-9!#$%&'*+.|~]+$
+      1    0.0%    0.0%  RegExp: ^[!#$%&'*+.^_`|~0-9A-Za-z-]+\/[!#$%&'*+.^_`|~0-9A-Za-z-]+$
+      1    0.0%    0.0%  JS: ^resolve node:path:1095:10
+      1    0.0%    0.0%  JS: ^removeListener node:events:676:28
+      1    0.0%    0.0%  JS: ^isFileType node:fs:206:20
+      1    0.0%    0.0%  JS: ^header /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/response.js:777:29
+      1    0.0%    0.0%  JS: ^getTimerDuration node:internal/timers:395:26
+      1    0.0%    0.0%  JS: ^getDefaultTriggerAsyncId node:internal/async_hooks:433:34
+      1    0.0%    0.0%  JS: ^get node:_http_incoming:112:16
+      1    0.0%    0.0%  JS: ^generateETag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/utils.js:273:32
+      1    0.0%    0.0%  JS: ^fromString node:buffer:472:20
+      1    0.0%    0.0%  JS: ^doWrite node:internal/streams/writable:408:17
+      1    0.0%    0.0%  JS: ^clearIncoming node:_http_server:959:23
+      1    0.0%    0.0%  JS: ^checkIsHttpToken node:_http_common:212:26
+      1    0.0%    0.0%  JS: ^_storeHeader node:_http_outgoing:414:22
+      1    0.0%    0.0%  JS: ^_flushOutput node:_http_outgoing:1132:63
+      1    0.0%    0.0%  JS: ^_finish node:_http_server:232:52
+      1    0.0%    0.0%  JS: ^Writable.cork node:internal/streams/writable:347:35
+      1    0.0%    0.0%  JS: ^ReadableState node:internal/streams/readable:86:23
+      1    0.0%    0.0%  JS: ^FastBuffer node:internal/buffer:960:14
+      1    0.0%    0.0%  JS: *normalizeString node:path:66:25
+      1    0.0%    0.0%  JS: *nextTick node:internal/process/task_queues:103:18
+      1    0.0%    0.0%  JS: *fastparse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/parseurl/index.js:95:20
 
  [C++]:
    ticks  total  nonlib   name
-    107   14.1%   14.7%  node::builtins::BuiltinLoader::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
-     57    7.5%    7.8%  node::contextify::ContextifyContext::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
-     27    3.5%    3.7%  fwrite@@GLIBC_2.2.5
-     27    3.5%    3.7%  __write@@GLIBC_2.2.5
-     18    2.4%    2.5%  void node::StreamBase::JSMethod<&node::StreamBase::Writev>(v8::FunctionCallbackInfo<v8::Value> const&)
-     15    2.0%    2.1%  epoll_pwait@@GLIBC_2.6
-     13    1.7%    1.8%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
-      5    0.7%    0.7%  node::fs::ReadFileSync(v8::FunctionCallbackInfo<v8::Value> const&)
-      5    0.7%    0.7%  isprint@@GLIBC_2.2.5
-      4    0.5%    0.5%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
-      4    0.5%    0.5%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
-      4    0.5%    0.5%  node::fs::InternalModuleStat(v8::FunctionCallbackInfo<v8::Value> const&)
-      4    0.5%    0.5%  _IO_file_xsputn@@GLIBC_2.2.5
-      3    0.4%    0.4%  __pthread_rwlock_unlock@GLIBC_2.2.5
-      2    0.3%    0.3%  node::fs::LStat(v8::FunctionCallbackInfo<v8::Value> const&)
-      2    0.3%    0.3%  node::fs::InternalModuleReadJSON(v8::FunctionCallbackInfo<v8::Value> const&)
-      2    0.3%    0.3%  node::Buffer::(anonymous namespace)::SlowByteLengthUtf8(v8::FunctionCallbackInfo<v8::Value> const&)
-      2    0.3%    0.3%  __libc_malloc@@GLIBC_2.2.5
-      1    0.1%    0.1%  std::set<node::(anonymous namespace)::Parser*, node::(anonymous namespace)::ParserComparator, std::allocator<node::(anonymous namespace)::Parser*> >::insert(node::(anonymous namespace)::Parser* const&)
-      1    0.1%    0.1%  std::ostream::flush()@@GLIBCXX_3.4
-      1    0.1%    0.1%  std::_Rb_tree_rebalance_for_erase(std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
-      1    0.1%    0.1%  std::_Hashtable<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, node::builtins::BuiltinCodeCacheData>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, node::builtins::BuiltinCodeCacheData> >, std::__detail::_Select1st, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::__detail::_Mod_range_hashing, std::__detail::_Default_ranged_hash, std::__detail::_Prime_rehash_policy, std::__detail::_Hashtable_traits<true, false, true> >::_M_find_before_node(unsigned long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned long) const
-      1    0.1%    0.1%  shutdown@@GLIBC_2.2.5
-      1    0.1%    0.1%  operator new[](unsigned long, std::nothrow_t const&)@@GLIBCXX_3.4
-      1    0.1%    0.1%  node::url::BindingData::Parse(v8::FunctionCallbackInfo<v8::Value> const&)
-      1    0.1%    0.1%  node::binding::GetInternalBinding(v8::FunctionCallbackInfo<v8::Value> const&)
-      1    0.1%    0.1%  node::Realm::DeserializeProperties(node::RealmSerializeInfo const*)
-      1    0.1%    0.1%  node::PrincipalRealm::async_hooks_after_function() const
-      1    0.1%    0.1%  node::LibuvStreamWrap::OnUvAlloc(unsigned long, uv_buf_t*)
-      1    0.1%    0.1%  node::HandleWrap::Close(v8::FunctionCallbackInfo<v8::Value> const&)
-      1    0.1%    0.1%  node::AsyncWrap::EmitBefore(node::Environment*, double)
-      1    0.1%    0.1%  icu_73::UnicodeSet::getRangeEnd(int) const
-      1    0.1%    0.1%  fflush@@GLIBC_2.2.5
-      1    0.1%    0.1%  enumEitherTrie(UTrie2 const*, int, int, unsigned int (*)(void const*, unsigned int), signed char (*)(void const*, int, int, unsigned int), void const*)
-      1    0.1%    0.1%  cfree@GLIBC_2.2.5
-      1    0.1%    0.1%  _init
-      1    0.1%    0.1%  __pthread_rwlock_wrlock@GLIBC_2.2.5
-      1    0.1%    0.1%  __madvise@@GLIBC_PRIVATE
-      1    0.1%    0.1%  __clock_gettime@@GLIBC_PRIVATE
+    133    0.5%    0.5%  node::builtins::BuiltinLoader::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
+     64    0.2%    0.2%  node::contextify::ContextifyContext::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
+     33    0.1%    0.1%  __write@@GLIBC_2.2.5
+     29    0.1%    0.1%  fwrite@@GLIBC_2.2.5
+     15    0.1%    0.1%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+     10    0.0%    0.0%  void node::StreamBase::JSMethod<&node::StreamBase::Writev>(v8::FunctionCallbackInfo<v8::Value> const&)
+      9    0.0%    0.0%  _IO_file_xsputn@@GLIBC_2.2.5
+      8    0.0%    0.0%  epoll_pwait@@GLIBC_2.6
+      4    0.0%    0.0%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+      3    0.0%    0.0%  isprint@@GLIBC_2.2.5
+      3    0.0%    0.0%  __read@@GLIBC_2.2.5
+      2    0.0%    0.0%  node::fs::LStat(v8::FunctionCallbackInfo<v8::Value> const&)
+      2    0.0%    0.0%  __munmap@@GLIBC_PRIVATE
+      2    0.0%    0.0%  __libc_malloc@@GLIBC_2.2.5
+      1    0.0%    0.0%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
+      1    0.0%    0.0%  pthread_cond_signal@@GLIBC_2.3.2
+      1    0.0%    0.0%  operator delete(void*, unsigned long)@@CXXABI_1.3.9
+      1    0.0%    0.0%  node::timers::BindingData::SlowGetLibuvNow(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  node::fs::ReadFileSync(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  node::fs::InternalModuleStat(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  node::fs::InternalModuleReadJSON(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  node::binding::GetInternalBinding(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.0%    0.0%  node::ShutdownWrap::OnDone(int)
+      1    0.0%    0.0%  node::AsyncWrap::EmitTraceEventBefore()
+      1    0.0%    0.0%  node::AsyncHooks::pop_async_context(double)
+      1    0.0%    0.0%  node::(anonymous namespace)::Parser::Proxy<int (node::(anonymous namespace)::Parser::*)(), &node::(anonymous namespace)::Parser::on_message_complete>::Raw(llhttp__internal_s*)
+      1    0.0%    0.0%  node::(anonymous namespace)::Parser::OnStreamRead(long, uv_buf_t const&)
+      1    0.0%    0.0%  icu_73::UnicodeSet::~UnicodeSet()
+      1    0.0%    0.0%  fflush@@GLIBC_2.2.5
+      1    0.0%    0.0%  enumEitherTrie(UTrie2 const*, int, int, unsigned int (*)(void const*, unsigned int), signed char (*)(void const*, int, int, unsigned int), void const*)
+      1    0.0%    0.0%  cfree@GLIBC_2.2.5
+      1    0.0%    0.0%  _init
+      1    0.0%    0.0%  __pthread_rwlock_wrlock@GLIBC_2.2.5
+      1    0.0%    0.0%  __pthread_rwlock_unlock@GLIBC_2.2.5
+      1    0.0%    0.0%  __pthread_mutex_unlock@GLIBC_2.2.5
+      1    0.0%    0.0%  __mmap@@GLIBC_PRIVATE
+      1    0.0%    0.0%  __madvise@@GLIBC_PRIVATE
 
  [Summary]:
    ticks  total  nonlib   name
-     25    3.3%    3.4%  JavaScript
-    322   42.3%   44.1%  C++
-     39    5.1%    5.3%  GC
-     31    4.1%          Shared libraries
-    383   50.3%          Unaccounted
+     27    0.1%    0.1%  JavaScript
+    340    1.3%    1.3%  C++
+     32    0.1%    0.1%  GC
+     23    0.1%          Shared libraries
+  25817   98.5%          Unaccounted
 
  [C++ entry points]:
    ticks    cpp   total   name
-    107   37.9%   14.1%  node::builtins::BuiltinLoader::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
-     57   20.2%    7.5%  node::contextify::ContextifyContext::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
-     25    8.9%    3.3%  fwrite@@GLIBC_2.2.5
-     18    6.4%    2.4%  void node::StreamBase::JSMethod<&node::StreamBase::Writev>(v8::FunctionCallbackInfo<v8::Value> const&)
-     18    6.4%    2.4%  __write@@GLIBC_2.2.5
-     11    3.9%    1.4%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
-      5    1.8%    0.7%  node::fs::ReadFileSync(v8::FunctionCallbackInfo<v8::Value> const&)
-      5    1.8%    0.7%  isprint@@GLIBC_2.2.5
-      4    1.4%    0.5%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
-      4    1.4%    0.5%  node::fs::InternalModuleStat(v8::FunctionCallbackInfo<v8::Value> const&)
-      4    1.4%    0.5%  _IO_file_xsputn@@GLIBC_2.2.5
-      3    1.1%    0.4%  __pthread_rwlock_unlock@GLIBC_2.2.5
-      2    0.7%    0.3%  node::fs::LStat(v8::FunctionCallbackInfo<v8::Value> const&)
-      2    0.7%    0.3%  node::fs::InternalModuleReadJSON(v8::FunctionCallbackInfo<v8::Value> const&)
-      2    0.7%    0.3%  node::Buffer::(anonymous namespace)::SlowByteLengthUtf8(v8::FunctionCallbackInfo<v8::Value> const&)
-      2    0.7%    0.3%  __libc_malloc@@GLIBC_2.2.5
-      1    0.4%    0.1%  std::ostream::flush()@@GLIBCXX_3.4
-      1    0.4%    0.1%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
-      1    0.4%    0.1%  operator new[](unsigned long, std::nothrow_t const&)@@GLIBCXX_3.4
-      1    0.4%    0.1%  node::url::BindingData::Parse(v8::FunctionCallbackInfo<v8::Value> const&)
-      1    0.4%    0.1%  node::loader::ModuleWrap::Evaluate(v8::FunctionCallbackInfo<v8::Value> const&)
-      1    0.4%    0.1%  node::binding::GetInternalBinding(v8::FunctionCallbackInfo<v8::Value> const&)
-      1    0.4%    0.1%  node::HandleWrap::Close(v8::FunctionCallbackInfo<v8::Value> const&)
-      1    0.4%    0.1%  icu_73::UnicodeSet::getRangeEnd(int) const
-      1    0.4%    0.1%  fflush@@GLIBC_2.2.5
-      1    0.4%    0.1%  enumEitherTrie(UTrie2 const*, int, int, unsigned int (*)(void const*, unsigned int), signed char (*)(void const*, int, int, unsigned int), void const*)
-      1    0.4%    0.1%  cfree@GLIBC_2.2.5
-      1    0.4%    0.1%  _init
-      1    0.4%    0.1%  __pthread_rwlock_wrlock@GLIBC_2.2.5
+    133   44.5%    0.5%  node::builtins::BuiltinLoader::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
+     64   21.4%    0.2%  node::contextify::ContextifyContext::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
+     27    9.0%    0.1%  fwrite@@GLIBC_2.2.5
+     18    6.0%    0.1%  __write@@GLIBC_2.2.5
+     15    5.0%    0.1%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+     10    3.3%    0.0%  void node::StreamBase::JSMethod<&node::StreamBase::Writev>(v8::FunctionCallbackInfo<v8::Value> const&)
+      7    2.3%    0.0%  _IO_file_xsputn@@GLIBC_2.2.5
+      4    1.3%    0.0%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+      3    1.0%    0.0%  isprint@@GLIBC_2.2.5
+      2    0.7%    0.0%  node::fs::LStat(v8::FunctionCallbackInfo<v8::Value> const&)
+      2    0.7%    0.0%  __libc_malloc@@GLIBC_2.2.5
+      1    0.3%    0.0%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
+      1    0.3%    0.0%  operator delete(void*, unsigned long)@@CXXABI_1.3.9
+      1    0.3%    0.0%  node::timers::BindingData::SlowGetLibuvNow(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.3%    0.0%  node::loader::ModuleWrap::Evaluate(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.3%    0.0%  node::fs::ReadFileSync(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.3%    0.0%  node::fs::InternalModuleStat(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.3%    0.0%  node::fs::InternalModuleReadJSON(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.3%    0.0%  node::binding::GetInternalBinding(v8::FunctionCallbackInfo<v8::Value> const&)
+      1    0.3%    0.0%  icu_73::UnicodeSet::~UnicodeSet()
+      1    0.3%    0.0%  enumEitherTrie(UTrie2 const*, int, int, unsigned int (*)(void const*, unsigned int), signed char (*)(void const*, int, int, unsigned int), void const*)
+      1    0.3%    0.0%  cfree@GLIBC_2.2.5
+      1    0.3%    0.0%  __pthread_rwlock_wrlock@GLIBC_2.2.5
+      1    0.3%    0.0%  __pthread_rwlock_unlock@GLIBC_2.2.5
+      1    0.3%    0.0%  __munmap@@GLIBC_PRIVATE
 
  [Bottom up (heavy) profile]:
   Note: percentage shows a share of a particular caller in the total
@@ -119,519 +115,24 @@ Statistical profiling result from isolate-0x559ea8b4a0e0-72671-v8.log, (761 tick
   Callers occupying less than 1.0% are not shown.
 
    ticks parent  name
-    383   50.3%  UNKNOWN
-    100   26.1%    JS: ~pbkdf2Sync node:internal/crypto/pbkdf2:61:20
-    100  100.0%      JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:11:21
-    100  100.0%        JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
-    100  100.0%          JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:116:16
-    100  100.0%            JS: ~dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:98:45
-      6    1.6%    JS: ^write /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/finalhandler/index.js:273:18
-      6  100.0%      JS: ^runInAsyncScope node:async_hooks:200:18
-      6  100.0%        JS: ^listener /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:162:21
-      6  100.0%          JS: ^onFinish /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:96:21
-      6  100.0%            JS: ^callback /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/ee-first/index.js:53:20
-      6    1.6%    JS: ^nextTick node:internal/process/task_queues:103:18
-      3   50.0%      JS: ^endReadable node:internal/streams/readable:1359:21
-      3  100.0%        JS: ^Readable.read node:internal/streams/readable:421:35
-      2   66.7%          JS: ^resume_ node:internal/streams/readable:1013:17
-      2  100.0%            JS: ^processTicksAndRejections node:internal/process/task_queues:67:35
-      1   33.3%          JS: ^flow node:internal/streams/readable:1037:14
-      1  100.0%            JS: ^emitReadable_ node:internal/streams/readable:605:23
-      1   16.7%      JS: ~emitReadable node:internal/streams/readable:594:22
-      1  100.0%        JS: ~onEofChunk node:internal/streams/readable:564:20
-      1  100.0%          JS: ~readableAddChunk node:internal/streams/readable:261:26
-      1  100.0%            JS: ~Readable.push node:internal/streams/readable:252:35
-      1   16.7%      JS: ^resOnFinish node:_http_server:972:21
-      1  100.0%        JS: ^emit node:events:461:44
-      1  100.0%          JS: ^onFinish node:_http_outgoing:1003:18
-      1  100.0%            JS: ^callback node:internal/streams/writable:560:44
-      1   16.7%      JS: ^emitReadable node:internal/streams/readable:594:22
-      1  100.0%        JS: ^onEofChunk node:internal/streams/readable:564:20
-      1  100.0%          JS: ^readableAddChunk node:internal/streams/readable:261:26
-      1  100.0%            JS: ^Readable.push node:internal/streams/readable:252:35
-      6    1.6%    JS: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/middleware/init.js:29:30
-      6  100.0%      JS: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
-      5   83.3%        JS: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:293:23
-      5  100.0%          JS: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:280:64
-      5  100.0%            JS: ^process_params /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:338:47
-      1   16.7%        JS: ~trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:293:23
-      1  100.0%          JS: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:280:64
-      1  100.0%            JS: ^process_params /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:338:47
-      5    1.3%    JS: ~Module._extensions..json node:internal/modules/cjs/loader:1300:39
-      5  100.0%      JS: ^Module.load node:internal/modules/cjs/loader:1079:33
-      5  100.0%        JS: ^Module._load node:internal/modules/cjs/loader:867:24
-      5  100.0%          JS: ^Module.require node:internal/modules/cjs/loader:1107:36
-      5  100.0%            JS: ^require node:internal/modules/helpers:128:31
-      5    1.3%    JS: ^write_ node:_http_outgoing:872:16
-      5  100.0%      JS: ^end node:_http_outgoing:1008:45
-      5  100.0%        JS: ^write /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/finalhandler/index.js:273:18
-      5  100.0%          JS: ^runInAsyncScope node:async_hooks:200:18
-      5  100.0%            JS: ^listener /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:162:21
-      5    1.3%    JS: ^endReadableNT node:internal/streams/readable:1369:23
-      4   80.0%      JS: ^processTicksAndRejections node:internal/process/task_queues:67:35
-      1   20.0%      JS: *processTicksAndRejections node:internal/process/task_queues:67:35
-      5    1.3%    JS: ^end node:_http_outgoing:1008:45
-      5  100.0%      JS: ^write /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/finalhandler/index.js:273:18
-      5  100.0%        JS: ^runInAsyncScope node:async_hooks:200:18
-      5  100.0%          JS: ^listener /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:162:21
-      5  100.0%            JS: ^onFinish /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:96:21
-      4    1.0%    JS: ^writevGeneric node:internal/stream_base_commons:122:23
-      3   75.0%      JS: ^Socket._writeGeneric node:net:921:42
-      3  100.0%        JS: ^Socket._writev node:net:958:36
-      3  100.0%          JS: ^doWrite node:internal/streams/writable:408:17
-      3  100.0%            JS: ^clearBuffer node:internal/streams/writable:539:21
-      1   25.0%      JS: ~Socket._writeGeneric node:net:921:42
-      1  100.0%        JS: ^Socket._writev node:net:958:36
-      1  100.0%          JS: ^doWrite node:internal/streams/writable:408:17
-      1  100.0%            JS: ^clearBuffer node:internal/streams/writable:539:21
-      4    1.0%    JS: ^writeHead node:_http_server:342:19
-      4  100.0%      JS: ^_implicitHeader node:_http_server:337:68
-      4  100.0%        JS: ^write_ node:_http_outgoing:872:16
-      4  100.0%          JS: ^end node:_http_outgoing:1008:45
-      4  100.0%            JS: ^write /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/finalhandler/index.js:273:18
-      4    1.0%    JS: ^toRealPath node:internal/modules/cjs/loader:455:20
-      4  100.0%      JS: ^tryFile node:internal/modules/cjs/loader:446:17
-      3   75.0%        JS: ^tryExtensions node:internal/modules/cjs/loader:462:23
-      2   66.7%          JS: ^Module._findPath node:internal/modules/cjs/loader:564:28
-      1   50.0%            JS: ~Module._resolveFilename node:internal/modules/cjs/loader:964:35
-      1   50.0%            JS: ^Module._resolveFilename node:internal/modules/cjs/loader:964:35
-      1   33.3%          JS: ~tryPackage node:internal/modules/cjs/loader:400:20
-      1  100.0%            JS: ~Module._findPath node:internal/modules/cjs/loader:564:28
-      1   25.0%        JS: ~finalizeEsmResolution node:internal/modules/cjs/loader:1054:31
-      1  100.0%          JS: ^resolveExports node:internal/modules/cjs/loader:536:24
-      1  100.0%            JS: ^Module._findPath node:internal/modules/cjs/loader:564:28
-      4    1.0%    JS: ^parserOnIncoming node:_http_server:1030:26
-      4  100.0%      JS: ^parserOnHeadersComplete node:_http_common:72:33
-      4    1.0%    JS: ^module.exports /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/qs/lib/parse.js:239:27
-      4  100.0%      JS: ^parseExtendedQueryString /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/utils.js:289:34
-      4  100.0%        JS: ^query /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/middleware/query.js:39:24
-      4  100.0%          JS: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
-      4  100.0%            JS: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:293:23
-
-    107   14.1%  node::builtins::BuiltinLoader::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
-    107  100.0%    JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-     99   92.5%      JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      9    9.1%        JS: ~<anonymous> node:internal/fs/promises:1:1
-      9  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      9  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      9    9.1%        JS: ~<anonymous> node:http:1:1
-      9  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      9  100.0%            JS: ~compileForPublicLoader node:internal/bootstrap/realm:322:25
-      7    7.1%        JS: ~<anonymous> node:internal/cluster/primary:1:1
-      7  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      7  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      7    7.1%        JS: ~<anonymous> node:crypto:1:1
-      7  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      7  100.0%            JS: ~compileForPublicLoader node:internal/bootstrap/realm:322:25
-      6    6.1%        JS: ~<anonymous> node:internal/fs/streams:1:1
-      6  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      6  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      5    5.1%        JS: ~<anonymous> node:tty:1:1
-      5  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      5  100.0%            JS: ~compileForPublicLoader node:internal/bootstrap/realm:322:25
-      5    5.1%        JS: ~<anonymous> node:internal/streams/duplex:1:1
-      5  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      5  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      4    4.0%        JS: ~<anonymous> node:internal/child_process:1:1
-      4  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      4  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      4    4.0%        JS: ~<anonymous> node:child_process:1:1
-      4  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      4  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      4    4.0%        JS: ~<anonymous> node:_http_client:1:1
-      4  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      4  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      3    3.0%        JS: ~lazyLoadStreams node:fs:3052:25
-      3  100.0%          JS: ~get ReadStream node:fs:3195:17
-      3  100.0%            JS: ^getOwn node:internal/bootstrap/realm:202:16
-      3    3.0%        JS: ^resolveExports node:internal/modules/cjs/loader:536:24
-      3  100.0%          JS: ^Module._findPath node:internal/modules/cjs/loader:564:28
-      3  100.0%            JS: ~Module._resolveFilename node:internal/modules/cjs/loader:964:35
-      2    2.0%        JS: ~lazyWebCrypto node:crypto:124:23
-      2  100.0%          JS: ~get node:crypto:368:8
-      2  100.0%            JS: ^getOwn node:internal/bootstrap/realm:202:16
-      2    2.0%        JS: ~<anonymous> node:stream:1:1
-      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      2    2.0%        JS: ~<anonymous> node:net:1:1
-      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      2    2.0%        JS: ~<anonymous> node:internal/streams/operators:1:1
-      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      2    2.0%        JS: ~<anonymous> node:internal/readline/interface:1:1
-      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      2    2.0%        JS: ~<anonymous> node:internal/process/esm_loader:1:1
-      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      2    2.0%        JS: ~<anonymous> node:internal/crypto/hkdf:1:1
-      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      2    2.0%        JS: ~<anonymous> node:cluster:1:1
-      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      2    2.0%        JS: ~<anonymous> node:_http_common:1:1
-      2  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      2  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~lazyUtilColors node:internal/console/constructor:83:24
-      1  100.0%          JS: ~value node:internal/console/constructor:319:20
-      1  100.0%            JS: ~value node:internal/console/constructor:339:20
-      1    1.0%        JS: ~getTranslators node:internal/modules/esm/loader:34:24
-      1  100.0%          JS: ~<instance_members_initializer> node:internal/modules/esm/loader:64:1
-      1  100.0%            JS: ~ModuleLoader node:internal/modules/esm/loader:113:14
-      1    1.0%        JS: ~get node:internal/util:587:17
-      1  100.0%          JS: ^getOwn node:internal/bootstrap/realm:202:16
-      1  100.0%            JS: ^syncExports node:internal/bootstrap/realm:365:14
-      1    1.0%        JS: ~get BlockList node:net:2373:16
-      1  100.0%          JS: ^getOwn node:internal/bootstrap/realm:202:16
-      1  100.0%            JS: ^syncExports node:internal/bootstrap/realm:365:14
-      1    1.0%        JS: ~<anonymous> node:internal/util/parse_args/parse_args:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/streams/readable:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/streams/pipeline:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/streams/end-of-stream:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/streams/compose:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/perf/observe:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/modules/esm/resolve:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/modules/esm/module_map:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/crypto/pbkdf2:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:internal/blocklist:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1    1.0%        JS: ~<anonymous> node:_http_outgoing:1:1
-      1  100.0%          JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%            JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      6    5.6%      JS: ^compileForPublicLoader node:internal/bootstrap/realm:322:25
-      6  100.0%        JS: ^loadBuiltinModule node:internal/modules/helpers:61:27
-      6  100.0%          JS: ^Module._load node:internal/modules/cjs/loader:867:24
-      6  100.0%            JS: ^Module.require node:internal/modules/cjs/loader:1107:36
-      2    1.9%      JS: ~compileForPublicLoader node:internal/bootstrap/realm:322:25
-      2  100.0%        JS: ~loadBuiltinModule node:internal/modules/helpers:61:27
-      2  100.0%          JS: ~Module._load node:internal/modules/cjs/loader:867:24
-      2  100.0%            JS: ~Module.require node:internal/modules/cjs/loader:1107:36
-
-     57    7.5%  node::contextify::ContextifyContext::CompileFunction(v8::FunctionCallbackInfo<v8::Value> const&)
-     53   93.0%    JS: ^internalCompileFunction node:internal/vm:31:33
-     45   84.9%      JS: ^wrapSafe node:internal/modules/cjs/loader:1126:18
-     45  100.0%        JS: ^Module._compile node:internal/modules/cjs/loader:1195:37
-     25   55.6%          JS: ^Module._extensions..js node:internal/modules/cjs/loader:1250:37
-     25  100.0%            JS: ^Module.load node:internal/modules/cjs/loader:1079:33
-     20   44.4%          JS: ~Module._extensions..js node:internal/modules/cjs/loader:1250:37
-     20  100.0%            JS: ^Module.load node:internal/modules/cjs/loader:1079:33
-      8   15.1%      JS: ~wrapSafe node:internal/modules/cjs/loader:1126:18
-      8  100.0%        JS: ~Module._compile node:internal/modules/cjs/loader:1195:37
-      8  100.0%          JS: ~Module._extensions..js node:internal/modules/cjs/loader:1250:37
-      8  100.0%            JS: ^Module.load node:internal/modules/cjs/loader:1079:33
-      4    7.0%    JS: ~internalCompileFunction node:internal/vm:31:33
-      4  100.0%      JS: ~wrapSafe node:internal/modules/cjs/loader:1126:18
-      4  100.0%        JS: ~Module._compile node:internal/modules/cjs/loader:1195:37
-      4  100.0%          JS: ~Module._extensions..js node:internal/modules/cjs/loader:1250:37
-      4  100.0%            JS: ~Module.load node:internal/modules/cjs/loader:1079:33
-
-     29    3.8%  /usr/lib/x86_64-linux-gnu/libc.so.6
-      1    3.4%    JS: ~toRealPath node:internal/modules/cjs/loader:455:20
-      1  100.0%      JS: ~Module._findPath node:internal/modules/cjs/loader:564:28
-      1  100.0%        JS: ~resolveMainPath node:internal/modules/run_main:10:25
-      1  100.0%          JS: ~executeUserEntryPoint node:internal/modules/run_main:75:31
-      1  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.4%    JS: ~syncExports node:internal/bootstrap/realm:365:14
-      1  100.0%      JS: ~<anonymous> node:internal/bootstrap/realm:351:15
-      1  100.0%        node::loader::ModuleWrap::Evaluate(v8::FunctionCallbackInfo<v8::Value> const&)
-      1  100.0%          JS: ~getESMFacade node:internal/bootstrap/realm:340:15
-      1  100.0%            JS: ~compileForPublicLoader node:internal/bootstrap/realm:322:25
-      1    3.4%    JS: ~patchProcessObject node:internal/process/pre_execution:171:28
-      1  100.0%      JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      1  100.0%        JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      1  100.0%          JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.4%    JS: ~destroy node:internal/streams/destroy:39:17
-      1  100.0%      JS: ^endReadableNT node:internal/streams/readable:1369:23
-      1  100.0%        JS: ^processTicksAndRejections node:internal/process/task_queues:67:35
-      1    3.4%    JS: ~WritableState node:internal/streams/writable:77:23
-      1  100.0%      JS: ~Writable node:internal/streams/writable:227:18
-      1  100.0%        JS: ~Duplex node:internal/streams/duplex:54:16
-      1  100.0%          JS: ~Socket node:net:353:16
-      1  100.0%            JS: ~onconnection node:net:2098:22
-      1    3.4%    JS: ~Socket._destroy node:net:794:37
-      1  100.0%      JS: ^_destroy node:internal/streams/destroy:77:18
-      1  100.0%        JS: ^destroy node:internal/streams/destroy:39:17
-      1  100.0%          JS: ~finish node:internal/streams/writable:748:16
-      1  100.0%            JS: *processTicksAndRejections node:internal/process/task_queues:67:35
-      1    3.4%    JS: ~<anonymous> node:internal/abort_controller:1:1
-      1  100.0%      JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1  100.0%        JS: ^requireBuiltin node:internal/bootstrap/realm:414:24
-      1  100.0%          JS: ~<anonymous> node:internal/streams/operators:1:1
-      1  100.0%            JS: ^compileForInternalLoader node:internal/bootstrap/realm:377:27
-      1    3.4%    JS: ^stat node:internal/modules/cjs/loader:172:14
-      1  100.0%      JS: ^Module._findPath node:internal/modules/cjs/loader:564:28
-      1  100.0%        JS: ^Module._resolveFilename node:internal/modules/cjs/loader:964:35
-      1  100.0%          JS: ^Module._load node:internal/modules/cjs/loader:867:24
-      1  100.0%            JS: ^Module.require node:internal/modules/cjs/loader:1107:36
-      1    3.4%    JS: ^setHeader node:_http_outgoing:650:57
-      1  100.0%      JS: ^write /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/finalhandler/index.js:273:18
-      1  100.0%        JS: ^runInAsyncScope node:async_hooks:200:18
-      1  100.0%          JS: ^listener /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:162:21
-      1  100.0%            JS: ^onFinish /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:96:21
-      1    3.4%    JS: *decode /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/qs/lib/utils.js:111:23
-      1  100.0%      JS: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/qs/lib/parse.js:91:26
-      1  100.0%        JS: ^maybeMap /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/qs/lib/utils.js:230:33
-      1  100.0%          JS: ^parseQueryStringValues /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/qs/lib/parse.js:51:50
-      1  100.0%            JS: ^module.exports /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/qs/lib/parse.js:239:27
-
-     27    3.5%  fwrite@@GLIBC_2.2.5
-      3   11.1%    JS: ~value node:internal/console/constructor:339:20
-      3  100.0%      JS: ~log node:internal/console/constructor:378:6
-      3  100.0%        JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:24:18
-      3  100.0%          JS: ~onceWrapper node:events:623:21
-      3  100.0%            JS: ~emitListeningNT node:net:1903:25
-      2    7.4%    JS: ~initializeCJSLoader node:internal/process/pre_execution:649:29
-      2  100.0%      JS: ~setupUserModules node:internal/process/pre_execution:153:26
-      2  100.0%        JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      2  100.0%          JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      2  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~writeGeneric node:internal/stream_base_commons:147:22
-      1  100.0%      JS: ~Socket._writeGeneric node:net:921:42
-      1  100.0%        JS: ~Socket._write node:net:963:35
-      1  100.0%          JS: ~writeOrBuffer node:internal/streams/writable:375:23
-      1  100.0%            JS: ~_write node:internal/streams/writable:293:16
-      1    3.7%    JS: ~wrap /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:219:15
-      1  100.0%      JS: ~onFinished /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/on-finished/index.js:46:21
-      1  100.0%        JS: ~send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/finalhandler/index.js:272:15
-      1  100.0%          JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/finalhandler/index.js:86:19
-      1  100.0%            JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:640:19
-      1    3.7%    JS: ~use /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:439:25
-      1  100.0%      JS: ~lazyrouter /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/application.js:144:37
-      1  100.0%        JS: ~app.<computed> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/application.js:490:25
-      1  100.0%          JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:1:1
-      1  100.0%            JS: ~Module._compile node:internal/modules/cjs/loader:1195:37
-      1    3.7%    JS: ~toRealPath node:internal/modules/cjs/loader:455:20
-      1  100.0%      JS: ~Module._findPath node:internal/modules/cjs/loader:564:28
-      1  100.0%        JS: ~resolveMainPath node:internal/modules/run_main:10:25
-      1  100.0%          JS: ~executeUserEntryPoint node:internal/modules/run_main:75:31
-      1  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~syncExports node:internal/bootstrap/realm:365:14
-      1  100.0%      JS: ~<anonymous> node:internal/bootstrap/realm:351:15
-      1  100.0%        node::loader::ModuleWrap::Evaluate(v8::FunctionCallbackInfo<v8::Value> const&)
-      1  100.0%          JS: ~getESMFacade node:internal/bootstrap/realm:340:15
-      1  100.0%            JS: ~compileForPublicLoader node:internal/bootstrap/realm:322:25
-      1    3.7%    JS: ~setupListenHandle node:net:1825:27
-      1  100.0%      JS: ~listenInCluster node:net:1910:25
-      1  100.0%        JS: ~Server.listen node:net:1953:35
-      1  100.0%          JS: ~listen /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/application.js:633:29
-      1  100.0%            JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:1:1
-      1    3.7%    JS: ~setupConnectionsTracking node:_http_server:503:34
-      1  100.0%      JS: ~emitListeningNT node:net:1903:25
-      1  100.0%        JS: ~processTicksAndRejections node:internal/process/task_queues:67:35
-      1    3.7%    JS: ~setSourceMapsEnabled node:internal/source_map/source_map_cache:52:30
-      1  100.0%      JS: ~initializeSourceMapsHandlers node:internal/process/pre_execution:671:38
-      1  100.0%        JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      1  100.0%          JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      1  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~setInterval node:timers:210:21
-      1  100.0%      JS: ~setupConnectionsTracking node:_http_server:503:34
-      1  100.0%        JS: ~emitListeningNT node:net:1903:25
-      1  100.0%          JS: ~processTicksAndRejections node:internal/process/task_queues:67:35
-      1    3.7%    JS: ~resolve node:path:1095:10
-      1  100.0%      JS: ~Module._initPaths node:internal/modules/cjs/loader:1371:29
-      1  100.0%        JS: ~initializeCJS node:internal/modules/cjs/loader:330:23
-      1  100.0%          JS: ~initializeCJSLoader node:internal/process/pre_execution:649:29
-      1  100.0%            JS: ~setupUserModules node:internal/process/pre_execution:153:26
-      1    3.7%    JS: ~realpathSync node:fs:2606:22
-      1  100.0%      JS: ~toRealPath node:internal/modules/cjs/loader:455:20
-      1  100.0%        JS: ~Module._findPath node:internal/modules/cjs/loader:564:28
-      1  100.0%          JS: ~resolveMainPath node:internal/modules/run_main:10:25
-      1  100.0%            JS: ~executeUserEntryPoint node:internal/modules/run_main:75:31
-      1    3.7%    JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      1  100.0%      JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      1  100.0%        JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~patchProcessObject node:internal/process/pre_execution:171:28
-      1  100.0%      JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      1  100.0%        JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      1  100.0%          JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:177:16
-      1  100.0%      JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:136:31
-      1  100.0%        JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/application.js:165:29
-      1  100.0%          JS: ~app /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/express.js:38:21
-      1  100.0%            JS: ~parserOnIncoming node:_http_server:1030:26
-      1    3.7%    JS: ~expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/middleware/init.js:29:30
-      1  100.0%      JS: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
-      1  100.0%        JS: ~trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:293:23
-      1  100.0%          JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:280:64
-      1  100.0%            JS: ^process_params /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:338:47
-      1    3.7%    JS: ~assertEncoding node:internal/fs/utils:157:24
-      1  100.0%      JS: ~getOptions node:internal/fs/utils:322:20
-      1  100.0%        JS: ~readFileSync node:fs:458:22
-      1  100.0%          JS: ~Module._extensions..js node:internal/modules/cjs/loader:1250:37
-      1  100.0%            JS: ~Module.load node:internal/modules/cjs/loader:1079:33
-      1    3.7%    JS: ~Timeout node:internal/timers:165:14
-      1  100.0%      JS: ~setInterval node:timers:210:21
-      1  100.0%        JS: ~setupConnectionsTracking node:_http_server:503:34
-      1  100.0%          JS: ~emitListeningNT node:net:1903:25
-      1  100.0%            JS: ~processTicksAndRejections node:internal/process/task_queues:67:35
-      1    3.7%    JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/debug/src/node.js:1:1
-      1  100.0%      JS: ~Module._compile node:internal/modules/cjs/loader:1195:37
-      1  100.0%        JS: ~Module._extensions..js node:internal/modules/cjs/loader:1250:37
-      1  100.0%          JS: ~Module.load node:internal/modules/cjs/loader:1079:33
-      1  100.0%            JS: ~Module._load node:internal/modules/cjs/loader:867:24
-      1    3.7%    JS: ^fastparse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/parseurl/index.js:95:20
-      1  100.0%      JS: ~parseurl /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/parseurl/index.js:35:19
-      1  100.0%        JS: ~getPathname /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:537:21
-      1  100.0%          JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:177:16
-      1  100.0%            JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:136:31
-
-     27    3.5%  __write@@GLIBC_2.2.5
-      1    3.7%    JS: ~value node:internal/console/constructor:339:20
-      1  100.0%      JS: ~log node:internal/console/constructor:378:6
-      1  100.0%        JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:24:18
-      1  100.0%          JS: ~onceWrapper node:events:623:21
-      1  100.0%            JS: ~emitListeningNT node:net:1903:25
-      1    3.7%    JS: ~setupTraceCategoryState node:internal/process/pre_execution:424:33
-      1  100.0%      JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      1  100.0%        JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      1  100.0%          JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~resume_ node:internal/streams/readable:1013:17
-      1  100.0%      JS: ^processTicksAndRejections node:internal/process/task_queues:67:35
-      1    3.7%    JS: ~resolve node:path:1095:10
-      1  100.0%      JS: ~Module._initPaths node:internal/modules/cjs/loader:1371:29
-      1  100.0%        JS: ~initializeCJS node:internal/modules/cjs/loader:330:23
-      1  100.0%          JS: ~initializeCJSLoader node:internal/process/pre_execution:649:29
-      1  100.0%            JS: ~setupUserModules node:internal/process/pre_execution:153:26
-      1    3.7%    JS: ~processTicksAndRejections node:internal/process/task_queues:67:35
-      1    3.7%    JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      1  100.0%      JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      1  100.0%        JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~percolateUp node:internal/priority_queue:65:14
-      1  100.0%      JS: ~insert node:internal/priority_queue:26:9
-      1  100.0%        JS: ~insert node:internal/timers:361:16
-      1  100.0%          JS: ~setUnrefTimeout node:internal/timers:384:25
-      1  100.0%            JS: ~cache node:internal/http:24:15
-      1    3.7%    JS: ~parsersCb node:_http_common:160:65
-      1  100.0%      JS: ~alloc node:internal/freelist:15:8
-      1  100.0%        JS: ~connectionListenerInternal node:_http_server:650:36
-      1  100.0%          JS: ~defaultTriggerAsyncIdScope node:internal/async_hooks:455:36
-      1  100.0%            JS: ~connectionListener node:_http_server:644:28
-      1    3.7%    JS: ~normalizeString node:path:66:25
-      1  100.0%      JS: ~resolve node:path:1095:10
-      1  100.0%        JS: ~patchProcessObject node:internal/process/pre_execution:171:28
-      1  100.0%          JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      1  100.0%            JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      1    3.7%    JS: ~normalizeRequirableId node:internal/bootstrap/realm:292:31
-      1  100.0%      JS: ~Module._resolveFilename node:internal/modules/cjs/loader:964:35
-      1  100.0%        JS: ~Module._load node:internal/modules/cjs/loader:867:24
-      1  100.0%          JS: ~executeUserEntryPoint node:internal/modules/run_main:75:31
-      1  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:177:16
-      1  100.0%      JS: ~expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/middleware/init.js:29:30
-      1  100.0%        JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
-      1  100.0%          JS: ~trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:293:23
-      1  100.0%            JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:280:64
-      1    3.7%    JS: ~cleanup /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/ee-first/index.js:58:19
-      1  100.0%      JS: ~callback /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/ee-first/index.js:53:20
-      1  100.0%        JS: ~onevent /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/ee-first/index.js:81:26
-      1  100.0%          JS: ~endReadableNT node:internal/streams/readable:1369:23
-      1  100.0%            JS: ^processTicksAndRejections node:internal/process/task_queues:67:35
-      1    3.7%    JS: ~_storeHeader node:_http_outgoing:414:22
-      1  100.0%      JS: ~writeHead node:_http_server:342:19
-      1  100.0%        JS: ~_implicitHeader node:_http_server:337:68
-      1  100.0%          JS: ~write_ node:_http_outgoing:872:16
-      1  100.0%            JS: ~end node:_http_outgoing:1008:45
-      1    3.7%    JS: ~ServerResponse node:_http_server:195:24
-      1  100.0%      JS: ~parserOnIncoming node:_http_server:1030:26
-      1  100.0%        JS: ~parserOnHeadersComplete node:_http_common:72:33
-      1    3.7%    JS: ~Readable.removeAllListeners node:internal/streams/readable:951:49
-      1  100.0%      JS: ~_dump node:_http_incoming:432:49
-      1  100.0%        JS: ~resOnFinish node:_http_server:972:21
-      1  100.0%          JS: ~onFinish node:_http_outgoing:1003:18
-      1  100.0%            JS: ~callback node:internal/streams/writable:560:44
-      1    3.7%    JS: ~<anonymous> node:internal/util:764:18
-      1  100.0%      JS: ~Module node:internal/modules/cjs/loader:217:16
-      1  100.0%        JS: ~Module._load node:internal/modules/cjs/loader:867:24
-      1  100.0%          JS: ~executeUserEntryPoint node:internal/modules/run_main:75:31
-      1  100.0%            JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%    JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:11:21
-      1  100.0%      JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
-      1  100.0%        JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:116:16
-      1  100.0%          JS: ~dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:98:45
-      1  100.0%            JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
-      1    3.7%    JS: ^getOwn node:internal/bootstrap/realm:202:16
-      1  100.0%      JS: ^syncExports node:internal/bootstrap/realm:365:14
-      1  100.0%        JS: ~<anonymous> node:internal/bootstrap/realm:351:15
-      1  100.0%          node::loader::ModuleWrap::Evaluate(v8::FunctionCallbackInfo<v8::Value> const&)
-      1  100.0%            JS: ~getESMFacade node:internal/bootstrap/realm:340:15
-
-     18    2.4%  void node::StreamBase::JSMethod<&node::StreamBase::Writev>(v8::FunctionCallbackInfo<v8::Value> const&)
-     18  100.0%    JS: ^writevGeneric node:internal/stream_base_commons:122:23
-     17   94.4%      JS: ^Socket._writeGeneric node:net:921:42
-     17  100.0%        JS: ^Socket._writev node:net:958:36
-     17  100.0%          JS: ^doWrite node:internal/streams/writable:408:17
-     17  100.0%            JS: ^clearBuffer node:internal/streams/writable:539:21
-      1    5.6%      JS: ~Socket._writeGeneric node:net:921:42
-      1  100.0%        JS: ~Socket._writev node:net:958:36
-      1  100.0%          JS: ~doWrite node:internal/streams/writable:408:17
-      1  100.0%            JS: ~clearBuffer node:internal/streams/writable:539:21
-
-     15    2.0%  epoll_pwait@@GLIBC_2.6
-
-     13    1.7%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
-      2   15.4%    JS: ~value node:internal/console/constructor:339:20
-      2  100.0%      JS: ~log node:internal/console/constructor:378:6
-      2  100.0%        JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:24:18
-      2  100.0%          JS: ~onceWrapper node:events:623:21
-      2  100.0%            JS: ~emitListeningNT node:net:1903:25
-      2   15.4%    JS: ^fastparse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/parseurl/index.js:95:20
-      2  100.0%      JS: ~parseurl /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/parseurl/index.js:35:19
-      2  100.0%        JS: ~getPathname /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:537:21
-      2  100.0%          JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:177:16
-      2  100.0%            JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:136:31
-      1    7.7%    JS: ~route /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/index.js:502:29
-      1  100.0%      JS: ~app.<computed> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/application.js:490:25
-      1  100.0%        JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:1:1
-      1  100.0%          JS: ~Module._compile node:internal/modules/cjs/loader:1195:37
-      1  100.0%            JS: ~Module._extensions..js node:internal/modules/cjs/loader:1250:37
-      1    7.7%    JS: ~removeAllListeners node:events:736:32
-      1  100.0%      JS: ^Readable.removeAllListeners node:internal/streams/readable:951:49
-      1  100.0%        JS: ^_dump node:_http_incoming:432:49
-      1  100.0%          JS: ^resOnFinish node:_http_server:972:21
-      1  100.0%            JS: ^emit node:events:461:44
-      1    7.7%    JS: ~realpathSync node:fs:2606:22
-      1  100.0%      JS: ~toRealPath node:internal/modules/cjs/loader:455:20
-      1  100.0%        JS: ~Module._findPath node:internal/modules/cjs/loader:564:28
-      1  100.0%          JS: ~resolveMainPath node:internal/modules/run_main:10:25
-      1  100.0%            JS: ~executeUserEntryPoint node:internal/modules/run_main:75:31
-      1    7.7%    JS: ~prepareExecution node:internal/process/pre_execution:62:26
-      1  100.0%      JS: ~prepareMainThreadExecution node:internal/process/pre_execution:46:36
-      1  100.0%        JS: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    7.7%    JS: ~forEachCode /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/http-errors/index.js:259:38
-      1  100.0%      JS: ~populateConstructorExports /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/http-errors/index.js:258:37
-      1  100.0%        JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/http-errors/index.js:1:1
-      1  100.0%          JS: ^Module._compile node:internal/modules/cjs/loader:1195:37
-      1  100.0%            JS: ~Module._extensions..js node:internal/modules/cjs/loader:1250:37
-      1    7.7%    JS: ~defaultTriggerAsyncIdScope node:internal/async_hooks:455:36
-      1  100.0%      JS: ~setupListenHandle node:net:1825:27
-      1  100.0%        JS: ~listenInCluster node:net:1910:25
-      1  100.0%          JS: ~Server.listen node:net:1953:35
-      1  100.0%            JS: ~listen /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/application.js:633:29
-      1    7.7%    JS: ~assertEncoding node:internal/fs/utils:157:24
-      1  100.0%      JS: ~getOptions node:internal/fs/utils:322:20
-      1  100.0%        JS: ~readFileSync node:fs:458:22
-      1  100.0%          JS: ~Module._extensions..js node:internal/modules/cjs/loader:1250:37
-      1  100.0%            JS: ~Module.load node:internal/modules/cjs/loader:1079:33
+  25817   98.5%  UNKNOWN
+  24794   96.0%    JS: ^pbkdf2Sync node:internal/crypto/pbkdf2:61:20
+  24628   99.3%      JS: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:24:18
+  24628  100.0%        JS: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
+  24231   98.4%          JS: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:116:16
+  24231  100.0%            JS: ^dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:98:45
+    397    1.6%          JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:116:16
+    397  100.0%            JS: ^dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:98:45
+    740    2.9%    JS: ~pbkdf2Sync node:internal/crypto/pbkdf2:61:20
+    644   87.0%      JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:24:18
+    411   63.8%        JS: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
+    411  100.0%          JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:116:16
+    411  100.0%            JS: ~dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:98:45
+    233   36.2%        JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
+    233  100.0%          JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:116:16
+    233  100.0%            JS: ~dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:98:45
+     96   13.0%      JS: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/src/index.js:11:21
+     96  100.0%        JS: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/layer.js:86:49
+     96  100.0%          JS: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:116:16
+     96  100.0%            JS: ~dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/v8-profiler/node_modules/express/lib/router/route.js:98:45
 
