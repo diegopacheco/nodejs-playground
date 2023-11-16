@@ -1,0 +1,3 @@
+#!/bin/bash
+
+node --prof-process isolate-0x559ea8b4a0e0-72671-v8.log > processed.txt
