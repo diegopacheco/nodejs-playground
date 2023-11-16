@@ -7,6 +7,16 @@
 5. Run the magic `./make-it-rain-baby-sh`
 6. open processed.txt and have fun
 
+## Flame graph
+1. install 0x
+```bash
+npm install -g 0x
+```
+2.  run `./generate-flame-graphs.sh`
+3. Insert the user `./test.sh`
+4. Run the stress test `./stress.sh`
+5. open the flamegraph.html
+
 ## Install PERF 
 ```bash
 git clone --depth 1 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
