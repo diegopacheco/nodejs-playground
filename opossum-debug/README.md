@@ -63,3 +63,9 @@ Statistical profiling result from isolate-0x729b260-93391-v8.log, (8780 ticks, 9
      16    0.2%    0.5%  LazyCompile: *Socket._writeGeneric node:net:899:42
      15    0.2%    0.4%  LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
 ```     
+
+I added and stop the break point time to time, and is always running "getStats"
+<img src="getStats-runs-everry-1-sec.png"></img>
+
+CPU never went down.
+<img src="CPU_dont_go_down.png"></img>
