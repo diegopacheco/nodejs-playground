@@ -69,3 +69,6 @@ I added and stop the break point time to time, and is always running "getStats"
 
 CPU never went down. Even when I stop sending requests, because getStats keep running.
 <img src="CPU_dont_go_down.png"></img>
+
+V8 Profiler points to the same conclusion <BR>
+<img src="v8-profiler-summary.png"></img>
