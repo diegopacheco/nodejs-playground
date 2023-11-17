@@ -67,5 +67,5 @@ Statistical profiling result from isolate-0x729b260-93391-v8.log, (8780 ticks, 9
 I added and stop the break point time to time, and is always running "getStats"
 <img src="getStats-runs-everry-1-sec.png"></img>
 
-CPU never went down.
+CPU never went down. Even when I stop sending requests, because getStats keep running.
 <img src="CPU_dont_go_down.png"></img>
