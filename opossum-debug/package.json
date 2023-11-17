@@ -1,0 +1,24 @@
+{
+  "name": "opossum-debug",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "commonjs",
+  "engines": {
+    "node": "v18.15.0"
+  },
+  "scripts": {
+    "start": "PORT=8080 node src/app.js",
+    "profile": "PORT=8080 node --prof src/app.js",
+    "summary": "node --prof-process isolate-*.log > processed.txt",
+    "stress": "ab -k -c 20 -n 250 'http://127.0.0.1:8080/'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "opossum": "6.4.0"
+  }
+}
