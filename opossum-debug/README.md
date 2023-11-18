@@ -123,3 +123,10 @@ is not optimized and can take more time than you realize
 ```
 LazyCompile *something some.js 
 ```
+
+### The V8 Inspector
+
+1. run `node --inspect-brk src/app.js` 
+2. goto chrome in: `about:inspect`
+3. attach to the process, something like this: `ws://127.0.0.1:9229/4d5d22e3-b5dd-4e4d-8d84-d8f3a265b7b1`
+4. have fun :-)
