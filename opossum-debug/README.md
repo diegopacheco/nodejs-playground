@@ -149,3 +149,10 @@ app.get('/heap-dump', (req, res) => {
 3. load in Chrome with - (A) run the app with node --inspect src/app.js
 4. Goto chrome and type: about:inspect
 5. Load the headump file in the Chrome V8 Inspector tool
+
+### Heapdump on CLI
+
+1. run app with `node --heapsnapshot-signal=SIGUSR2 src/app.js`
+2. get the app pid `ps aux | grep app.js`
+3. take the heapdump `kill -USR2 $PID`
+4. will get a file like: `Heap.20231117.210811.245053.0.001.heapsnapshot`
