@@ -57,6 +57,11 @@ app.get('/heap', (req, res) => {
     res.send(v8.getHeapStatistics());
 });
 
+var log = require('why-is-node-running')
+setTimeout(function () {
+  log() // logs out active handles that are keeping node running
+}, 100);
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
