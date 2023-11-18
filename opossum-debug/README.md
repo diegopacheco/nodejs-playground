@@ -72,3 +72,27 @@ CPU never went down. Even when I stop sending requests, because getStats keep ru
 
 V8 Profiler points to the same conclusion <BR>
 <img src="v8-profiler-summary.png"></img>
+
+### Some other metrics
+
+http://localhost:8080/heap
+```json
+// 20231117190752
+// http://localhost:8080/heap
+{
+  "total_heap_size": 13660160,
+  "total_heap_size_executable": 786432,
+  "total_physical_size": 14057472,
+  "total_available_size": 4334141312,
+  "used_heap_size": 10870080,
+  "heap_size_limit": 4345298944,
+  "malloced_memory": 516272,
+  "peak_malloced_memory": 1080600,
+  "does_zap_garbage": 0,
+  "number_of_native_contexts": 1,
+  "number_of_detached_contexts": 0,
+  "total_global_handles_size": 16384,
+  "used_global_handles_size": 10368,
+  "external_memory": 829215
+}
+```

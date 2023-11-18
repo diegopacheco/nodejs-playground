@@ -52,6 +52,11 @@ app.get('/civilized', (req, res) => {
     res.send('Hello World stinky animal!');
 });
 
+app.get('/heap', (req, res) => {
+    const v8 = require('v8');
+    res.send(v8.getHeapStatistics());
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
