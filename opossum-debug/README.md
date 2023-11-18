@@ -159,14 +159,32 @@ app.get('/heap-dump', (req, res) => {
 
 ### Clinic Results
 
+Install Clinic
+```bash
+npm install -g clinic
+```
+
+
 Doctor (CPU)
-https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/247878.clinic-doctor.html
+```bash
+clinic doctor -- node src/app.js
+```
+Results: https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/247878.clinic-doctor.html
 
 Flamegraph (CPU)
-https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/248731.clinic-flame.html
+```bash
+clinic flame -- node src/app.js
+```
+Results: https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/248731.clinic-flame.html
 
 Bubbleprof (Latency/Network)
-https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/248394.clinic-bubbleprof.html
+```bash
+clinic bubbleprof -- node src/app.js
+```
+Results: https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/248394.clinic-bubbleprof.html
 
 Heap (memory)
-https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/249138.clinic-heapprofiler.html
+```bash
+clinic heapprofiler -- node src/app.js
+```
+Results: https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/249138.clinic-heapprofiler.html
