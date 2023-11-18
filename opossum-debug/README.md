@@ -156,3 +156,17 @@ app.get('/heap-dump', (req, res) => {
 2. get the app pid `ps aux | grep app.js`
 3. take the heapdump `kill -USR2 $PID`
 4. will get a file like: `Heap.20231117.210811.245053.0.001.heapsnapshot`
+
+### Clinic Results
+
+Doctor (CPU)
+https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/247878.clinic-doctor.html
+
+Flamegraph (CPU)
+https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/248731.clinic-flame.html
+
+Bubbleprof (Latency/Network)
+https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/248394.clinic-bubbleprof.html
+
+Heap (memory)
+https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/main/opossum-debug/.clinic/249138.clinic-heapprofiler.html
