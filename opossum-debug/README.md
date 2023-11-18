@@ -96,3 +96,20 @@ http://localhost:8080/heap
   "external_memory": 829215
 }
 ```
+
+### Interesting Flags
+
+Nodejs has some interesting flags can help us to figureout memory leaks and possible reasons to app to crash.
+
+1) Detect sync io (can make node crash)
+```bash
+node --trace-sync-io src/app.js
+```
+2) Look for promisse rejections (can make memory leaks)
+```bash
+node --unhandled-rejections=warn src/app.js
+```
+3) More detail stack traces
+```
+NODE_DEBUG=fs node src/app.js
+```
