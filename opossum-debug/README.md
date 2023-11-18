@@ -113,3 +113,13 @@ node --unhandled-rejections=warn src/app.js
 ```
 NODE_DEBUG=fs node src/app.js
 ```
+
+### Some notes on the profiler
+
+Node Optimizations:
+
+Means that node was able to optimize the code, if there is no * means your code 
+is not optimized and can take more time than you realize
+```
+LazyCompile *something some.js 
+```
