@@ -57,6 +57,16 @@ app.get('/heap', (req, res) => {
     res.send(v8.getHeapStatistics());
 });
 
+app.get('/heap-dump', (req, res) => {
+    var heapdump = require('heapdump');
+    var filename = '/' + Date.now() + '.heapsnapshot';
+    heapdump.writeSnapshot(filename);
+    heapdump.writeSnapshot(function (err, filename) {
+        console.log('dump written to', filename);
+    });
+    res.send(filename + " written!");
+});
+
 var log = require('why-is-node-running')
 setTimeout(function () {
   log() // logs out active handles that are keeping node running

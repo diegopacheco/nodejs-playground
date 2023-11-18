@@ -130,3 +130,22 @@ LazyCompile *something some.js
 2. goto chrome in: `about:inspect`
 3. attach to the process, something like this: `ws://127.0.0.1:9229/4d5d22e3-b5dd-4e4d-8d84-d8f3a265b7b1`
 4. have fun :-)
+
+### Heapdump and load on the inspector
+
+1. install npm instal heapdump --save
+2. Add the head-dump endpoint in express
+```js
+app.get('/heap-dump', (req, res) => {
+    var heapdump = require('heapdump');
+    var filename = '/' + Date.now() + '.heapsnapshot';
+    heapdump.writeSnapshot(filename);
+    heapdump.writeSnapshot(function (err, filename) {
+        console.log('dump written to', filename);
+    });
+    res.send(filename + " written!");
+});
+```
+3. load in Chrome with - (A) run the app with node --inspect src/app.js
+4. Goto chrome and type: about:inspect
+5. Load the headump file in the Chrome V8 Inspector tool
