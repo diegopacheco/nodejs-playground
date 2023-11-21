@@ -7,9 +7,15 @@ const port = 8080
 
 const CircuitBreaker = require('opossum');
 
+function sleep(){
+    setTimeout(function() {
+        // code to be executed after 2 seconds
+    },2000);
+};
+
 function dummyProc(){
     console.log("I will return 200...");
-    sleep(2000);
+    sleep();
     return "200";
 };
 
