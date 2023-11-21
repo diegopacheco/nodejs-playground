@@ -9,12 +9,20 @@ function dummyProc(){
     return "200";
 };
 
+function asyncFunctionThatCouldFail(x, y) {
+    return new Promise((resolve, reject) => {
+      console.log("*** here!");
+      console.log("Resolve: ", resolve);
+      resolve();
+    });
+};
+
 const options = {
     timeout: 3000,                // If our function takes longer than 3 seconds, trigger a failure
     errorThresholdPercentage: 50, // When 50% of requests fail, trip the circuit
     resetTimeout: 30000           // After 30 seconds, try again.
 };
-const breaker = new CircuitBreaker(dummyProc,options);
+const breaker = new CircuitBreaker(asyncFunctionThatCouldFail,options);
 
 app.get('/', (req, res) => {
     breaker.fire(dummyProc())
