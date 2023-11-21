@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "PORT=8080 node src/app.js",
+    "start2": "PORT=8080 node src/app2.js",
     "profile": "PORT=8080 node --prof src/app.js",
+    "profile2": "PORT=8080 node --prof src/app2.js",
     "summary": "node --prof-process isolate-*.log > processed.txt",
     "stress": "ab -k -c 200 -n 1000 'http://127.0.0.1:8080/'",
     "stress_civilized": "ab -k -c 200 -n 1000 'http://127.0.0.1:8080/civilized'",
