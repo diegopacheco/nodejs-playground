@@ -1,3 +1,6 @@
+/**
+ * POC2 - Moving breaker outside of the method.
+ */
 const express = require('express')
 const app = express()
 const port = 8080
@@ -6,6 +9,7 @@ const CircuitBreaker = require('opossum');
 
 function dummyProc(){
     console.log("I will return 200...");
+    sleep(2000);
     return "200";
 };
 
