@@ -1,0 +1,17 @@
+{
+  "name": "event-emitter-fun",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "commonjs",
+  "engines": {
+    "node": "18.15.0"
+  },
+  "scripts": {
+    "run": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
