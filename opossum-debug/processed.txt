@@ -1,290 +1,54 @@
-Testing v8 version different from logging version
-Statistical profiling result from isolate-0x729b260-93391-v8.log, (8780 ticks, 9 unaccounted, 0 excluded).
+Statistical profiling result from isolate-0x746c260-791580-v8.log, (358 ticks, 0 unaccounted, 0 excluded).
 
  [Shared libraries]:
    ticks  total  nonlib   name
-   5040   57.4%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-    183    2.1%          /usr/lib/x86_64-linux-gnu/libc.so.6
-      8    0.1%          [vdso]
-      3    0.0%          /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30
+    251   70.1%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
+     11    3.1%          /usr/lib/x86_64-linux-gnu/libc.so.6
+      1    0.3%          [vdso]
+      1    0.3%          /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30
 
  [JavaScript]:
    ticks  total  nonlib   name
-     23    0.3%    0.6%  LazyCompile: *get stats /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:99:13
-     21    0.2%    0.6%  LazyCompile: *Status /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:51:15
-     16    0.2%    0.5%  LazyCompile: *Socket._writeGeneric node:net:899:42
-     15    0.2%    0.4%  LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     15    0.2%    0.4%  LazyCompile: *formatError node:internal/util/inspect:1361:21
-     12    0.1%    0.3%  RegExp: ^ {4}at (?:[^/\\(]+ \(|)node:(.+):\d+:\d+\)?$
-     11    0.1%    0.3%  LazyCompile: *writeOrBuffer node:internal/streams/writable:368:23
-     11    0.1%    0.3%  LazyCompile: *getColorDepth node:internal/tty:106:23
-     10    0.1%    0.3%  LazyCompile: *_storeHeader node:_http_outgoing:439:22
-      9    0.1%    0.3%  RegExp: [/\\]node_modules[/\\](.+?)(?=[/\\])
-      9    0.1%    0.3%  LazyCompile: *onwrite node:internal/streams/writable:428:17
-      9    0.1%    0.3%  LazyCompile: *nextTick node:internal/process/task_queues:103:18
-      9    0.1%    0.3%  LazyCompile: *formatRaw node:internal/util/inspect:844:19
-      8    0.1%    0.2%  LazyCompile: *value node:internal/console/constructor:272:20
-      8    0.1%    0.2%  LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      8    0.1%    0.2%  LazyCompile: *processTicksAndRejections node:internal/process/task_queues:67:35
-      8    0.1%    0.2%  LazyCompile: *parserOnIncoming node:_http_server:972:26
-      8    0.1%    0.2%  LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      7    0.1%    0.2%  LazyCompile: *formatValue node:internal/util/inspect:766:21
-      6    0.1%    0.2%  RegExp: ^.*[\.\/\\]
-      6    0.1%    0.2%  LazyCompile: *write_ node:_http_outgoing:872:16
-      6    0.1%    0.2%  LazyCompile: *removeListener node:events:675:28
-      6    0.1%    0.2%  LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-      6    0.1%    0.2%  LazyCompile: *endReadableNT node:internal/streams/readable:1352:23
-      6    0.1%    0.2%  LazyCompile: *end node:_http_outgoing:992:45
-      6    0.1%    0.2%  LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      6    0.1%    0.2%  LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:100:40
-      5    0.1%    0.1%  RegExp: ^[\^_`a-zA-Z\-0-9!#$%&'*+.|~]+$
-      5    0.1%    0.1%  RegExp: ^[!#$%&'*+.^_`|~0-9A-Za-z-]+\/[!#$%&'*+.^_`|~0-9A-Za-z-]+$
-      5    0.1%    0.1%  LazyCompile: *readableAddChunk node:internal/streams/readable:242:26
-      5    0.1%    0.1%  LazyCompile: *insert node:internal/timers:360:16
-      5    0.1%    0.1%  LazyCompile: *emit node:events:460:44
-      5    0.1%    0.1%  LazyCompile: *assignSocket node:_http_server:281:62
-      5    0.1%    0.1%  LazyCompile: *_addListener node:events:541:22
-      5    0.1%    0.1%  LazyCompile: *Readable.read node:internal/streams/readable:402:35
-      5    0.1%    0.1%  LazyCompile: *CircuitBreaker /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:129:15
-      4    0.0%    0.1%  RegExp: [^\t\x20-\x7e\x80-\xff]
-      4    0.0%    0.1%  LazyCompile: *removeAllListeners node:events:735:32
-      4    0.0%    0.1%  LazyCompile: *log node:internal/console/constructor:376:6
-      4    0.0%    0.1%  LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:136:31
-      4    0.0%    0.1%  LazyCompile: *get node:_http_incoming:112:16
-      4    0.0%    0.1%  LazyCompile: *formatWithOptions node:internal/util/inspect:2133:27
-      4    0.0%    0.1%  LazyCompile: *call /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:526:8
-      4    0.0%    0.1%  LazyCompile: *_writeRaw node:_http_outgoing:390:19
-      4    0.0%    0.1%  LazyCompile: *Timeout node:internal/timers:169:14
-      4    0.0%    0.1%  LazyCompile: *<anonymous> node:internal/console/constructor:356:10
-      4    0.0%    0.1%  Function: ^value node:internal/console/constructor:272:20
-      3    0.0%    0.1%  RegExp: ^[!#$%&'*+.^_`|~0-9A-Za-z-]+$
-      3    0.0%    0.1%  LazyCompile: *warn node:internal/console/constructor:381:7
-      3    0.0%    0.1%  LazyCompile: *stylizeWithColor node:internal/util/inspect:561:26
-      3    0.0%    0.1%  LazyCompile: *removeDuplicateErrorKeys node:internal/util/inspect:1297:34
-      3    0.0%    0.1%  LazyCompile: *remove node:internal/linkedlist:16:16
-      3    0.0%    0.1%  LazyCompile: *listOnTimeout node:internal/timers:517:25
-      3    0.0%    0.1%  LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/application.js:165:29
-      3    0.0%    0.1%  LazyCompile: *getHeader node:_http_outgoing:729:57
-      3    0.0%    0.1%  LazyCompile: *getFunctionBase node:internal/util/inspect:1178:25
-      3    0.0%    0.1%  LazyCompile: *get node:internal/console/constructor:209:14
-      3    0.0%    0.1%  LazyCompile: *formatProperty node:internal/util/inspect:1911:24
-      3    0.0%    0.1%  LazyCompile: *etag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:70:15
-      3    0.0%    0.1%  LazyCompile: *afterWriteTick node:internal/streams/writable:485:24
-      3    0.0%    0.1%  LazyCompile: *Readable.on node:internal/streams/readable:886:33
-      3    0.0%    0.1%  LazyCompile: *OutgoingMessage node:_http_outgoing:104:25
-      3    0.0%    0.1%  LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:102:32
-      3    0.0%    0.1%  Function: ^<anonymous> node:internal/console/constructor:356:10
-      3    0.0%    0.1%  Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      2    0.0%    0.1%  RegExp: ^text\/|^application\/(javascript|json)
-      2    0.0%    0.1%  RegExp: ; *([!#$%&'*+.^_`|~0-9A-Za-z-]+) *= *("(?:[\u000b\u0020\u0021\u0023-\u005b\u005d-\u007e\u0080-\u00ff]|\\[\u000b\u0020-\u00ff])*"|[!#$%&'*+.^_`|~0-9A-Za-z-]+) *
-      2    0.0%    0.1%  LazyCompile: *writevGeneric node:internal/stream_base_commons:122:23
-      2    0.0%    0.1%  LazyCompile: *setHeader node:_http_outgoing:661:57
-      2    0.0%    0.1%  LazyCompile: *parserOnMessageComplete node:_http_common:137:33
-      2    0.0%    0.1%  LazyCompile: *once node:events:646:44
-      2    0.0%    0.1%  LazyCompile: *normalizeString node:path:66:25
-      2    0.0%    0.1%  LazyCompile: *normalizeParseOptions /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/qs/lib/parse.js:204:59
-      2    0.0%    0.1%  LazyCompile: *matchKnownFields node:_http_incoming:279:26
-      2    0.0%    0.1%  LazyCompile: *improveStack node:internal/util/inspect:1264:22
-      2    0.0%    0.1%  LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      2    0.0%    0.1%  LazyCompile: *contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
-      2    0.0%    0.1%  LazyCompile: *clearIncoming node:_http_server:901:23
-      2    0.0%    0.1%  LazyCompile: *_write node:internal/streams/writable:286:16
-      2    0.0%    0.1%  LazyCompile: *_getMaxListeners node:events:414:26
-      2    0.0%    0.1%  LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:130:33
-      2    0.0%    0.1%  Function: ^setHasTickScheduled node:internal/process/task_queues:51:29
-      2    0.0%    0.1%  Function: ^improveStack node:internal/util/inspect:1264:22
-      2    0.0%    0.1%  Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:136:31
-      2    0.0%    0.1%  Function: ^getStackFrames node:internal/util/inspect:1244:24
-      2    0.0%    0.1%  Function: ^get node:internal/streams/duplex:103:8
-      2    0.0%    0.1%  Function: ^formatValue node:internal/util/inspect:766:21
-      2    0.0%    0.1%  Function: ^formatRaw node:internal/util/inspect:844:19
-      2    0.0%    0.1%  Function: ^contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
-      2    0.0%    0.1%  Function: ^afterWriteDispatched node:internal/stream_base_commons:155:30
-      2    0.0%    0.1%  Function: ^_addListener node:events:541:22
-      2    0.0%    0.1%  Function: ^Socket._writev node:net:936:36
-      2    0.0%    0.1%  Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:8:24
-      2    0.0%    0.1%  Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:212:7
-      1    0.0%    0.0%  RegExp: ^\/civilized\/?$
-      1    0.0%    0.0%  RegExp: ^\/?$
-      1    0.0%    0.0%  RegExp: [^\t\x20-\x7e\x80-\xff] {1}
-      1    0.0%    0.0%  RegExp: ;\s*charset\s*=
-      1    0.0%    0.0%  RegExp: (?:^|\W)chunked(?:$|\W)
-      1    0.0%    0.0%  LazyCompile: *value node:internal/console/constructor:337:20
-      1    0.0%    0.0%  LazyCompile: *unenroll node:timers:78:18
-      1    0.0%    0.0%  LazyCompile: *slowCases node:internal/util:180:19
-      1    0.0%    0.0%  LazyCompile: *setHasTickScheduled node:internal/process/task_queues:51:29
-      1    0.0%    0.0%  LazyCompile: *set /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/application.js:359:23
-      1    0.0%    0.0%  LazyCompile: *resOnFinish node:_http_server:914:21
-      1    0.0%    0.0%  LazyCompile: *reduceToSingleString node:internal/util/inspect:2007:30
-      1    0.0%    0.0%  LazyCompile: *processTimers node:internal/timers:497:25
-      1    0.0%    0.0%  LazyCompile: *processPromiseRejections node:internal/process/promises:220:34
-      1    0.0%    0.0%  LazyCompile: *prepareStackTrace node:internal/errors:89:27
-      1    0.0%    0.0%  LazyCompile: *parserOnHeadersComplete node:_http_common:72:33
-      1    0.0%    0.0%  LazyCompile: *needFinish node:internal/streams/writable:653:20
-      1    0.0%    0.0%  LazyCompile: *inspect node:internal/util/inspect:310:17
-      1    0.0%    0.0%  LazyCompile: *header /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:777:29
-      1    0.0%    0.0%  LazyCompile: *handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-      1    0.0%    0.0%  LazyCompile: *get node:internal/util/inspect:437:8
-      1    0.0%    0.0%  LazyCompile: *get node:internal/streams/readable:1282:8
-      1    0.0%    0.0%  LazyCompile: *format /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:65:17
-      1    0.0%    0.0%  LazyCompile: *fastparse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/parseurl/index.js:95:20
-      1    0.0%    0.0%  LazyCompile: *expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      1    0.0%    0.0%  LazyCompile: *emitReadable_ node:internal/streams/readable:586:23
-      1    0.0%    0.0%  LazyCompile: *emitCloseNT node:internal/streams/destroy:120:21
-      1    0.0%    0.0%  LazyCompile: *checkListener node:events:265:23
-      1    0.0%    0.0%  LazyCompile: *_onceWrap node:events:632:19
-      1    0.0%    0.0%  LazyCompile: *_flushOutput node:_http_outgoing:1114:63
-      1    0.0%    0.0%  LazyCompile: *_destroy node:_http_incoming:221:55
-      1    0.0%    0.0%  LazyCompile: *Socket node:net:338:16
-      1    0.0%    0.0%  LazyCompile: *ReadableState node:internal/streams/readable:83:23
-      1    0.0%    0.0%  LazyCompile: *Readable.removeListener node:internal/streams/readable:916:45
-      1    0.0%    0.0%  LazyCompile: *Readable node:internal/streams/readable:186:18
-      1    0.0%    0.0%  LazyCompile: *Mime.lookup /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/mime/mime.js:69:33
-      1    0.0%    0.0%  LazyCompile: *EventEmitter.init node:events:337:29
-      1    0.0%    0.0%  LazyCompile: *<anonymous> node:internal/validators:247:3
-      1    0.0%    0.0%  LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/request.js:467:36
-      1    0.0%    0.0%  Function: ^value node:internal/console/constructor:346:20
-      1    0.0%    0.0%  Function: ^value node:internal/console/constructor:315:20
-      1    0.0%    0.0%  Function: ^validateString node:internal/validators:161:24
-      1    0.0%    0.0%  Function: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      1    0.0%    0.0%  Function: ^syncExports node:internal/bootstrap/loaders:307:14
-      1    0.0%    0.0%  Function: ^socketOnDrain node:_http_server:716:23
-      1    0.0%    0.0%  Function: ^setStreamTimeout node:internal/stream_base_commons:237:26
-      1    0.0%    0.0%  Function: ^setHeader node:_http_outgoing:661:57
-      1    0.0%    0.0%  Function: ^setCharset /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/utils.js:248:41
-      1    0.0%    0.0%  Function: ^set /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/application.js:359:23
-      1    0.0%    0.0%  Function: ^resume node:internal/streams/readable:989:16
-      1    0.0%    0.0%  Function: ^removeDuplicateErrorKeys node:internal/util/inspect:1297:34
-      1    0.0%    0.0%  Function: ^readableAddChunk node:internal/streams/readable:242:26
-      1    0.0%    0.0%  Function: ^processPromiseRejections node:internal/process/promises:220:34
-      1    0.0%    0.0%  Function: ^peek node:internal/priority_queue:37:7
-      1    0.0%    0.0%  Function: ^peek node:internal/linkedlist:10:14
-      1    0.0%    0.0%  Function: ^parse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:106:16
-      1    0.0%    0.0%  Function: ^onwrite node:internal/streams/writable:428:17
-      1    0.0%    0.0%  Function: ^onStreamRead node:internal/stream_base_commons:167:22
-      1    0.0%    0.0%  Function: ^noop node:internal/util/debuglog:47:14
-      1    0.0%    0.0%  Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-      1    0.0%    0.0%  Function: ^maybeOverridePrepareStackTrace node:internal/errors:134:40
-      1    0.0%    0.0%  Function: ^lazyChannels node:net:149:22
-      1    0.0%    0.0%  Function: ^isEncoding node:buffer:542:40
-      1    0.0%    0.0%  Function: ^internalBinding node:internal/bootstrap/loaders:172:45
-      1    0.0%    0.0%  Function: ^header /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:777:29
-      1    0.0%    0.0%  Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      1    0.0%    0.0%  Function: ^getTimerDuration node:internal/timers:393:26
-      1    0.0%    0.0%  Function: ^getStderr node:internal/bootstrap/switches/is_main_thread:168:19
-      1    0.0%    0.0%  Function: ^getOwnPropertyValueOrDefault node:internal/validators:228:38
-      1    0.0%    0.0%  Function: ^get stats /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:99:13
-      1    0.0%    0.0%  Function: ^get node:internal/streams/readable:1282:8
-      1    0.0%    0.0%  Function: ^get node:internal/console/constructor:219:14
-      1    0.0%    0.0%  Function: ^get hasSubscribers node:diagnostics_channel:88:21
-      1    0.0%    0.0%  Function: ^formatWithOptions node:internal/util/inspect:2133:27
-      1    0.0%    0.0%  Function: ^format /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:65:17
-      1    0.0%    0.0%  Function: ^fail /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:771:15
-      1    0.0%    0.0%  Function: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      1    0.0%    0.0%  Function: ^etag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:70:15
-      1    0.0%    0.0%  Function: ^end node:_http_outgoing:992:45
-      1    0.0%    0.0%  Function: ^emitAfterScript node:internal/async_hooks:517:25
-      1    0.0%    0.0%  Function: ^doWrite node:internal/streams/writable:401:17
-      1    0.0%    0.0%  Function: ^dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      1    0.0%    0.0%  Function: ^compareTimersLists node:internal/timers:410:28
-      1    0.0%    0.0%  Function: ^clearTimeout node:timers:185:22
-      1    0.0%    0.0%  Function: ^clearIncoming node:_http_server:901:23
-      1    0.0%    0.0%  Function: ^clearBuffer node:internal/streams/writable:532:21
-      1    0.0%    0.0%  Function: ^checkListener node:events:265:23
-      1    0.0%    0.0%  Function: ^callback node:internal/streams/writable:553:44
-      1    0.0%    0.0%  Function: ^call /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:526:8
-      1    0.0%    0.0%  Function: ^app /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/express.js:38:21
-      1    0.0%    0.0%  Function: ^addListener node:events:604:58
-      1    0.0%    0.0%  Function: ^_getMaxListeners node:events:414:26
-      1    0.0%    0.0%  Function: ^Writable.uncork node:internal/streams/writable:344:37
-      1    0.0%    0.0%  Function: ^Socket._writeGeneric node:net:899:42
-      1    0.0%    0.0%  Function: ^ServerResponse node:_http_server:193:24
-      1    0.0%    0.0%  Function: ^ReadableState node:internal/streams/readable:83:23
-      1    0.0%    0.0%  Function: ^FastBuffer node:internal/buffer:960:14
-      1    0.0%    0.0%  Function: ^CircuitBreaker /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:129:15
-      1    0.0%    0.0%  Function: ^<anonymous> node:internal/validators:247:3
-      1    0.0%    0.0%  Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
+      2    0.6%    2.1%  LazyCompile: *normalizeString node:path:66:25
+      1    0.3%    1.1%  Function: ^normalizeString node:path:66:25
 
  [C++]:
    ticks  total  nonlib   name
-   2112   24.1%   59.6%  epoll_pwait@@GLIBC_2.6
-    384    4.4%   10.8%  __write@@GLIBC_2.2.5
-    148    1.7%    4.2%  writev@@GLIBC_2.2.5
-     59    0.7%    1.7%  fwrite@@GLIBC_2.2.5
-     48    0.5%    1.4%  __read@@GLIBC_2.2.5
-     42    0.5%    1.2%  shutdown@@GLIBC_2.2.5
-     24    0.3%    0.7%  __mprotect@@GLIBC_PRIVATE
-     23    0.3%    0.6%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
-     21    0.2%    0.6%  __libc_malloc@@GLIBC_2.2.5
-     19    0.2%    0.5%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
-     13    0.1%    0.4%  _IO_file_xsputn@@GLIBC_2.2.5
-     11    0.1%    0.3%  accept4@@GLIBC_2.10
-     10    0.1%    0.3%  cfree@GLIBC_2.2.5
-      7    0.1%    0.2%  epoll_ctl@@GLIBC_2.3.2
-      6    0.1%    0.2%  __madvise@@GLIBC_PRIVATE
-      5    0.1%    0.1%  __munmap@@GLIBC_PRIVATE
-      4    0.0%    0.1%  pthread_cond_signal@@GLIBC_2.3.2
-      3    0.0%    0.1%  operator delete(void*)@@GLIBCXX_3.4
-      3    0.0%    0.1%  __clock_gettime@@GLIBC_PRIVATE
-      3    0.0%    0.1%  _IO_default_xsputn@@GLIBC_2.2.5
-      2    0.0%    0.1%  syscall@@GLIBC_2.2.5
-      2    0.0%    0.1%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
-      2    0.0%    0.1%  operator new[](unsigned long)@@GLIBCXX_3.4
-      2    0.0%    0.1%  __pthread_mutex_unlock@GLIBC_2.2.5
-      1    0.0%    0.0%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const@@GLIBCXX_3.4
-      1    0.0%    0.0%  std::ostream::operator<<(int)@@GLIBCXX_3.4
-      1    0.0%    0.0%  std::locale::id::_M_id() const@@GLIBCXX_3.4
-      1    0.0%    0.0%  std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const@@GLIBCXX_3.4.18
-      1    0.0%    0.0%  std::_Rb_tree_rebalance_for_erase(std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
-      1    0.0%    0.0%  std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
-      1    0.0%    0.0%  std::_Rb_tree_increment(std::_Rb_tree_node_base const*)@@GLIBCXX_3.4
-      1    0.0%    0.0%  std::_Rb_tree_decrement(std::_Rb_tree_node_base*)@@GLIBCXX_3.4
-      1    0.0%    0.0%  operator new(unsigned long)@@GLIBCXX_3.4
-      1    0.0%    0.0%  getenv@@GLIBC_2.2.5
-      1    0.0%    0.0%  __pthread_rwlock_wrlock@GLIBC_2.2.5
-      1    0.0%    0.0%  __pthread_rwlock_destroy@GLIBC_2.2.5
-      1    0.0%    0.0%  __pthread_mutex_lock@GLIBC_2.2.5
-      1    0.0%    0.0%  __pthread_getspecific@GLIBC_2.2.5
-      1    0.0%    0.0%  __mmap@@GLIBC_PRIVATE
-      1    0.0%    0.0%  _IO_setb@@GLIBC_2.2.5
-      1    0.0%    0.0%  _IO_file_write@@GLIBC_2.2.5
-      1    0.0%    0.0%  _IO_file_sync@@GLIBC_2.2.5
+     35    9.8%   37.2%  fwrite@@GLIBC_2.2.5
+     15    4.2%   16.0%  __write@@GLIBC_2.2.5
+     11    3.1%   11.7%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+      8    2.2%    8.5%  epoll_pwait@@GLIBC_2.6
+      5    1.4%    5.3%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+      4    1.1%    4.3%  _IO_file_xsputn@@GLIBC_2.2.5
+      3    0.8%    3.2%  __mprotect@@GLIBC_PRIVATE
+      2    0.6%    2.1%  __libc_malloc@@GLIBC_2.2.5
+      2    0.6%    2.1%  _IO_default_xsputn@@GLIBC_2.2.5
+      1    0.3%    1.1%  std::ostream::operator<<(int)@@GLIBCXX_3.4
+      1    0.3%    1.1%  std::ostream::flush()@@GLIBCXX_3.4
+      1    0.3%    1.1%  std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
+      1    0.3%    1.1%  pthread_cond_signal@@GLIBC_2.3.2
+      1    0.3%    1.1%  operator new(unsigned long)@@GLIBCXX_3.4
+      1    0.3%    1.1%  _IO_setb@@GLIBC_2.2.5
 
  [Summary]:
    ticks  total  nonlib   name
-    566    6.4%   16.0%  JavaScript
-   2971   33.8%   83.8%  C++
-    264    3.0%    7.4%  GC
-   5234   59.6%          Shared libraries
-      9    0.1%          Unaccounted
+      3    0.8%    3.2%  JavaScript
+     91   25.4%   96.8%  C++
+      8    2.2%    8.5%  GC
+    264   73.7%          Shared libraries
 
  [C++ entry points]:
    ticks    cpp   total   name
-    368   54.8%    4.2%  __write@@GLIBC_2.2.5
-    148   22.0%    1.7%  writev@@GLIBC_2.2.5
-     53    7.9%    0.6%  fwrite@@GLIBC_2.2.5
-     22    3.3%    0.3%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
-     17    2.5%    0.2%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
-     15    2.2%    0.2%  __libc_malloc@@GLIBC_2.2.5
-     12    1.8%    0.1%  _IO_file_xsputn@@GLIBC_2.2.5
-      6    0.9%    0.1%  cfree@GLIBC_2.2.5
-      5    0.7%    0.1%  __mprotect@@GLIBC_PRIVATE
-      5    0.7%    0.1%  __madvise@@GLIBC_PRIVATE
-      3    0.4%    0.0%  _IO_default_xsputn@@GLIBC_2.2.5
-      2    0.3%    0.0%  syscall@@GLIBC_2.2.5
-      2    0.3%    0.0%  std::ostream& std::ostream::_M_insert<long>(long)@@GLIBCXX_3.4.9
-      2    0.3%    0.0%  epoll_ctl@@GLIBC_2.3.2
-      2    0.3%    0.0%  __clock_gettime@@GLIBC_PRIVATE
-      1    0.1%    0.0%  std::ostreambuf_iterator<char, std::char_traits<char> > std::num_put<char, std::ostreambuf_iterator<char, std::char_traits<char> > >::_M_insert_int<long>(std::ostreambuf_iterator<char, std::char_traits<char> >, std::ios_base&, char, long) const@@GLIBCXX_3.4
-      1    0.1%    0.0%  std::ostream::operator<<(int)@@GLIBCXX_3.4
-      1    0.1%    0.0%  std::locale::id::_M_id() const@@GLIBCXX_3.4
-      1    0.1%    0.0%  std::__detail::_Prime_rehash_policy::_M_next_bkt(unsigned long) const@@GLIBCXX_3.4.18
-      1    0.1%    0.0%  operator new(unsigned long)@@GLIBCXX_3.4
-      1    0.1%    0.0%  operator delete(void*)@@GLIBCXX_3.4
-      1    0.1%    0.0%  __pthread_rwlock_wrlock@GLIBC_2.2.5
-      1    0.1%    0.0%  __pthread_getspecific@GLIBC_2.2.5
-      1    0.1%    0.0%  _IO_setb@@GLIBC_2.2.5
-      1    0.1%    0.0%  _IO_file_sync@@GLIBC_2.2.5
+     31   47.7%    8.7%  fwrite@@GLIBC_2.2.5
+      9   13.8%    2.5%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+      9   13.8%    2.5%  __write@@GLIBC_2.2.5
+      4    6.2%    1.1%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+      4    6.2%    1.1%  _IO_file_xsputn@@GLIBC_2.2.5
+      3    4.6%    0.8%  __mprotect@@GLIBC_PRIVATE
+      2    3.1%    0.6%  _IO_default_xsputn@@GLIBC_2.2.5
+      1    1.5%    0.3%  std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)@@GLIBCXX_3.4
+      1    1.5%    0.3%  __libc_malloc@@GLIBC_2.2.5
+      1    1.5%    0.3%  _IO_setb@@GLIBC_2.2.5
 
  [Bottom up (heavy) profile]:
   Note: percentage shows a share of a particular caller in the total
@@ -292,760 +56,407 @@ Statistical profiling result from isolate-0x729b260-93391-v8.log, (8780 ticks, 9
   Callers occupying less than 1.0% are not shown.
 
    ticks parent  name
-   5040   57.4%  /home/diego/.nvm/versions/node/v18.15.0/bin/node
-   2955   58.6%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
-    336   11.4%      LazyCompile: *getColorDepth node:internal/tty:106:23
-    256   76.2%        LazyCompile: *log node:internal/console/constructor:376:6
-    256  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-    123   48.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:8:24
-     61   23.8%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:8:24
-     46   18.0%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     26   10.2%            Function: ^dummyProc /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:15:19
-     47   14.0%        LazyCompile: *warn node:internal/console/constructor:381:7
-     47  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     33   70.2%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     25    7.4%        Function: ^value node:internal/console/constructor:315:20
-     22   88.0%          Function: ^value node:internal/console/constructor:346:20
-     22  100.0%            Function: ^warn node:internal/console/constructor:381:7
-      3   12.0%          Function: ^value node:internal/console/constructor:337:20
-      3  100.0%            Function: ^log node:internal/console/constructor:376:6
-      5    1.5%        LazyCompile: *value node:internal/console/constructor:337:20
-      5  100.0%          Function: ^log node:internal/console/constructor:376:6
-      5  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-    268    9.1%      /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     80   29.9%        LazyCompile: *prepareStackTrace node:internal/errors:89:27
-     80  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     80  100.0%            LazyCompile: *formatError node:internal/util/inspect:1361:21
-     29   10.8%        Function: ^prepareStackTrace node:internal/errors:89:27
-     29  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     19   65.5%            LazyCompile: *formatError node:internal/util/inspect:1361:21
-     10   34.5%            Function: ^getStackString node:internal/util/inspect:1240:24
-     25    9.3%        Function: ^getStackFrames node:internal/util/inspect:1244:24
-     23   92.0%          LazyCompile: *formatError node:internal/util/inspect:1361:21
-     23  100.0%            LazyCompile: *formatRaw node:internal/util/inspect:844:19
-      2    8.0%          Function: ^formatError node:internal/util/inspect:1361:21
-      2  100.0%            Function: ^formatRaw node:internal/util/inspect:844:19
-     20    7.5%        LazyCompile: *contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
-     20  100.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-     20  100.0%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     17    6.3%        LazyCompile: *expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      9   52.9%          LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      9  100.0%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      8   47.1%          LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      8  100.0%            Function: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-     12    4.5%        LazyCompile: *formatProperty node:internal/util/inspect:1911:24
-     12  100.0%          LazyCompile: *formatRaw node:internal/util/inspect:844:19
-     12  100.0%            LazyCompile: *formatValue node:internal/util/inspect:766:21
-      8    3.0%        LazyCompile: *listOnTimeout node:internal/timers:517:25
-      5   62.5%          Function: ^processTimers node:internal/timers:497:25
-      3   37.5%          LazyCompile: *processTimers node:internal/timers:497:25
-      7    2.6%        LazyCompile: *setHeader node:_http_outgoing:661:57
-      7  100.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      5   71.4%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      2   28.6%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      7    2.6%        LazyCompile: *header /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:777:29
-      7  100.0%          Function: ^contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
-      7  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      7    2.6%        LazyCompile: *format /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:65:17
-      7  100.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      7  100.0%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      7    2.6%        Function: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      4   57.1%          LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      4  100.0%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      3   42.9%          Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      3  100.0%            Function: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      6    2.2%        Function: ^runNextTicks node:internal/process/task_queues:58:22
-      6  100.0%          Function: ^listOnTimeout node:internal/timers:517:25
-      6  100.0%            Function: ^processTimers node:internal/timers:497:25
-      4    1.5%        Function: ^parse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:106:16
-      3   75.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      2   66.7%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1   33.3%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1   25.0%          Function: ^setCharset /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/utils.js:248:41
-      1  100.0%            Function: ^send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      4    1.5%        Function: ^formatProperty node:internal/util/inspect:1911:24
-      4  100.0%          Function: ^formatRaw node:internal/util/inspect:844:19
-      4  100.0%            Function: ^formatValue node:internal/util/inspect:766:21
-      3    1.1%        Function: ^format /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:65:17
-      2   66.7%          Function: ^setCharset /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/utils.js:248:41
-      2  100.0%            Function: ^send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1   33.3%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-    152    5.1%      LazyCompile: *write_ node:_http_outgoing:872:16
-    152  100.0%        LazyCompile: *end node:_http_outgoing:992:45
-    152  100.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-    136   89.5%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     16   10.5%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     78    2.6%      Function: ^writevGeneric node:internal/stream_base_commons:122:23
-     45   57.7%        Function: ^Socket._writeGeneric node:net:899:42
-     45  100.0%          Function: ^Socket._writev node:net:936:36
-     44   97.8%            Function: ^doWrite node:internal/streams/writable:401:17
-      1    2.2%            LazyCompile: ~doWrite node:internal/streams/writable:401:17
-     33   42.3%        LazyCompile: *Socket._writeGeneric node:net:899:42
-     33  100.0%          Function: ^Socket._writev node:net:936:36
-     33  100.0%            Function: ^doWrite node:internal/streams/writable:401:17
-     73    2.5%      LazyCompile: *get stats /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:99:13
-     46   63.0%        LazyCompile: *fail /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:771:15
-     34   73.9%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     34  100.0%            LazyCompile: *listOnTimeout node:internal/timers:517:25
-     12   26.1%          Function: ^handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-     12  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     20   27.4%        LazyCompile: *handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-     13   65.0%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     13  100.0%            LazyCompile: *listOnTimeout node:internal/timers:517:25
-      7   35.0%          Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      7  100.0%            LazyCompile: *listOnTimeout node:internal/timers:517:25
-      7    9.6%        Function: ^get stats /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:413:13
-      7  100.0%          Function: ^fail /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:771:15
-      7  100.0%            Function: ^handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-     72    2.4%      LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     48   66.7%        LazyCompile: *expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-     27   56.3%          LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-     27  100.0%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     21   43.8%          LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-     21  100.0%            Function: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-     23   31.9%        Function: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-     14   60.9%          LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-     14  100.0%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      9   39.1%          Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      9  100.0%            Function: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      1    1.4%        LazyCompile: *query /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/query.js:39:24
-      1  100.0%          LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      1  100.0%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     71    2.4%      LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-     53   74.6%        LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     48   90.6%          LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-     45   93.8%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      3    6.3%            LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      5    9.4%          LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      5  100.0%            Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-     18   25.4%        Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     14   77.8%          Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-     14  100.0%            Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-      4   22.2%          LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      4  100.0%            Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-     70    2.4%      LazyCompile: *end node:_http_outgoing:992:45
-     70  100.0%        LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-     52   74.3%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     50   96.2%            LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      2    3.8%            LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-     18   25.7%          Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     16   88.9%            Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      2   11.1%            LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-     70    2.4%      LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     70  100.0%        LazyCompile: *listOnTimeout node:internal/timers:517:25
-     51   72.9%          Function: ^processTimers node:internal/timers:497:25
-     19   27.1%          LazyCompile: *processTimers node:internal/timers:497:25
-     65    2.2%      LazyCompile: *resOnFinish node:_http_server:914:21
-     62   95.4%        LazyCompile: *emit node:events:460:44
-     62  100.0%          Function: ^onFinish node:_http_outgoing:987:18
-     46   74.2%            LazyCompile: *callback node:internal/streams/writable:553:44
-     16   25.8%            Function: ^callback node:internal/streams/writable:553:44
-      3    4.6%        LazyCompile: *onFinish node:_http_outgoing:987:18
-      3  100.0%          LazyCompile: *callback node:internal/streams/writable:553:44
-      3  100.0%            LazyCompile: *afterWriteTick node:internal/streams/writable:485:24
-     65    2.2%      Function: ^internalCompileFunction node:internal/vm:31:33
-     57   87.7%        Function: ^wrapSafe node:internal/modules/cjs/loader:1152:18
-     50   87.7%          Function: ^Module._compile node:internal/modules/cjs/loader:1208:37
-     37   74.0%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1263:37
-     13   26.0%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
-      7   12.3%          LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
+    251   70.1%  /home/diego/.nvm/versions/node/v18.15.0/bin/node
+    209   83.3%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
+     41   19.6%      Function: ^internalCompileFunction node:internal/vm:31:33
+     36   87.8%        Function: ^wrapSafe node:internal/modules/cjs/loader:1152:18
+     29   80.6%          Function: ^Module._compile node:internal/modules/cjs/loader:1208:37
+     17   58.6%            Function: ^Module._extensions..js node:internal/modules/cjs/loader:1263:37
+     12   41.4%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
+      7   19.4%          LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
       7  100.0%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
-      8   12.3%        LazyCompile: ~wrapSafe node:internal/modules/cjs/loader:1152:18
-      8  100.0%          LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
-      8  100.0%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
-     63    2.1%      Function: ^handleWriteReq node:internal/stream_base_commons:45:24
-     63  100.0%        Function: ^writeGeneric node:internal/stream_base_commons:147:22
-     63  100.0%          Function: ^Socket._writeGeneric node:net:899:42
-     40   63.5%            LazyCompile: *_write node:internal/streams/writable:286:16
-     16   25.4%            Function: ^Socket._write node:net:941:35
-      7   11.1%            LazyCompile: *value node:internal/console/constructor:272:20
-     51    1.7%      LazyCompile: *expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-     26   51.0%        LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-     26  100.0%          Function: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-     22   84.6%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      4   15.4%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:280:64
-     25   49.0%        LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-     25  100.0%          LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     25  100.0%            LazyCompile: *query /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/query.js:39:24
-     48    1.6%      LazyCompile: *formatRaw node:internal/util/inspect:844:19
-     47   97.9%        LazyCompile: *formatValue node:internal/util/inspect:766:21
-     47  100.0%          LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-     47  100.0%            LazyCompile: *formatWithOptions node:internal/util/inspect:2133:27
-      1    2.1%        Function: ^formatValue node:internal/util/inspect:766:21
-      1  100.0%          LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-      1  100.0%            Function: ^formatWithOptions node:internal/util/inspect:2133:27
-     48    1.6%      Function: ^buildError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:791:21
-     48  100.0%        Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     38   79.2%          Function: ^listOnTimeout node:internal/timers:517:25
-     38  100.0%            Function: ^processTimers node:internal/timers:497:25
-     10   20.8%          LazyCompile: *listOnTimeout node:internal/timers:517:25
-     10  100.0%            Function: ^processTimers node:internal/timers:497:25
-     46    1.6%      LazyCompile: *formatError node:internal/util/inspect:1361:21
-     44   95.7%        LazyCompile: *formatRaw node:internal/util/inspect:844:19
-     43   97.7%          LazyCompile: *formatValue node:internal/util/inspect:766:21
-     43  100.0%            LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-      1    2.3%          Function: ^formatValue node:internal/util/inspect:766:21
-      1  100.0%            LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-      2    4.3%        Function: ^formatRaw node:internal/util/inspect:844:19
-      2  100.0%          Function: ^formatValue node:internal/util/inspect:766:21
-      2  100.0%            LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-     44    1.5%      Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-     40   90.9%        Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
-      7   17.5%          Function: ~<anonymous> node:http:1:1
+      5   12.2%        LazyCompile: ~wrapSafe node:internal/modules/cjs/loader:1152:18
+      5  100.0%          LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
+      5  100.0%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
+     38   18.2%      Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      6   15.8%        Function: ~<anonymous> node:internal/fs/promises:1:1
+      6  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      6  100.0%            Function: ~<anonymous> node:internal/modules/esm/load:1:1
+      5   13.2%        Function: ~<anonymous> node:internal/modules/esm/fetch_module:1:1
+      5  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      5  100.0%            Function: ~<anonymous> node:internal/modules/esm/get_format:1:1
+      4   10.5%        Function: ~<anonymous> node:internal/process/esm_loader:1:1
+      4  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      4  100.0%            Function: ~<anonymous> node:internal/modules/cjs/loader:1:1
+      4   10.5%        Function: ~<anonymous> node:internal/modules/esm/loader:1:1
+      4  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      4  100.0%            Function: ~<anonymous> node:internal/process/esm_loader:1:1
+      3    7.9%        LazyCompile: ~initializeCJSLoader node:internal/process/pre_execution:542:29
+      3  100.0%          LazyCompile: ~setupUserModules node:internal/process/pre_execution:113:26
+      3  100.0%            LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      3    7.9%        Function: ~<anonymous> node:internal/modules/esm/load:1:1
+      3  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      3  100.0%            Function: ~<anonymous> node:internal/modules/esm/loader:1:1
+      2    5.3%        Function: ~<anonymous> node:internal/readline/interface:1:1
+      2  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      2  100.0%            Function: ~<anonymous> node:internal/fs/promises:1:1
+      2    5.3%        Function: ~<anonymous> node:internal/modules/esm/get_format:1:1
+      2  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      2  100.0%            Function: ~<anonymous> node:internal/modules/esm/resolve:1:1
+      1    2.6%        LazyCompile: ~setupInspectorHooks node:internal/process/pre_execution:378:29
+      1  100.0%          LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%            LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1    2.6%        LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%          LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1  100.0%            Function: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    2.6%        LazyCompile: ~initializeSourceMapsHandlers node:internal/process/pre_execution:581:38
+      1  100.0%          LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%            LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1    2.6%        LazyCompile: ~get BlockList node:net:2235:16
+      1  100.0%          Function: ~<anonymous> node:internal/modules/esm/fetch_module:1:1
+      1  100.0%            Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1    2.6%        Function: ~<anonymous> node:internal/source_map/source_map_cache:1:1
+      1  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%            LazyCompile: ~initializeSourceMapsHandlers node:internal/process/pre_execution:581:38
+      1    2.6%        Function: ~<anonymous> node:internal/modules/esm/translators:1:1
+      1  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%            Function: ~<anonymous> node:internal/modules/esm/loader:1:1
+      1    2.6%        Function: ~<anonymous> node:internal/modules/esm/resolve:1:1
+      1  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%            Function: ~<anonymous> node:internal/modules/esm/loader:1:1
+      1    2.6%        Function: ~<anonymous> node:internal/modules/esm/module_map:1:1
+      1  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%            Function: ~<anonymous> node:internal/modules/esm/loader:1:1
+      1    2.6%        Function: ~<anonymous> node:internal/dns/utils:1:1
+      1  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%            LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+     31   14.8%      Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+     30   96.8%        Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      7   23.3%          Function: ~<anonymous> node:http:1:1
       7  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-      6   15.0%          Function: ~<anonymous> node:internal/cluster/primary:1:1
-      6  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-      6   15.0%          Function: ~<anonymous> node:internal/child_process:1:1
-      6  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-      6   15.0%          Function: ~<anonymous> node:child_process:1:1
-      6  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-      5   12.5%          Function: ~<anonymous> node:_http_client:1:1
+      5   16.7%          Function: ~<anonymous> node:child_process:1:1
       5  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-      3    7.5%          LazyCompile: ~lazyWebCrypto node:crypto:125:23
-      3  100.0%            LazyCompile: ~get node:crypto:369:8
-      2    5.0%          Function: ~<anonymous> node:_http_common:1:1
+      5   16.7%          Function: ~<anonymous> node:_http_client:1:1
+      5  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      4   13.3%          Function: ~<anonymous> node:internal/cluster/primary:1:1
+      4  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      2    6.7%          LazyCompile: ~lazyWebCrypto node:crypto:125:23
+      2  100.0%            LazyCompile: ~get node:crypto:369:8
+      2    6.7%          Function: ~<anonymous> node:internal/child_process:1:1
       2  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-      1    2.5%          LazyCompile: ~listenInCluster node:net:1778:25
+      1    3.3%          LazyCompile: ~listenInCluster node:net:1778:25
       1  100.0%            LazyCompile: ~Server.listen node:net:1821:35
-      1    2.5%          LazyCompile: ~lazyLoadStreams node:fs:2935:25
+      1    3.3%          LazyCompile: ~lazyLoadStreams node:fs:2935:25
       1  100.0%            LazyCompile: ~get ReadStream node:fs:3080:17
-      1    2.5%          LazyCompile: ~initializeCJSLoader node:internal/process/pre_execution:542:29
-      1  100.0%            LazyCompile: ~setupUserModules node:internal/process/pre_execution:113:26
-      1    2.5%          Function: ~<anonymous> node:tty:1:1
+      1    3.3%          Function: ~<anonymous> node:tty:1:1
       1  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-      1    2.5%          Function: ~<anonymous> node:cluster:1:1
+      1    3.3%          Function: ~<anonymous> node:dgram:1:1
       1  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
-      3    6.8%        Function: ^compileForPublicLoader node:internal/bootstrap/loaders:264:25
-      3  100.0%          Function: ^loadBuiltinModule node:internal/modules/cjs/helpers:51:27
-      3  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:886:24
-      1    2.3%        LazyCompile: ~compileForPublicLoader node:internal/bootstrap/loaders:264:25
+      1    3.3%          Function: ~<anonymous> node:_http_common:1:1
+      1  100.0%            Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      1    3.2%        Function: ^compileForPublicLoader node:internal/bootstrap/loaders:264:25
       1  100.0%          Function: ^loadBuiltinModule node:internal/modules/cjs/helpers:51:27
-      1  100.0%            LazyCompile: ~Module._load node:internal/modules/cjs/loader:886:24
-     43    1.5%      LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     37   86.0%        LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-     34   91.9%          LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     33   97.1%            LazyCompile: *expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      1    2.9%            Function: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      3    8.1%          LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      3  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:280:64
-      6   14.0%        LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      6  100.0%          Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-      6  100.0%            Function: ^dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-     40    1.4%      LazyCompile: *etag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:70:15
-     40  100.0%        LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-     40  100.0%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     40  100.0%            LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-     40    1.4%      LazyCompile: *_storeHeader node:_http_outgoing:439:22
-     35   87.5%        LazyCompile: *write_ node:_http_outgoing:872:16
-     35  100.0%          LazyCompile: *end node:_http_outgoing:992:45
-     35  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      4   10.0%        LazyCompile: *writeHead node:_http_server:339:19
-      4  100.0%          Function: ^_implicitHeader node:_http_server:334:68
-      4  100.0%            Function: ^write_ node:_http_outgoing:872:16
-      1    2.5%        Function: ^writeHead node:_http_server:339:19
-      1  100.0%          Function: ^_implicitHeader node:_http_server:334:68
-      1  100.0%            Function: ^write_ node:_http_outgoing:872:16
-     40    1.4%      Function: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-     27   67.5%        Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-     26   96.3%          Function: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-     19   73.1%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      7   26.9%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:280:64
-      1    3.7%          LazyCompile: ~trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      1  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:280:64
-     13   32.5%        LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-     13  100.0%          LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     11   84.6%            LazyCompile: *query /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/query.js:39:24
-      2   15.4%            Function: ^query /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/query.js:39:24
-     40    1.4%      Function: ^Hash node:internal/crypto/hash:62:14
-     40  100.0%        Function: ^createHash node:crypto:132:20
-     40  100.0%          Function: ^entitytag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:39:20
-     40  100.0%            Function: ^etag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:70:15
-     39    1.3%      Function: ^parse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:106:16
-     31   79.5%        LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-     24   77.4%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     24  100.0%            LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      7   22.6%          Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      7  100.0%            Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      8   20.5%        Function: ^setCharset /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/utils.js:248:41
-      8  100.0%          Function: ^send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      8  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     36    1.2%      LazyCompile: *CircuitBreaker /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:129:15
-     24   66.7%        LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     24  100.0%          LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-     24  100.0%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     12   33.3%        Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     11   91.7%          Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-     11  100.0%            Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-      1    8.3%          LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      1  100.0%            Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-     30    1.0%      LazyCompile: *prepareStackTrace node:internal/errors:89:27
-     30  100.0%        /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     30  100.0%          LazyCompile: *formatError node:internal/util/inspect:1361:21
-     30  100.0%            LazyCompile: *formatRaw node:internal/util/inspect:844:19
-    100    2.0%    LazyCompile: *Socket._writeGeneric node:net:899:42
-     68   68.0%      LazyCompile: *writeOrBuffer node:internal/streams/writable:368:23
-     68  100.0%        LazyCompile: *value node:internal/console/constructor:272:20
-     37   54.4%          LazyCompile: *warn node:internal/console/constructor:381:7
-     37  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     23   33.8%          LazyCompile: *log node:internal/console/constructor:376:6
-     23  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      8   11.8%          Function: ^warn node:internal/console/constructor:381:7
-      8  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     15   15.0%      Function: ^Socket._writev node:net:936:36
-     15  100.0%        Function: ^doWrite node:internal/streams/writable:401:17
-      8   53.3%          LazyCompile: *end node:_http_outgoing:992:45
-      8  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      7   46.7%          Function: ^clearBuffer node:internal/streams/writable:532:21
-      7  100.0%            Function: ^Writable.uncork node:internal/streams/writable:344:37
-     13   13.0%      Function: ^Socket._write node:net:941:35
-     13  100.0%        Function: ^writeOrBuffer node:internal/streams/writable:368:23
-     11   84.6%          Function: ^_write node:internal/streams/writable:286:16
-     11  100.0%            Function: ^Writable.write node:internal/streams/writable:336:36
-      2   15.4%          LazyCompile: *value node:internal/console/constructor:272:20
-      2  100.0%            LazyCompile: *log node:internal/console/constructor:376:6
-      3    3.0%      LazyCompile: *_write node:internal/streams/writable:286:16
-      3  100.0%        Function: ^Writable.write node:internal/streams/writable:336:36
-      3  100.0%          Function: ^value node:internal/console/constructor:272:20
-      2   66.7%            LazyCompile: *log node:internal/console/constructor:376:6
-      1   33.3%            Function: ^warn node:internal/console/constructor:381:7
-      1    1.0%      LazyCompile: *value node:internal/console/constructor:272:20
-      1  100.0%        LazyCompile: *log node:internal/console/constructor:376:6
-      1  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      1  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:8:24
-     70    1.4%    LazyCompile: *formatError node:internal/util/inspect:1361:21
-     67   95.7%      LazyCompile: *formatRaw node:internal/util/inspect:844:19
-     66   98.5%        LazyCompile: *formatValue node:internal/util/inspect:766:21
-     66  100.0%          LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-     66  100.0%            LazyCompile: *formatWithOptions node:internal/util/inspect:2133:27
-      1    1.5%        Function: ^formatValue node:internal/util/inspect:766:21
-      1  100.0%          LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-      1  100.0%            Function: ^formatWithOptions node:internal/util/inspect:2133:27
-      3    4.3%      Function: ^formatRaw node:internal/util/inspect:844:19
-      3  100.0%        Function: ^formatValue node:internal/util/inspect:766:21
-      3  100.0%          LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-      3  100.0%            Function: ^formatWithOptions node:internal/util/inspect:2133:27
-     65    1.3%    LazyCompile: *get stats /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:99:13
-     42   64.6%      LazyCompile: *fail /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:771:15
-     30   71.4%        LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     30  100.0%          LazyCompile: *listOnTimeout node:internal/timers:517:25
-     30  100.0%            Function: ^processTimers node:internal/timers:497:25
-     12   28.6%        Function: ^handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-     12  100.0%          Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     11   91.7%            LazyCompile: *listOnTimeout node:internal/timers:517:25
-      1    8.3%            Function: ^listOnTimeout node:internal/timers:517:25
-     17   26.2%      LazyCompile: *handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-     12   70.6%        LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     12  100.0%          LazyCompile: *listOnTimeout node:internal/timers:517:25
-     12  100.0%            LazyCompile: *processTimers node:internal/timers:497:25
-      5   29.4%        Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      5  100.0%          LazyCompile: *listOnTimeout node:internal/timers:517:25
-      5  100.0%            LazyCompile: *processTimers node:internal/timers:497:25
-      6    9.2%      Function: ^get stats /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:413:13
-      6  100.0%        Function: ^fail /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:771:15
-      6  100.0%          Function: ^handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-      6  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-     60    1.2%    LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-     43   71.7%      LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     39   90.7%        LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-     37   94.9%          LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-     36   97.3%            LazyCompile: *expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      1    2.7%            Function: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      2    5.1%          LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      2  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:280:64
-      4    9.3%        LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      4  100.0%          Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-      4  100.0%            Function: ^dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-     17   28.3%      Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-     13   76.5%        Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-     13  100.0%          Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-     13  100.0%            Function: ^dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      4   23.5%        LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      4  100.0%          Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-      4  100.0%            Function: ^dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-
-   2112   24.1%  epoll_pwait@@GLIBC_2.6
-
-    384    4.4%  __write@@GLIBC_2.2.5
-    333   86.7%    LazyCompile: *Socket._writeGeneric node:net:899:42
-    280   84.1%      LazyCompile: *writeOrBuffer node:internal/streams/writable:368:23
-    279   99.6%        LazyCompile: *value node:internal/console/constructor:272:20
-    142   50.9%          LazyCompile: *warn node:internal/console/constructor:381:7
-    142  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-    101   36.2%          LazyCompile: *log node:internal/console/constructor:376:6
-    101  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     36   12.9%          Function: ^warn node:internal/console/constructor:381:7
-     36  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     25    7.5%      LazyCompile: *value node:internal/console/constructor:272:20
-     15   60.0%        LazyCompile: *log node:internal/console/constructor:376:6
-     15  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     11   73.3%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:8:24
-      4   26.7%            Function: ^dummyProc /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:15:19
-     10   40.0%        Function: ^warn node:internal/console/constructor:381:7
-     10  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     10  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     20    6.0%      Function: ^Socket._write node:net:941:35
-     20  100.0%        Function: ^writeOrBuffer node:internal/streams/writable:368:23
-     15   75.0%          Function: ^_write node:internal/streams/writable:286:16
-     15  100.0%            Function: ^Writable.write node:internal/streams/writable:336:36
-      5   25.0%          LazyCompile: *value node:internal/console/constructor:272:20
-      4   80.0%            Function: ^warn node:internal/console/constructor:381:7
-      1   20.0%            LazyCompile: *log node:internal/console/constructor:376:6
-      8    2.4%      LazyCompile: *_write node:internal/streams/writable:286:16
-      8  100.0%        Function: ^Writable.write node:internal/streams/writable:336:36
-      8  100.0%          Function: ^value node:internal/console/constructor:272:20
-      6   75.0%            Function: ^warn node:internal/console/constructor:381:7
-      2   25.0%            LazyCompile: *log node:internal/console/constructor:376:6
-     27    7.0%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      3   11.1%      /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      1   33.3%        LazyCompile: ~pathToFileURL node:internal/url:1529:23
-      1  100.0%          Function: ^resolveExports node:internal/modules/cjs/loader:555:24
+      1  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      9    4.3%      /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      3   33.3%        LazyCompile: ~resolvePackageTargetString node:internal/modules/esm/resolve:412:36
+      3  100.0%          LazyCompile: ~resolvePackageTarget node:internal/modules/esm/resolve:519:30
+      2   66.7%            LazyCompile: ~resolvePackageTarget node:internal/modules/esm/resolve:519:30
+      1   33.3%            LazyCompile: ~packageExportsResolve node:internal/modules/esm/resolve:625:31
+      1   11.1%        LazyCompile: ~getStack /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/depd/index.js:381:19
+      1  100.0%          LazyCompile: ~depd /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/depd/index.js:103:15
+      1  100.0%            Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/body-parser/index.js:1:1
+      1   11.1%        LazyCompile: ~encodeUrl /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/encodeurl/index.js:56:20
+      1  100.0%          LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/finalhandler/index.js:86:19
+      1  100.0%            LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:640:19
+      1   11.1%        Function: ^normalizeString node:path:66:25
+      1  100.0%          Function: ^resolve node:path:1091:10
+      1  100.0%            Function: ^tryPackage node:internal/modules/cjs/loader:421:20
+      1   11.1%        Function: ^isURLInstance node:internal/url:1566:23
+      1  100.0%          LazyCompile: ~fileURLToPath node:internal/url:1487:23
+      1  100.0%            LazyCompile: ~finalizeEsmResolution node:internal/modules/cjs/loader:1081:31
+      1   11.1%        Function: ^Module._nodeModulePaths node:internal/modules/cjs/loader:747:37
+      1  100.0%          Function: ^Module.load node:internal/modules/cjs/loader:1105:33
+      1  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      1   11.1%        Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%          Function: ^Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      7    3.3%      LazyCompile: ~internalCompileFunction node:internal/vm:31:33
+      7  100.0%        LazyCompile: ~wrapSafe node:internal/modules/cjs/loader:1152:18
+      7  100.0%          LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
+      7  100.0%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
+      5    2.4%      Function: ^stat node:internal/modules/cjs/loader:180:14
+      3   60.0%        Function: ^tryFile node:internal/modules/cjs/loader:467:17
+      2   66.7%          Function: ^tryExtensions node:internal/modules/cjs/loader:483:23
+      2  100.0%            Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
+      1   33.3%          Function: ^tryPackage node:internal/modules/cjs/loader:421:20
       1  100.0%            Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
-      1   33.3%        LazyCompile: ~getOwn node:internal/bootstrap/loaders:188:16
+      2   40.0%        Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
+      1   50.0%          LazyCompile: ~Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      1   50.0%          Function: ^Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      3    1.4%      LazyCompile: ~value node:internal/console/constructor:337:20
+      3  100.0%        LazyCompile: ~log node:internal/console/constructor:376:6
+      3  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      3  100.0%            LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app2.js:26:18
+      3    1.4%      LazyCompile: ~realpathSync node:fs:2502:22
+      3  100.0%        LazyCompile: ~toRealPath node:internal/modules/cjs/loader:476:20
+      2   66.7%          LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
+      2  100.0%            LazyCompile: ~resolveMainPath node:internal/modules/run_main:15:25
+      1   33.3%          LazyCompile: ~tryFile node:internal/modules/cjs/loader:467:17
+      1  100.0%            LazyCompile: ~tryExtensions node:internal/modules/cjs/loader:483:23
+      3    1.4%      LazyCompile: ~Module._extensions..json node:internal/modules/cjs/loader:1313:39
+      3  100.0%        Function: ^Module.load node:internal/modules/cjs/loader:1105:33
+      3  100.0%          Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      3  100.0%            Function: ^Module.require node:internal/modules/cjs/loader:1133:36
+      3    1.4%      Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      3  100.0%        Function: ^Module.require node:internal/modules/cjs/loader:1133:36
+      3  100.0%          Function: ^require node:internal/modules/cjs/helpers:108:31
+      1   33.3%            Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/send/index.js:1:1
+      1   33.3%            Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/safer-buffer/safer.js:1:1
+      1   33.3%            Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/accepts/index.js:1:1
+      8    3.2%    Function: ^resolve node:path:1091:10
+      5   62.5%      Function: ^readPackage node:internal/modules/cjs/loader:362:21
+      3   60.0%        Function: ^readPackageScope node:internal/modules/cjs/loader:404:26
+      2   66.7%          Function: ^trySelf node:internal/modules/cjs/loader:524:17
+      2  100.0%            Function: ^Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1   33.3%          LazyCompile: ~trySelf node:internal/modules/cjs/loader:524:17
+      1  100.0%            LazyCompile: ~Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1   20.0%        LazyCompile: ~tryPackage node:internal/modules/cjs/loader:421:20
+      1  100.0%          Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%            LazyCompile: ~Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1   20.0%        Function: ^tryPackage node:internal/modules/cjs/loader:421:20
+      1  100.0%          Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%            Function: ^Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1   12.5%      Function: ^resolveExports node:internal/modules/cjs/loader:555:24
+      1  100.0%        Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%          Function: ^Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1  100.0%            Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      1   12.5%      Function: ^Module._nodeModulePaths node:internal/modules/cjs/loader:747:37
+      1  100.0%        Function: ^Module.load node:internal/modules/cjs/loader:1105:33
+      1  100.0%          Function: ^Module._load node:internal/modules/cjs/loader:886:24
+      1  100.0%            Function: ^Module.require node:internal/modules/cjs/loader:1133:36
+      1   12.5%      Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%        LazyCompile: ~Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1  100.0%          LazyCompile: ~Module._load node:internal/modules/cjs/loader:886:24
+      1  100.0%            Function: ^Module.require node:internal/modules/cjs/loader:1133:36
+
+     35    9.8%  fwrite@@GLIBC_2.2.5
+     31   88.6%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      5   16.1%      /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      3   60.0%        LazyCompile: ~getStack /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/depd/index.js:381:19
+      3  100.0%          LazyCompile: ~depd /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/depd/index.js:103:15
+      3  100.0%            Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/body-parser/index.js:1:1
+      1   20.0%        LazyCompile: ~getOwn node:internal/bootstrap/loaders:188:16
       1  100.0%          LazyCompile: ~syncExports node:internal/bootstrap/loaders:307:14
       1  100.0%            LazyCompile: ~<anonymous> node:internal/bootstrap/loaders:293:15
-      1   33.3%        LazyCompile: ~createStatusCodeList /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/statuses/index.js:82:31
-      1  100.0%          Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/statuses/index.js:1:1
-      1  100.0%            LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
-      2    7.4%      Function: ^processTimers node:internal/timers:497:25
-      2    7.4%      Function: ^afterWriteDispatched node:internal/stream_base_commons:155:30
-      1   50.0%        LazyCompile: *Socket._writeGeneric node:net:899:42
-      1  100.0%          Function: ^Socket._writev node:net:936:36
-      1  100.0%            Function: ^doWrite node:internal/streams/writable:401:17
-      1   50.0%        Function: ^writeGeneric node:internal/stream_base_commons:147:22
-      1  100.0%          Function: ^Socket._writeGeneric node:net:899:42
-      1  100.0%            LazyCompile: *_write node:internal/streams/writable:286:16
-      1    3.7%      LazyCompile: ~tryExtensions node:internal/modules/cjs/loader:483:23
-      1  100.0%        LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
-      1  100.0%          LazyCompile: ~Module._resolveFilename node:internal/modules/cjs/loader:984:35
-      1  100.0%            LazyCompile: ~Module._load node:internal/modules/cjs/loader:886:24
-      1    3.7%      LazyCompile: ~strEscape node:internal/util/inspect:496:19
-      1  100.0%        LazyCompile: ~formatPrimitive node:internal/util/inspect:1612:25
-      1  100.0%          Function: ^formatValue node:internal/util/inspect:766:21
-      1  100.0%            LazyCompile: ~formatProperty node:internal/util/inspect:1911:24
-      1    3.7%      LazyCompile: ~shutdown /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:325:12
-      1  100.0%        LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1  100.0%          LazyCompile: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      1  100.0%            LazyCompile: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-      1    3.7%      LazyCompile: ~patchProcessObject node:internal/process/pre_execution:127:28
+      1   20.0%        Function: ^getOwn node:internal/bootstrap/loaders:188:16
+      1  100.0%          Function: ^syncExports node:internal/bootstrap/loaders:307:14
+      1  100.0%            LazyCompile: ~<anonymous> node:internal/bootstrap/loaders:293:15
+      2    6.5%      LazyCompile: ~toRealPath node:internal/modules/cjs/loader:476:20
+      2  100.0%        LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
+      2  100.0%          LazyCompile: ~resolveMainPath node:internal/modules/run_main:15:25
+      2  100.0%            LazyCompile: ~executeUserEntryPoint node:internal/modules/run_main:74:31
+      2    6.5%      LazyCompile: ~realpathSync node:fs:2502:22
+      2  100.0%        LazyCompile: ~toRealPath node:internal/modules/cjs/loader:476:20
+      2  100.0%          LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
+      2  100.0%            LazyCompile: ~resolveMainPath node:internal/modules/run_main:15:25
+      2    6.5%      LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      2  100.0%        LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      2  100.0%          Function: ~<anonymous> node:internal/main/run_main_module:1:1
+      2    6.5%      LazyCompile: ~patchProcessObject node:internal/process/pre_execution:127:28
+      2  100.0%        LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      2  100.0%          LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      2  100.0%            Function: ~<anonymous> node:internal/main/run_main_module:1:1
+      2    6.5%      LazyCompile: ~fastparse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/parseurl/index.js:95:20
+      2  100.0%        LazyCompile: ~parseurl /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/parseurl/index.js:35:19
+      2  100.0%          LazyCompile: ~getPathname /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:537:21
+      2  100.0%            LazyCompile: ~next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
+      2    6.5%      Function: ~<anonymous> node:internal/modules/cjs/loader:1:1
+      2  100.0%        Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      2  100.0%          LazyCompile: ~initializeCJSLoader node:internal/process/pre_execution:542:29
+      2  100.0%            LazyCompile: ~setupUserModules node:internal/process/pre_execution:113:26
+      1    3.2%      LazyCompile: ~value node:internal/console/constructor:337:20
+      1  100.0%        LazyCompile: ~log node:internal/console/constructor:376:6
+      1  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1  100.0%            LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app2.js:26:18
+      1    3.2%      LazyCompile: ~toString node:buffer:796:46
+      1  100.0%        LazyCompile: ~readFileSync node:fs:466:22
+      1  100.0%          LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
+      1  100.0%            LazyCompile: ~Module.load node:internal/modules/cjs/loader:1105:33
+      1    3.2%      LazyCompile: ~setupPerfHooks node:internal/process/pre_execution:373:24
       1  100.0%        LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
       1  100.0%          LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
       1  100.0%            Function: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    3.7%      LazyCompile: ~onParseComplete node:internal/url:546:25
-      1  100.0%        /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      1  100.0%          LazyCompile: ~URL node:internal/url:638:14
-      1  100.0%            LazyCompile: ~URL node:internal/url:638:14
-      1    3.7%      LazyCompile: ~markCwd node:internal/util/inspect:1325:17
-      1  100.0%        LazyCompile: ~formatError node:internal/util/inspect:1361:21
-      1  100.0%          Function: ^formatRaw node:internal/util/inspect:844:19
-      1  100.0%            Function: ^formatValue node:internal/util/inspect:766:21
-      1    3.7%      LazyCompile: ~logger node:internal/util/debuglog:95:18
-      1  100.0%        LazyCompile: ~onWriteComplete node:internal/stream_base_commons:80:25
-      1    3.7%      LazyCompile: ~getColorDepth node:internal/tty:106:23
-      1  100.0%        Function: ^value node:internal/console/constructor:315:20
-      1  100.0%          Function: ^value node:internal/console/constructor:337:20
-      1  100.0%            Function: ^log node:internal/console/constructor:376:6
-      1    3.7%      LazyCompile: ~expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      1  100.0%        Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      1  100.0%          LazyCompile: ~trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      1  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:280:64
-      1    3.7%      LazyCompile: ~createWritableStdioStream node:internal/bootstrap/switches/is_main_thread:45:35
+      1    3.2%      LazyCompile: ~setupFetch node:internal/process/pre_execution:213:20
+      1  100.0%        LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%          LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1  100.0%            Function: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    3.2%      LazyCompile: ~readPackage node:internal/modules/cjs/loader:362:21
+      1  100.0%        LazyCompile: ~readPackageScope node:internal/modules/cjs/loader:404:26
+      1  100.0%          LazyCompile: ~shouldUseESMLoader node:internal/modules/run_main:30:28
+      1  100.0%            LazyCompile: ~executeUserEntryPoint node:internal/modules/run_main:74:31
+      1    3.2%      LazyCompile: ~parseExtendedQueryString /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/utils.js:289:34
+      1  100.0%        LazyCompile: ~query /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/query.js:39:24
+      1  100.0%          LazyCompile: ~handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
+      1  100.0%            LazyCompile: ~trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
+      1    3.2%      LazyCompile: ~onError node:_http_incoming:442:17
+      1  100.0%        LazyCompile: ~processTicksAndRejections node:internal/process/task_queues:67:35
+      1    3.2%      LazyCompile: ~listOnTimeout node:internal/timers:517:25
+      1  100.0%        LazyCompile: ~processTimers node:internal/timers:497:25
+      1    3.2%      LazyCompile: ~createWritableStdioStream node:internal/bootstrap/switches/is_main_thread:45:35
       1  100.0%        LazyCompile: ~getStderr node:internal/bootstrap/switches/is_main_thread:168:19
       1  100.0%          Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/debug/src/node.js:1:1
       1  100.0%            LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
-      1    3.7%      LazyCompile: ~_implicitHeader node:_http_server:334:68
-      1  100.0%        LazyCompile: ~write_ node:_http_outgoing:872:16
-      1  100.0%          LazyCompile: ~end node:_http_outgoing:992:45
-      1  100.0%            LazyCompile: ~send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1    3.7%      LazyCompile: ~Socket._destroy node:net:772:37
-      1  100.0%        Function: ^_destroy node:internal/streams/destroy:77:18
-      1  100.0%          Function: ^destroy node:internal/streams/destroy:39:17
-      1  100.0%            LazyCompile: ~finish node:internal/streams/writable:739:16
-      1    3.7%      LazyCompile: ~<anonymous> node:internal/fs/utils:691:38
-      1  100.0%        LazyCompile: ~realpathSync node:fs:2502:22
-      1  100.0%          LazyCompile: ~toRealPath node:internal/modules/cjs/loader:476:20
-      1  100.0%            LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
-      1    3.7%      LazyCompile: *value node:internal/console/constructor:272:20
-      1  100.0%        Function: ^log node:internal/console/constructor:376:6
-      1  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      1  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:8:24
-      1    3.7%      Function: ^release /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/semaphore.js:43:20
-      1  100.0%        Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      1  100.0%          Function: ^listOnTimeout node:internal/timers:517:25
-      1  100.0%            Function: ^processTimers node:internal/timers:497:25
-      1    3.7%      Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      1  100.0%        Function: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      1  100.0%          Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      1  100.0%            Function: ^trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      1    3.7%      Function: ^isEmpty node:internal/linkedlist:45:17
-      1  100.0%        Function: ^unenroll node:timers:78:18
-      1  100.0%          Function: ^clearTimeout node:timers:185:22
-      1  100.0%            Function: ^handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-      1    3.7%      Function: ^fire /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:498:8
-      1  100.0%        Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1  100.0%          Function: ^handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      1  100.0%            Function: ^next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:116:16
-      1    3.7%      Function: ^addListener node:events:604:58
-      1  100.0%        LazyCompile: ~Readable.on node:internal/streams/readable:886:33
-      1  100.0%          LazyCompile: ~connectionListenerInternal node:_http_server:611:36
-      1  100.0%            LazyCompile: ~defaultTriggerAsyncIdScope node:internal/async_hooks:455:36
-      1    3.7%      Function: ^Socket._write node:net:941:35
-      1  100.0%        Function: ^writeOrBuffer node:internal/streams/writable:368:23
-      1  100.0%          Function: ^_write node:internal/streams/writable:286:16
-      1  100.0%            Function: ^Writable.write node:internal/streams/writable:336:36
-      8    2.1%    LazyCompile: *writeGeneric node:internal/stream_base_commons:147:22
-      8  100.0%      Function: ^Socket._writeGeneric node:net:899:42
-      8  100.0%        Function: ^Socket._write node:net:941:35
-      8  100.0%          Function: ^writeOrBuffer node:internal/streams/writable:368:23
-      7   87.5%            LazyCompile: *value node:internal/console/constructor:272:20
-      1   12.5%            Function: ^_write node:internal/streams/writable:286:16
-
-    183    2.1%  /usr/lib/x86_64-linux-gnu/libc.so.6
-     81   44.3%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
-     20   24.7%      /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      3   15.0%        Function: ^parse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:106:16
-      2   66.7%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      2  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1   33.3%          Function: ^setCharset /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/utils.js:248:41
-      1  100.0%            Function: ^send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      2   10.0%        LazyCompile: *prepareStackTrace node:internal/errors:89:27
-      2  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      2  100.0%            LazyCompile: *formatError node:internal/util/inspect:1361:21
-      2   10.0%        Function: ^improveStack node:internal/util/inspect:1264:22
-      2  100.0%          LazyCompile: *formatError node:internal/util/inspect:1361:21
-      1   50.0%            LazyCompile: *formatRaw node:internal/util/inspect:844:19
-      1   50.0%            Function: ^formatRaw node:internal/util/inspect:844:19
-      2   10.0%        Function: ^FastBuffer node:internal/buffer:960:14
-      2  100.0%          Function: ^createUnsafeBuffer node:internal/buffer:1061:28
-      2  100.0%            Function: ^createPool node:buffer:162:20
-      1    5.0%        LazyCompile: ~lookup /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/mime/mime.js:102:19
-      1  100.0%          LazyCompile: ~header /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:777:29
-      1  100.0%            LazyCompile: ~contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
-      1    5.0%        LazyCompile: *setHeader node:_http_outgoing:661:57
-      1  100.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1  100.0%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1    5.0%        LazyCompile: *end node:_http_outgoing:992:45
-      1  100.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1  100.0%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1    5.0%        Function: ^writeHead node:_http_server:339:19
-      1  100.0%          Function: ^_implicitHeader node:_http_server:334:68
-      1  100.0%            Function: ^write_ node:_http_outgoing:872:16
-      1    5.0%        Function: ^markCwd node:internal/util/inspect:1325:17
-      1  100.0%          Function: ^formatError node:internal/util/inspect:1361:21
-      1  100.0%            Function: ^formatRaw node:internal/util/inspect:844:19
-      1    5.0%        Function: ^header /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:777:29
-      1  100.0%          Function: ^send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1    5.0%        Function: ^getKeys node:internal/util/inspect:709:17
-      1  100.0%          Function: ^formatRaw node:internal/util/inspect:844:19
-      1  100.0%            Function: ^formatValue node:internal/util/inspect:766:21
-      1    5.0%        Function: ^entitytag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:39:20
-      1  100.0%          Function: ^etag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:70:15
-      1  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1    5.0%        Function: ^contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
-      1  100.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1    5.0%        Function: ^checkInvalidHeaderChar node:_http_common:223:32
-      1  100.0%          Function: ^<anonymous> node:_http_outgoing:637:45
-      1  100.0%            Function: ^setHeader node:_http_outgoing:661:57
-      1    5.0%        Function: ^Mime.lookup /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/mime/mime.js:69:33
-      1  100.0%          Function: ^contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
-      1  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      6    7.4%      LazyCompile: *formatError node:internal/util/inspect:1361:21
-      6  100.0%        LazyCompile: *formatRaw node:internal/util/inspect:844:19
-      6  100.0%          LazyCompile: *formatValue node:internal/util/inspect:766:21
-      6  100.0%            LazyCompile: *formatWithOptionsInternal node:internal/util/inspect:2154:35
-      4    4.9%      LazyCompile: *get stats /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:99:13
-      3   75.0%        LazyCompile: *fail /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:771:15
-      2   66.7%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      2  100.0%            LazyCompile: *listOnTimeout node:internal/timers:517:25
-      1   33.3%          Function: ^handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-      1  100.0%            Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      1   25.0%        LazyCompile: *handleError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:732:22
-      1  100.0%          Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      1  100.0%            LazyCompile: *listOnTimeout node:internal/timers:517:25
-      4    4.9%      LazyCompile: *get node:_http_incoming:112:16
-      3   75.0%        LazyCompile: *parserOnIncoming node:_http_server:972:26
-      3  100.0%          LazyCompile: *parserOnHeadersComplete node:_http_common:72:33
-      1   25.0%        Function: ^ServerResponse node:_http_server:193:24
-      1  100.0%          Function: ^parserOnIncoming node:_http_server:972:26
-      1  100.0%            LazyCompile: *parserOnHeadersComplete node:_http_common:72:33
-      4    4.9%      LazyCompile: *end node:_http_outgoing:992:45
-      4  100.0%        LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      4  100.0%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      3   75.0%            LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      1   25.0%            LazyCompile: *handle /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/layer.js:86:49
-      3    3.7%      LazyCompile: *parserOnIncoming node:_http_server:972:26
-      3  100.0%        LazyCompile: *parserOnHeadersComplete node:_http_common:72:33
-      3    3.7%      Function: ^parse /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/content-type/index.js:106:16
-      3  100.0%        LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      3  100.0%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      3  100.0%            LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      3    3.7%      Function: ^isTraceHTTPEnabled node:internal/http:40:28
-      2   66.7%        Function: ^_finish node:_http_server:230:52
-      2  100.0%          Function: ^end node:_http_outgoing:992:45
-      2  100.0%            Function: ^send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1   33.3%        Function: ^ServerResponse node:_http_server:193:24
-      1  100.0%          Function: ^parserOnIncoming node:_http_server:972:26
-      1  100.0%            Function: ^parserOnHeadersComplete node:_http_common:72:33
-      2    2.5%      LazyCompile: ~value node:internal/console/constructor:337:20
-      2  100.0%        LazyCompile: ~log node:internal/console/constructor:376:6
-      2  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      2  100.0%            LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:55:18
-      2    2.5%      LazyCompile: *improveStack node:internal/util/inspect:1264:22
-      2  100.0%        LazyCompile: *formatError node:internal/util/inspect:1361:21
-      2  100.0%          LazyCompile: *formatRaw node:internal/util/inspect:844:19
-      2  100.0%            LazyCompile: *formatValue node:internal/util/inspect:766:21
-      2    2.5%      Function: ^_storeHeader node:_http_outgoing:439:22
-      2  100.0%        Function: ^writeHead node:_http_server:339:19
-      2  100.0%          Function: ^_implicitHeader node:_http_server:334:68
-      2  100.0%            Function: ^write_ node:_http_outgoing:872:16
-      1    1.2%      LazyCompile: ~toRealPath node:internal/modules/cjs/loader:476:20
-      1  100.0%        LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
-      1  100.0%          LazyCompile: ~resolveMainPath node:internal/modules/run_main:15:25
-      1  100.0%            LazyCompile: ~executeUserEntryPoint node:internal/modules/run_main:74:31
-      1    1.2%      LazyCompile: ~setInterval node:timers:210:21
-      1  100.0%        LazyCompile: ~setupConnectionsTracking node:_http_server:485:34
-      1  100.0%          LazyCompile: ~Server node:_http_server:495:16
-      1  100.0%            LazyCompile: ~createServer node:http:60:22
-      1    1.2%      LazyCompile: ~resolvePackageTargetString node:internal/modules/esm/resolve:412:36
-      1  100.0%        LazyCompile: ~resolvePackageTarget node:internal/modules/esm/resolve:519:30
-      1  100.0%          LazyCompile: ~resolvePackageTarget node:internal/modules/esm/resolve:519:30
-      1  100.0%            LazyCompile: ~resolvePackageTarget node:internal/modules/esm/resolve:519:30
-      1    1.2%      LazyCompile: ~processTicksAndRejections node:internal/process/task_queues:67:35
-      1    1.2%      LazyCompile: ~listen /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/application.js:633:29
-      1  100.0%        Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:1:1
-      1  100.0%          LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
+      1    3.2%      LazyCompile: ~assertEncoding node:internal/fs/utils:155:24
+      1  100.0%        LazyCompile: ~getOptions node:internal/fs/utils:318:20
+      1  100.0%          LazyCompile: ~readFileSync node:fs:466:22
       1  100.0%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
-      1    1.2%      LazyCompile: ~free node:internal/freelist:21:7
-      1  100.0%        LazyCompile: ~freeParser node:_http_common:182:20
-      1  100.0%          LazyCompile: ~socketOnClose node:_http_server:745:23
-      1  100.0%            Function: ^emit node:events:460:44
-      1    1.2%      LazyCompile: ~cache node:internal/http:24:15
-      1  100.0%        LazyCompile: ~utcDate node:internal/http:19:17
-      1  100.0%          LazyCompile: ~_storeHeader node:_http_outgoing:439:22
-      1  100.0%            LazyCompile: ~writeHead node:_http_server:339:19
-      1    1.2%      LazyCompile: ~Socket._writeGeneric node:net:899:42
-      1  100.0%        LazyCompile: ~Socket._write node:net:941:35
-      1  100.0%          LazyCompile: ~writeOrBuffer node:internal/streams/writable:368:23
-      1  100.0%            LazyCompile: ~_write node:internal/streams/writable:286:16
-      1    1.2%      LazyCompile: *setHeader node:_http_outgoing:661:57
-      1  100.0%        Function: ^expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      1  100.0%          LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      1  100.0%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      1    1.2%      LazyCompile: *expressInit /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/init.js:29:30
-      1  100.0%        LazyCompile: *trim_prefix /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:293:23
-      1  100.0%          LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      1  100.0%            LazyCompile: *query /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/middleware/query.js:39:24
-      1    1.2%      LazyCompile: *contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
-      1  100.0%        LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1  100.0%          LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1  100.0%            LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      1    1.2%      LazyCompile: *buildError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:791:21
-      1  100.0%        Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      1  100.0%          LazyCompile: *listOnTimeout node:internal/timers:517:25
-      1  100.0%            LazyCompile: *processTimers node:internal/timers:497:25
-      1    1.2%      LazyCompile: *CircuitBreaker /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:129:15
-      1  100.0%        LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1  100.0%          LazyCompile: *dispatch /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/route.js:98:45
-      1  100.0%            LazyCompile: *next /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/router/index.js:177:16
-      1    1.2%      LazyCompile: *<anonymous> node:internal/console/constructor:356:10
-      1  100.0%        LazyCompile: *afterWriteTick node:internal/streams/writable:485:24
-      1  100.0%          LazyCompile: *processTicksAndRejections node:internal/process/task_queues:67:35
-      1    1.2%      LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      1  100.0%        LazyCompile: *listOnTimeout node:internal/timers:517:25
-      1  100.0%          LazyCompile: *processTimers node:internal/timers:497:25
-      1    1.2%      LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/request.js:467:36
+      1    3.2%      LazyCompile: ~afterWrite node:internal/streams/writable:490:20
+      1  100.0%        LazyCompile: ~afterWriteTick node:internal/streams/writable:485:24
+      1  100.0%          LazyCompile: ~processTicksAndRejections node:internal/process/task_queues:67:35
+      1    3.2%      LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:581:24
       1  100.0%        /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      1  100.0%          LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1  100.0%            LazyCompile: *<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app.js:37:23
-      1    1.2%      Function: ^writevGeneric node:internal/stream_base_commons:122:23
-      1  100.0%        Function: ^Socket._writeGeneric node:net:899:42
-      1  100.0%          Function: ^Socket._writev node:net:936:36
-      1  100.0%            Function: ^doWrite node:internal/streams/writable:401:17
-      1    1.2%      Function: ^stylizeWithColor node:internal/util/inspect:561:26
-      1  100.0%        Function: ^markNodeModules node:internal/util/inspect:1309:25
-      1  100.0%          Function: ^formatError node:internal/util/inspect:1361:21
-      1  100.0%            Function: ^formatRaw node:internal/util/inspect:844:19
-      1    1.2%      Function: ^processHeader node:_http_outgoing:570:23
-      1  100.0%        Function: ^_storeHeader node:_http_outgoing:439:22
-      1  100.0%          Function: ^writeHead node:_http_server:339:19
-      1  100.0%            Function: ^_implicitHeader node:_http_server:334:68
-      1    1.2%      Function: ^parserOnHeadersComplete node:_http_common:72:33
-      1    1.2%      Function: ^onParserExecute node:_http_server:790:25
-      1    1.2%      Function: ^markNodeModules node:internal/util/inspect:1309:25
-      1  100.0%        Function: ^formatError node:internal/util/inspect:1361:21
-      1  100.0%          Function: ^formatRaw node:internal/util/inspect:844:19
-      1  100.0%            Function: ^formatValue node:internal/util/inspect:766:21
-      1    1.2%      Function: ^listOnTimeout node:internal/timers:517:25
-      1  100.0%        Function: ^processTimers node:internal/timers:497:25
-      1    1.2%      Function: ^buildError /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:791:21
-      1  100.0%        Function: ^<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:586:13
-      1  100.0%          Function: ^listOnTimeout node:internal/timers:517:25
-      1  100.0%            Function: ^processTimers node:internal/timers:497:25
-      1    1.2%      Function: ^Module._load node:internal/modules/cjs/loader:886:24
-      1  100.0%        Function: ^Module.require node:internal/modules/cjs/loader:1133:36
-      1  100.0%          Function: ^require node:internal/modules/cjs/helpers:108:31
-      1  100.0%            Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/qs/lib/stringify.js:1:1
-      1    1.2%      Function: ^Module._findPath node:internal/modules/cjs/loader:582:28
-      1  100.0%        Function: ^Module._resolveFilename node:internal/modules/cjs/loader:984:35
-      1  100.0%          Function: ^Module._load node:internal/modules/cjs/loader:886:24
-      1  100.0%            Function: ^Module.require node:internal/modules/cjs/loader:1133:36
-      1    1.2%      Function: ^LazyTransform node:internal/streams/lazy_transform:20:23
-      1  100.0%        Function: ^Hash node:internal/crypto/hash:62:14
-      1  100.0%          Function: ^createHash node:crypto:132:20
-      1  100.0%            Function: ^entitytag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:39:20
-      1    1.2%      Function: ^<anonymous> node:internal/validators:419:42
+      1  100.0%          LazyCompile: ~call /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:526:8
+      1  100.0%            LazyCompile: ~fire /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:498:8
+      1    3.2%      Function: ~<anonymous> node:internal/fs/promises:1:1
+      1  100.0%        Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%          Function: ~<anonymous> node:internal/modules/esm/load:1:1
+      1  100.0%            Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1    3.2%      Function: ^<anonymous> node:internal/validators:419:42
       1  100.0%        Function: ^internalCompileFunction node:internal/vm:31:33
       1  100.0%          Function: ^wrapSafe node:internal/modules/cjs/loader:1152:18
       1  100.0%            Function: ^Module._compile node:internal/modules/cjs/loader:1208:37
-      9    4.9%    LazyCompile: *Socket._writeGeneric node:net:899:42
-      7   77.8%      LazyCompile: *writeOrBuffer node:internal/streams/writable:368:23
-      7  100.0%        LazyCompile: *value node:internal/console/constructor:272:20
-      6   85.7%          LazyCompile: *log node:internal/console/constructor:376:6
-      6  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      1   14.3%          LazyCompile: *warn node:internal/console/constructor:381:7
-      1  100.0%            /home/diego/.nvm/versions/node/v18.15.0/bin/node
-      1   11.1%      Function: ^Socket._writev node:net:936:36
-      1  100.0%        Function: ^doWrite node:internal/streams/writable:401:17
-      1  100.0%          LazyCompile: *end node:_http_outgoing:992:45
-      1  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1   11.1%      Function: ^Socket._write node:net:941:35
-      1  100.0%        Function: ^writeOrBuffer node:internal/streams/writable:368:23
-      1  100.0%          LazyCompile: *value node:internal/console/constructor:272:20
-      1  100.0%            LazyCompile: *log node:internal/console/constructor:376:6
-      4    2.2%    LazyCompile: *connectionListenerInternal node:_http_server:611:36
-      4  100.0%      Function: ^defaultTriggerAsyncIdScope node:internal/async_hooks:455:36
-      4  100.0%        Function: ^connectionListener node:_http_server:605:28
-      4  100.0%          LazyCompile: *emit node:events:460:44
-      4  100.0%            Function: ^onconnection node:net:1966:22
-      2    1.1%    LazyCompile: *writevGeneric node:internal/stream_base_commons:122:23
-      2  100.0%      LazyCompile: *Socket._writeGeneric node:net:899:42
-      1   50.0%        LazyCompile: *doWrite node:internal/streams/writable:401:17
-      1  100.0%          LazyCompile: *end node:_http_outgoing:992:45
-      1  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      1   50.0%        Function: ^Socket._writev node:net:936:36
-      1  100.0%          Function: ^doWrite node:internal/streams/writable:401:17
-      1  100.0%            LazyCompile: *end node:_http_outgoing:992:45
 
-    148    1.7%  writev@@GLIBC_2.2.5
-    127   85.8%    LazyCompile: *writevGeneric node:internal/stream_base_commons:122:23
-    125   98.4%      LazyCompile: *Socket._writeGeneric node:net:899:42
-     83   66.4%        Function: ^Socket._writev node:net:936:36
-     83  100.0%          Function: ^doWrite node:internal/streams/writable:401:17
-     83  100.0%            LazyCompile: *end node:_http_outgoing:992:45
-     42   33.6%        LazyCompile: *doWrite node:internal/streams/writable:401:17
-     42  100.0%          LazyCompile: *end node:_http_outgoing:992:45
-     42  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
-      2    1.6%      Function: ^Socket._writeGeneric node:net:899:42
-      2  100.0%        Function: ^Socket._writev node:net:936:36
-      2  100.0%          Function: ^doWrite node:internal/streams/writable:401:17
-      2  100.0%            LazyCompile: *end node:_http_outgoing:992:45
-     21   14.2%    LazyCompile: *Socket._writeGeneric node:net:899:42
-     21  100.0%      Function: ^Socket._writev node:net:936:36
-     21  100.0%        Function: ^doWrite node:internal/streams/writable:401:17
-     14   66.7%          Function: ^clearBuffer node:internal/streams/writable:532:21
-     14  100.0%            Function: ^Writable.uncork node:internal/streams/writable:344:37
-      7   33.3%          LazyCompile: *end node:_http_outgoing:992:45
-      7  100.0%            LazyCompile: *send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
+     15    4.2%  __write@@GLIBC_2.2.5
+      9   60.0%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      3   33.3%      /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1   33.3%        LazyCompile: ~resolveExports node:internal/modules/cjs/loader:555:24
+      1  100.0%          LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%            LazyCompile: ~Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1   33.3%        LazyCompile: ~createStatusCodeList /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/statuses/index.js:82:31
+      1  100.0%          Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/statuses/index.js:1:1
+      1  100.0%            LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
+      1   33.3%        LazyCompile: ~Mime.lookup /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/mime/mime.js:69:33
+      1  100.0%          LazyCompile: ~contentType /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:619:32
+      1  100.0%            LazyCompile: ~send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/response.js:111:25
+      1   11.1%      LazyCompile: ~setupDebugEnv node:internal/process/pre_execution:330:23
+      1  100.0%        LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%          LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1  100.0%            Function: ~<anonymous> node:internal/main/run_main_module:1:1
+      1   11.1%      LazyCompile: ~openSync node:fs:592:18
+      1  100.0%        LazyCompile: ~readFileSync node:fs:466:22
+      1  100.0%          LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
+      1  100.0%            LazyCompile: ~Module.load node:internal/modules/cjs/loader:1105:33
+      1   11.1%      LazyCompile: ~onParserExecute node:_http_server:790:25
+      1   11.1%      LazyCompile: ~assertEncoding node:internal/fs/utils:155:24
+      1  100.0%        LazyCompile: ~getOptions node:internal/fs/utils:318:20
+      1  100.0%          LazyCompile: ~readFileSync node:fs:466:22
+      1  100.0%            LazyCompile: ~Module._extensions..js node:internal/modules/cjs/loader:1263:37
+      1   11.1%      LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%        LazyCompile: ~Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1  100.0%          LazyCompile: ~Module._load node:internal/modules/cjs/loader:886:24
+      1  100.0%            LazyCompile: ~Module.require node:internal/modules/cjs/loader:1133:36
+      1   11.1%      LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:610:24
+      1  100.0%        /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1  100.0%          LazyCompile: ~processTicksAndRejections node:internal/process/task_queues:67:35
+
+     11    3.1%  std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long)@@GLIBCXX_3.4.9
+      9   81.8%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      2   22.2%      /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1   50.0%        LazyCompile: ~getOwn node:internal/bootstrap/loaders:188:16
+      1  100.0%          LazyCompile: ~syncExports node:internal/bootstrap/loaders:307:14
+      1  100.0%            LazyCompile: ~<anonymous> node:internal/bootstrap/loaders:293:15
+      1   50.0%        Function: ^getOwn node:internal/bootstrap/loaders:188:16
+      1  100.0%          Function: ^syncExports node:internal/bootstrap/loaders:307:14
+      1  100.0%            Function: ^<anonymous> node:internal/bootstrap/loaders:293:15
+      1   11.1%      LazyCompile: ~wrap /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/on-finished/index.js:219:15
+      1  100.0%        LazyCompile: ~onFinished /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/on-finished/index.js:46:21
+      1  100.0%          LazyCompile: ~send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/finalhandler/index.js:272:15
+      1  100.0%            LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/finalhandler/index.js:86:19
+      1   11.1%      LazyCompile: ~patchProcessObject node:internal/process/pre_execution:127:28
+      1  100.0%        LazyCompile: ~prepareExecution node:internal/process/pre_execution:52:26
+      1  100.0%          LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:36:36
+      1  100.0%            Function: ~<anonymous> node:internal/main/run_main_module:1:1
+      1   11.1%      LazyCompile: ~onParseComplete node:internal/url:546:25
+      1  100.0%        /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1  100.0%          LazyCompile: ~URL node:internal/url:638:14
+      1  100.0%            LazyCompile: ~URL node:internal/url:638:14
+      1   11.1%      LazyCompile: ~compileForPublicLoader node:internal/bootstrap/loaders:264:25
+      1  100.0%        LazyCompile: ~loadBuiltinModule node:internal/modules/cjs/helpers:51:27
+      1  100.0%          LazyCompile: ~Module._load node:internal/modules/cjs/loader:886:24
+      1  100.0%            LazyCompile: ~Module.require node:internal/modules/cjs/loader:1133:36
+      1   11.1%      LazyCompile: ~Socket._writeGeneric node:net:899:42
+      1  100.0%        LazyCompile: ~Socket._write node:net:941:35
+      1  100.0%          LazyCompile: ~writeOrBuffer node:internal/streams/writable:368:23
+      1  100.0%            LazyCompile: ~_write node:internal/streams/writable:286:16
+      1   11.1%      LazyCompile: ~Readable node:internal/streams/readable:186:18
+      1  100.0%        LazyCompile: ~Duplex node:internal/streams/duplex:54:16
+      1  100.0%          LazyCompile: ~Socket node:net:338:16
+      1  100.0%            LazyCompile: ~WriteStream node:tty:84:21
+      1   11.1%      Function: ~<anonymous> node:internal/fs/promises:1:1
+      1  100.0%        Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%          Function: ~<anonymous> node:internal/modules/esm/load:1:1
+      1  100.0%            Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+
+     11    3.1%  /usr/lib/x86_64-linux-gnu/libc.so.6
+      7   63.6%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1   14.3%      LazyCompile: ~wrap /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/on-finished/index.js:219:15
+      1  100.0%        LazyCompile: ~onFinished /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/on-finished/index.js:46:21
+      1  100.0%          LazyCompile: ~send /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/finalhandler/index.js:272:15
+      1  100.0%            LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/finalhandler/index.js:86:19
+      1   14.3%      LazyCompile: ~value node:internal/console/constructor:337:20
+      1  100.0%        LazyCompile: ~log node:internal/console/constructor:376:6
+      1  100.0%          /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1  100.0%            LazyCompile: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app2.js:26:18
+      1   14.3%      LazyCompile: ~end node:_http_outgoing:992:45
+      1  100.0%        LazyCompile: ~write /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/finalhandler/index.js:273:18
+      1  100.0%          LazyCompile: ~runInAsyncScope node:async_hooks:198:18
+      1  100.0%            LazyCompile: ~listener /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/on-finished/index.js:162:21
+      1   14.3%      LazyCompile: ~createHash node:crypto:132:20
+      1  100.0%        LazyCompile: ~entitytag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:39:20
+      1  100.0%          LazyCompile: ~etag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/etag/index.js:70:15
+      1  100.0%            LazyCompile: ~generateETag /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/utils.js:273:32
+      1   14.3%      LazyCompile: ~connectionListenerInternal node:_http_server:611:36
+      1  100.0%        LazyCompile: ~defaultTriggerAsyncIdScope node:internal/async_hooks:455:36
+      1  100.0%          LazyCompile: ~connectionListener node:_http_server:605:28
+      1  100.0%            LazyCompile: ~onconnection node:net:1966:22
+      1   14.3%      LazyCompile: ~Module._resolveLookupPaths node:internal/modules/cjs/loader:785:38
+      1  100.0%        LazyCompile: ~Module._resolveFilename node:internal/modules/cjs/loader:984:35
+      1  100.0%          LazyCompile: ~Module._load node:internal/modules/cjs/loader:886:24
+      1  100.0%            Function: ^Module.require node:internal/modules/cjs/loader:1133:36
+      1   14.3%      Function: ~<anonymous> node:internal/modules/esm/fetch_module:1:1
+      1  100.0%        Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%          Function: ~<anonymous> node:internal/modules/esm/get_format:1:1
+      1  100.0%            Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+
+      8    2.2%  epoll_pwait@@GLIBC_2.6
+
+      5    1.4%  std::ostream::sentry::sentry(std::ostream&)@@GLIBCXX_3.4
+      4   80.0%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1   25.0%      LazyCompile: ~set /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/application.js:359:23
+      1  100.0%        LazyCompile: ~defaultConfiguration /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/application.js:77:57
+      1  100.0%          LazyCompile: ~init /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/application.js:64:25
+      1  100.0%            LazyCompile: ~createApplication /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/express/lib/express.js:37:27
+      1   25.0%      LazyCompile: ~defaultTriggerAsyncIdScope node:internal/async_hooks:455:36
+      1  100.0%        LazyCompile: ~setupListenHandle node:net:1693:27
+      1  100.0%          LazyCompile: ~listenInCluster node:net:1778:25
+      1  100.0%            LazyCompile: ~Server.listen node:net:1821:35
+      1   25.0%      LazyCompile: ~Status /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/status.js:51:15
+      1  100.0%        LazyCompile: ~CircuitBreaker /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/opossum/lib/circuit.js:129:15
+      1  100.0%          Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/src/app2.js:1:1
+      1  100.0%            LazyCompile: ~Module._compile node:internal/modules/cjs/loader:1208:37
+      1   25.0%      Function: ^<anonymous> node:internal/validators:419:42
+      1  100.0%        Function: ^internalCompileFunction node:internal/vm:31:33
+      1  100.0%          Function: ^wrapSafe node:internal/modules/cjs/loader:1152:18
+      1  100.0%            Function: ^Module._compile node:internal/modules/cjs/loader:1208:37
+
+      4    1.1%  _IO_file_xsputn@@GLIBC_2.2.5
+      4  100.0%    /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1   25.0%      LazyCompile: ~toRealPath node:internal/modules/cjs/loader:476:20
+      1  100.0%        LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%          LazyCompile: ~resolveMainPath node:internal/modules/run_main:15:25
+      1  100.0%            LazyCompile: ~executeUserEntryPoint node:internal/modules/run_main:74:31
+      1   25.0%      LazyCompile: ~realpathSync node:fs:2502:22
+      1  100.0%        LazyCompile: ~toRealPath node:internal/modules/cjs/loader:476:20
+      1  100.0%          LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:582:28
+      1  100.0%            LazyCompile: ~resolveMainPath node:internal/modules/run_main:15:25
+      1   25.0%      LazyCompile: ~Duplex node:internal/streams/duplex:54:16
+      1  100.0%        LazyCompile: ~Socket node:net:338:16
+      1  100.0%          LazyCompile: ~WriteStream node:tty:84:21
+      1  100.0%            LazyCompile: ~createWritableStdioStream node:internal/bootstrap/switches/is_main_thread:45:35
+      1   25.0%      /home/diego/.nvm/versions/node/v18.15.0/bin/node
+      1  100.0%        LazyCompile: ~getStack /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/depd/index.js:381:19
+      1  100.0%          LazyCompile: ~depd /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/depd/index.js:103:15
+      1  100.0%            Function: ~<anonymous> /mnt/e35d88d4-42b9-49ea-bf29-c4c3b018d429/diego/git/diegopacheco/nodejs-playground/opossum-debug/node_modules/body-parser/index.js:1:1
 
