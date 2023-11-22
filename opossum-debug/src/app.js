@@ -18,6 +18,16 @@ function dummyProc(){
     }
 };
 
+app.get('/status', (req, res) => {
+    const options = {
+        timeout: 3000,
+        errorThresholdPercentage: 50,
+        resetTimeout: 30000
+    };
+    console.log("Status",CircuitBreaker.newStatus(options));
+    res.send(CircuitBreaker.newStatus(options));
+});
+
 app.get('/', (req, res) => {
   
     const options = {
