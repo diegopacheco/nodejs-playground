@@ -33,3 +33,6 @@ external "require('path')" 42 bytes [built] [code generated]
 external "require('lodash')" 42 bytes [built] [code generated]
 webpack 5.89.0 compiled successfully in 206 ms
 ```
+
+## Bundle Analyzer
+<img src="bundle-analyzer.png"></img>

@@ -28,7 +28,7 @@ module.exports = {
       //algorithm: "gzip",
       algorithm: "brotliCompress",
     }),
-    new BundleAnalyzerPlugin()
+    new BundleAnalyzerPlugin(),
   ],
   mode: 'production',
   externals: [
