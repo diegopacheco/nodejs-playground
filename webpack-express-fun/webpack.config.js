@@ -9,8 +9,23 @@ module.exports = {
   },
   optimization: {
     usedExports: true,
+    minimize: true,
+    minimizer: [
+      (compiler) => {
+        const TerserPlugin = require('terser-webpack-plugin');
+        new TerserPlugin({
+          terserOptions: {
+            compress: {},
+          }
+        }).apply(compiler);
+      },
+    ]
   },
-  plugins: [new CompressionPlugin()],
+  plugins: [new CompressionPlugin({
+    test: /\.js(\?.*)?$/i,
+    //algorithm: "gzip",
+    algorithm: "brotliCompress",
+  })],
   mode: 'production',
   externals: [
     function(context, request, callback) {

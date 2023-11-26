@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "type": "commonjs",
+  "sideEffects": false,
   "engines": {
     "node": "18.15.0"
   },
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "compression-webpack-plugin": "^10.0.0",
+    "terser-webpack-plugin": "^5.3.9",
     "webpack-cli": "^5.1.4"
   }
 }
