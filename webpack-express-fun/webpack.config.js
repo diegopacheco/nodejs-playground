@@ -1,5 +1,6 @@
 const path = require('path')
 const CompressionPlugin = require("compression-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   target: 'node',
@@ -21,11 +22,14 @@ module.exports = {
       },
     ]
   },
-  plugins: [new CompressionPlugin({
-    test: /\.js(\?.*)?$/i,
-    //algorithm: "gzip",
-    algorithm: "brotliCompress",
-  })],
+  plugins: [
+    new CompressionPlugin({
+      test: /\.js(\?.*)?$/i,
+      //algorithm: "gzip",
+      algorithm: "brotliCompress",
+    }),
+    new BundleAnalyzerPlugin()
+  ],
   mode: 'production',
   externals: [
     function(context, request, callback) {
