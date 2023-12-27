@@ -1,3 +1,6 @@
+/**
+ * curried on line 8 works because it uses the stack recursion to build the missing params.
+ **/
 function curry(fn){
   return function curried(...args){
     if (args.length === fn.length){
