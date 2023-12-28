@@ -15,7 +15,11 @@ console.log(oldOfficers);
 var officersIds = officers.map(function (officer) {
   return officer.id
 });
+officersIds.take = function(n){
+   return officersIds.slice(0,n);
+}
 console.log(officersIds.slice(0,2));
+console.log(officersIds.take(2));
 
 var totalYears = officers.reduce(function (accumulator, officer) {
   return accumulator + officer.age;
