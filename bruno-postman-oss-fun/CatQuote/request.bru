@@ -1,0 +1,24 @@
+meta {
+    name: Get cat quotes
+    type: http
+    seq: 1
+}
+
+get {
+    url: https://catfact.ninja/breeds?limit=1
+    body: none
+}
+
+headers {
+    Content-Type: application/json
+}
+
+assert {
+    res.status: 200
+}
+
+tests {
+    test("status code is 200", function(){
+        expect(res.status).equal(200);
+    });
+}

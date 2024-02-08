@@ -1,0 +1,16 @@
+{
+  "name": "bruno-postman-oss-fun",
+  "version": "1.0.0",
+  "description": "```bash npm install -g @usebruno/cli ```",
+  "main": "index.js",
+  "scripts": {
+    "bruno": "bru run CatQuote/request.bru",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@usebruno/cli": "^1.8.0"
+  }
+}
