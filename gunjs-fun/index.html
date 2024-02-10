@@ -1,0 +1,21 @@
+<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+<script>
+// import GUN from 'gun'; // in ESM
+// GUN = require('gun'); // in NodeJS
+// GUN = require('gun/gun'); // in React
+gun = GUN();
+
+gun.get('mark').put({
+  name: "MR M",
+  email: "whoknows@who.who",
+});
+
+gun.get('mark').on((data, key) => {
+  console.log("realtime updates:", data);
+});
+
+let intervalId = setInterval(() => { 
+  gun.get('mark').get('live').put(Math.random()) 
+}, 5000);
+clearInterval(intervalId);
+</script>
