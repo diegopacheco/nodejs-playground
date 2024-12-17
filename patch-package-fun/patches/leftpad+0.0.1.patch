@@ -1,0 +1,26 @@
+diff --git a/node_modules/leftpad/index.js b/node_modules/leftpad/index.js
+index 563ef79..8d672a1 100644
+--- a/node_modules/leftpad/index.js
++++ b/node_modules/leftpad/index.js
+@@ -1,7 +1,15 @@
+-module.exports = function(str, width, char) {
+-  char = char || "0";
+-  str = str.toString();
+-  while (str.length < width)
+-    str = char + str;
+-  return str;
++module.exports = {
++  function(str, width, char) {
++    char = char || "0";
++    str = str.toString();
++    while (str.length < width)
++      str = char + str;
++    return str;
++  }, rightPad: function (str, width, char) {
++    char = char || "0";
++    str = str.toString();
++    while (str.length < width)
++      str = str + char;
++    return str;
++  }
+ };
