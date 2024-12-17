@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "limbo-wasm": "^0.0.9"
+  }
+}
