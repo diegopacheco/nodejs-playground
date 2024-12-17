@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "leftpad": "^0.0.1",
     "limbo-wasm": "^0.0.9"
   }
 }
