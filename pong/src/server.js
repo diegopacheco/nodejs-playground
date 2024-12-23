@@ -13,8 +13,8 @@ let ball = {
     x: 400,
     y: 300,
     radius: 10,
-    velocityX: 5,
-    velocityY: 5
+    velocityX: 3,
+    velocityY: 3
 };
 
 let gameState = {
