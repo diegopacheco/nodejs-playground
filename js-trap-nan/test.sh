@@ -5,7 +5,11 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 for i in {16..23}
 do
-    nvm install $i
-    echo "Running index.js with Node.js version $i..."
-    nvm exec $i node index.js
+  nvm install $i
+  echo "Running index.js with Node.js version $i..."
+  (
+    nvm use $i > /dev/null
+    echo "Node Version inside subshell: $(node -v)"
+    node index.js
+  )
 done
