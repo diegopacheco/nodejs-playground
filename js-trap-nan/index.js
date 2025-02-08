@@ -30,6 +30,12 @@ function test(value){
         console.log("#5: BAD: " + (parseInt(value) >= 0));
     }
 
+    if (typeof value === 'number' && value >= 0){
+        console.log("#6: typeof value === 'number' && value >= 0 value: " + value);
+    }else{
+        console.log("#6: BAD: " + value);
+    }
+
     console.log("-----");
 }
 
