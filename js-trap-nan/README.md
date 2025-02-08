@@ -63,17 +63,33 @@ Running index.js with Node.js version 16...
 Node Version inside subshell: v16.20.2
 Node Version: v16.20.2
 -----
+Test for [1,0042]:
 #1: if (value) : 1,0042
 #2: if (value != null && value != undefined) value: 1,0042
 #3: if (parseInt(value) != null) value: 1
 #4: BAD: false
 #5: if (parseInt(value) >= 0) value: 1,0042
 -----
+Test for [1.0042]:
 #1: if (value) : 1.0042
 #2: if (value != null && value != undefined) value: 1.0042
 #3: if (parseInt(value) != null) value: 1
 #4: if (value >= 0) value: 1.0042
 #5: if (parseInt(value) >= 0) value: 1.0042
+-----
+Test for [null]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value: null
+#5: BAD: false
+-----
+Test for [undefined]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: BAD: false
+#5: BAD: false
 -----
 END.
 v17.9.1 is already installed.
@@ -82,17 +98,33 @@ Running index.js with Node.js version 17...
 Node Version inside subshell: v17.9.1
 Node Version: v17.9.1
 -----
+Test for [1,0042]:
 #1: if (value) : 1,0042
 #2: if (value != null && value != undefined) value: 1,0042
 #3: if (parseInt(value) != null) value: 1
 #4: BAD: false
 #5: if (parseInt(value) >= 0) value: 1,0042
 -----
+Test for [1.0042]:
 #1: if (value) : 1.0042
 #2: if (value != null && value != undefined) value: 1.0042
 #3: if (parseInt(value) != null) value: 1
 #4: if (value >= 0) value: 1.0042
 #5: if (parseInt(value) >= 0) value: 1.0042
+-----
+Test for [null]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value: null
+#5: BAD: false
+-----
+Test for [undefined]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: BAD: false
+#5: BAD: false
 -----
 END.
 v18.20.6 is already installed.
@@ -101,17 +133,33 @@ Running index.js with Node.js version 18...
 Node Version inside subshell: v18.20.6
 Node Version: v18.20.6
 -----
+Test for [1,0042]:
 #1: if (value) : 1,0042
 #2: if (value != null && value != undefined) value: 1,0042
 #3: if (parseInt(value) != null) value: 1
 #4: BAD: false
 #5: if (parseInt(value) >= 0) value: 1,0042
 -----
+Test for [1.0042]:
 #1: if (value) : 1.0042
 #2: if (value != null && value != undefined) value: 1.0042
 #3: if (parseInt(value) != null) value: 1
 #4: if (value >= 0) value: 1.0042
 #5: if (parseInt(value) >= 0) value: 1.0042
+-----
+Test for [null]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value: null
+#5: BAD: false
+-----
+Test for [undefined]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: BAD: false
+#5: BAD: false
 -----
 END.
 v19.9.0 is already installed.
@@ -120,17 +168,33 @@ Running index.js with Node.js version 19...
 Node Version inside subshell: v19.9.0
 Node Version: v19.9.0
 -----
+Test for [1,0042]:
 #1: if (value) : 1,0042
 #2: if (value != null && value != undefined) value: 1,0042
 #3: if (parseInt(value) != null) value: 1
 #4: BAD: false
 #5: if (parseInt(value) >= 0) value: 1,0042
 -----
+Test for [1.0042]:
 #1: if (value) : 1.0042
 #2: if (value != null && value != undefined) value: 1.0042
 #3: if (parseInt(value) != null) value: 1
 #4: if (value >= 0) value: 1.0042
 #5: if (parseInt(value) >= 0) value: 1.0042
+-----
+Test for [null]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value: null
+#5: BAD: false
+-----
+Test for [undefined]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: BAD: false
+#5: BAD: false
 -----
 END.
 v20.18.2 is already installed.
@@ -139,17 +203,33 @@ Running index.js with Node.js version 20...
 Node Version inside subshell: v20.18.2
 Node Version: v20.18.2
 -----
+Test for [1,0042]:
 #1: if (value) : 1,0042
 #2: if (value != null && value != undefined) value: 1,0042
 #3: if (parseInt(value) != null) value: 1
 #4: BAD: false
 #5: if (parseInt(value) >= 0) value: 1,0042
 -----
+Test for [1.0042]:
 #1: if (value) : 1.0042
 #2: if (value != null && value != undefined) value: 1.0042
 #3: if (parseInt(value) != null) value: 1
 #4: if (value >= 0) value: 1.0042
 #5: if (parseInt(value) >= 0) value: 1.0042
+-----
+Test for [null]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value: null
+#5: BAD: false
+-----
+Test for [undefined]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: BAD: false
+#5: BAD: false
 -----
 END.
 v21.7.3 is already installed.
@@ -158,17 +238,33 @@ Running index.js with Node.js version 21...
 Node Version inside subshell: v21.7.3
 Node Version: v21.7.3
 -----
+Test for [1,0042]:
 #1: if (value) : 1,0042
 #2: if (value != null && value != undefined) value: 1,0042
 #3: if (parseInt(value) != null) value: 1
 #4: BAD: false
 #5: if (parseInt(value) >= 0) value: 1,0042
 -----
+Test for [1.0042]:
 #1: if (value) : 1.0042
 #2: if (value != null && value != undefined) value: 1.0042
 #3: if (parseInt(value) != null) value: 1
 #4: if (value >= 0) value: 1.0042
 #5: if (parseInt(value) >= 0) value: 1.0042
+-----
+Test for [null]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value: null
+#5: BAD: false
+-----
+Test for [undefined]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: BAD: false
+#5: BAD: false
 -----
 END.
 v22.13.1 is already installed.
@@ -177,17 +273,33 @@ Running index.js with Node.js version 22...
 Node Version inside subshell: v22.13.1
 Node Version: v22.13.1
 -----
+Test for [1,0042]:
 #1: if (value) : 1,0042
 #2: if (value != null && value != undefined) value: 1,0042
 #3: if (parseInt(value) != null) value: 1
 #4: BAD: false
 #5: if (parseInt(value) >= 0) value: 1,0042
 -----
+Test for [1.0042]:
 #1: if (value) : 1.0042
 #2: if (value != null && value != undefined) value: 1.0042
 #3: if (parseInt(value) != null) value: 1
 #4: if (value >= 0) value: 1.0042
 #5: if (parseInt(value) >= 0) value: 1.0042
+-----
+Test for [null]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value: null
+#5: BAD: false
+-----
+Test for [undefined]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: BAD: false
+#5: BAD: false
 -----
 END.
 v23.7.0 is already installed.
@@ -196,17 +308,34 @@ Running index.js with Node.js version 23...
 Node Version inside subshell: v23.7.0
 Node Version: v23.7.0
 -----
+Test for [1,0042]:
 #1: if (value) : 1,0042
 #2: if (value != null && value != undefined) value: 1,0042
 #3: if (parseInt(value) != null) value: 1
 #4: BAD: false
 #5: if (parseInt(value) >= 0) value: 1,0042
 -----
+Test for [1.0042]:
 #1: if (value) : 1.0042
 #2: if (value != null && value != undefined) value: 1.0042
 #3: if (parseInt(value) != null) value: 1
 #4: if (value >= 0) value: 1.0042
 #5: if (parseInt(value) >= 0) value: 1.0042
 -----
+Test for [null]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value: null
+#5: BAD: false
+-----
+Test for [undefined]:
+#1: BAD
+#2: BAD
+#3: if (parseInt(value) != null) value: NaN
+#4: BAD: false
+#5: BAD: false
+-----
 END.
+
 ```

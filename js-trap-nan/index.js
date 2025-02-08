@@ -1,4 +1,5 @@
 function test(value){
+    console.log("Test for [" + value + "]:");
     if (value){
         console.log("#1: if (value) : " + value);
     }else{
@@ -36,5 +37,7 @@ console.log("Node Version: " + process.version);
 console.log("-----");
 test("1,0042");
 test("1.0042");
+test(null);
+test(undefined);
 
 console.log("END.");
