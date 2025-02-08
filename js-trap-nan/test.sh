@@ -2,8 +2,9 @@
 
 source ~/.nvm/nvm.sh
 
-for i in {23..23} 
+for i in {16..23}
 do
-    nvm use node $i
+    nvm install $i
+    nvm use $i
     node index.js
 done
