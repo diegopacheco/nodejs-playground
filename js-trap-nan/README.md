@@ -10,6 +10,7 @@ if (value >= 0){
 Test is:
 ```js
 function test(value){
+    console.log("Test for [" + value + "]:");
     if (value){
         console.log("#1: if (value) : " + value);
     }else{
@@ -44,6 +45,9 @@ function test(value){
 }
 test("1,0042");
 test("1.0042");
+test(null);
+test(undefined);
+test("");
 ```
 
 * Tested with several favors
@@ -91,6 +95,13 @@ Test for [undefined]:
 #4: BAD: false
 #5: BAD: false
 -----
+Test for []:
+#1: BAD
+#2: if (value != null && value != undefined) value:
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value:
+#5: BAD: false
+-----
 END.
 v17.9.1 is already installed.
 Now using node v17.9.1 (npm v8.11.0)
@@ -124,6 +135,13 @@ Test for [undefined]:
 #2: BAD
 #3: if (parseInt(value) != null) value: NaN
 #4: BAD: false
+#5: BAD: false
+-----
+Test for []:
+#1: BAD
+#2: if (value != null && value != undefined) value:
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value:
 #5: BAD: false
 -----
 END.
@@ -161,6 +179,13 @@ Test for [undefined]:
 #4: BAD: false
 #5: BAD: false
 -----
+Test for []:
+#1: BAD
+#2: if (value != null && value != undefined) value:
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value:
+#5: BAD: false
+-----
 END.
 v19.9.0 is already installed.
 Now using node v19.9.0 (npm v9.6.3)
@@ -194,6 +219,13 @@ Test for [undefined]:
 #2: BAD
 #3: if (parseInt(value) != null) value: NaN
 #4: BAD: false
+#5: BAD: false
+-----
+Test for []:
+#1: BAD
+#2: if (value != null && value != undefined) value:
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value:
 #5: BAD: false
 -----
 END.
@@ -231,6 +263,13 @@ Test for [undefined]:
 #4: BAD: false
 #5: BAD: false
 -----
+Test for []:
+#1: BAD
+#2: if (value != null && value != undefined) value:
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value:
+#5: BAD: false
+-----
 END.
 v21.7.3 is already installed.
 Now using node v21.7.3 (npm v10.5.0)
@@ -264,6 +303,13 @@ Test for [undefined]:
 #2: BAD
 #3: if (parseInt(value) != null) value: NaN
 #4: BAD: false
+#5: BAD: false
+-----
+Test for []:
+#1: BAD
+#2: if (value != null && value != undefined) value:
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value:
 #5: BAD: false
 -----
 END.
@@ -301,6 +347,13 @@ Test for [undefined]:
 #4: BAD: false
 #5: BAD: false
 -----
+Test for []:
+#1: BAD
+#2: if (value != null && value != undefined) value:
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value:
+#5: BAD: false
+-----
 END.
 v23.7.0 is already installed.
 Now using node v23.7.0 (npm v10.9.2)
@@ -336,6 +389,12 @@ Test for [undefined]:
 #4: BAD: false
 #5: BAD: false
 -----
+Test for []:
+#1: BAD
+#2: if (value != null && value != undefined) value:
+#3: if (parseInt(value) != null) value: NaN
+#4: if (value >= 0) value:
+#5: BAD: false
+-----
 END.
-
 ```

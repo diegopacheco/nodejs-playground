@@ -39,5 +39,6 @@ test("1,0042");
 test("1.0042");
 test(null);
 test(undefined);
+test("");
 
 console.log("END.");
