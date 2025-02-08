@@ -7,6 +7,15 @@ if (value >= 0){
 }
 ```
 
+| Value    | Result   |
+|----------|----------|
+| "1,0042" | false    |
+| "1.0042" | "1.0042" |
+| null     | null     |
+| undefined| false    |
+| ""       | ""       |
+
+
 Test is:
 ```js
 function test(value){
