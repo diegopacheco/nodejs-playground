@@ -22,6 +22,13 @@ function test(value){
     }else{
         console.log("#4: BAD: " + (value >= 0));
     }
+
+    if (parseInt(value) >= 0){
+        console.log("#5: if (parseInt(value) >= 0) value: " + value);
+    }else{
+        console.log("#5: BAD: " + (parseInt(value) >= 0));
+    }
+
     console.log("-----");
 }
 
