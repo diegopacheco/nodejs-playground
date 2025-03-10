@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Flight Simulator</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div class="controls">
+        <p>Controls: Arrow keys to fly, W/S to control speed</p>
+        <p>Current Altitude: <span id="altitude">0</span> ft</p>
+        <p>Current Speed: <span id="speed">0</span> mph</p>
+    </div>
+
+    <script>
+        // Set up the canvas to fill the screen
+        const canvas = document.getElementById('gameCanvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+
+        // Game state
+        let altitudeDisplay = document.getElementById('altitude');
+        let speedDisplay = document.getElementById('speed');
+        
+        // Horizon line position (perspective)
+        let horizonY = canvas.height * 0.5;
+        // Global variable for adjustedHorizonY available to all functions
+        let adjustedHorizonY = horizonY;
+        
+        // Airplane properties
+        let plane = {
+            // Position in 3D space
+            x: 0,  // lateral position
+            y: 100,  // altitude - starting higher for better visibility
+            z: 0,  // forward position
+            
+            // Speed and movement
+            speed: 50, // starting with some speed to make takeoff easier
+            maxSpeed: 300,
+            acceleration: 0.5,
+            deceleration: 0.2,
+            turnSpeed: 0.03,
+            
+            // Orientation
+            angle: 0,      // rotation around y-axis (yaw)
+            pitch: 0,      // rotation around x-axis (pitch)
+            roll: 0,       // rotation around z-axis (roll)
+        };
+        
+        // Third person camera properties
+        const camera = {
+            distance: 200,   // Distance behind the plane
+            height: 50,      // Height above the plane
+            followSpeed: 0.1 // How quickly the camera follows the plane
+        };
+
+        // View settings
+        const viewDistance = 800;
+        
+        // Ground grid pattern
+        const gridSize = 2000;
+        const gridDivisions = 40;
+        
+        // Clouds
+        let clouds = [];
+        for (let i = 0; i < 50; i++) {
+            clouds.push({
+                x: (Math.random() - 0.5) * 5000,
+                y: Math.random() * 200 + 200,
+                z: (Math.random() - 0.5) * 5000,
+                size: Math.random() * 50 + 50
+            });
+        }
+
+        // Control state
+        const keys = {};
+        
+        // Handle key presses
+        function handleKeyDown(event) {
+            keys[event.key] = true;
+        }
+        
+        function handleKeyUp(event) {
+            keys[event.key] = false;
+        }
+        
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+        
+        // Window resize handler
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            horizonY = canvas.height * 0.5;
+            adjustedHorizonY = horizonY;
+        });
+
+        // Update game state
+        function update() {
+            // Handle controls
+            if (keys['ArrowUp']) {
+                plane.pitch = -0.05;
+                plane.y += 2;
+            } else if (keys['ArrowDown']) {
+                plane.pitch = 0.05;
+                plane.y -= 2;
+            } else {
+                plane.pitch = 0;
+            }
+            
+            if (keys['ArrowLeft']) {
+                plane.roll = 0.2;
+                plane.angle -= plane.turnSpeed;
+            } else if (keys['ArrowRight']) {
+                plane.roll = -0.2;
+                plane.angle += plane.turnSpeed;
+            } else {
+                plane.roll = 0;
+            }
+            
+            if (keys['w']) {
+                plane.speed = Math.min(plane.speed + plane.acceleration, plane.maxSpeed);
+            } else if (keys['s']) {
+                plane.speed = Math.max(plane.speed - plane.deceleration, 0);
+            }
+            
+            // Update plane position
+            plane.z += Math.cos(plane.angle) * plane.speed / 10;
+            plane.x += Math.sin(plane.angle) * plane.speed / 10;
+            
+            // Keep altitude above ground
+            plane.y = Math.max(plane.y, 10);
+            
+            // Update UI
+            altitudeDisplay.textContent = Math.floor(plane.y * 10);
+            speedDisplay.textContent = Math.floor(plane.speed);
+        }
+
+        // Draw the scene
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = "#87CEEB"; // Sky blue
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Calculate camera position (behind and slightly above the plane)
+            const camX = plane.x - Math.sin(plane.angle) * camera.distance;
+            const camY = plane.y + camera.height;
+            const camZ = plane.z - Math.cos(plane.angle) * camera.distance;
+            
+            // Horizon line position adjusted by pitch
+            adjustedHorizonY = horizonY + plane.pitch * 500;
+            
+            // Draw ground
+            ctx.fillStyle = "#228B22"; // Forest green
+            ctx.fillRect(0, adjustedHorizonY, canvas.width, canvas.height - adjustedHorizonY);
+            
+            // Draw perspective grid on ground
+            drawGrid(camX, camY, camZ);
+            
+            // Draw clouds in 3D space
+            drawClouds(camX, camY, camZ);
+            
+            // Draw the airplane in 3D
+            drawAirplane3D(camX, camY, camZ);
+        }
+
+        // Draw a perspective grid on the ground
+        function drawGrid(camX, camY, camZ) {
+            const gridStepX = gridSize / gridDivisions;
+            const gridStepZ = gridSize / gridDivisions;
+            
+            ctx.strokeStyle = "#1a631a";
+            ctx.lineWidth = 1;
+            
+            // Calculate grid lines
+            for (let i = -gridDivisions; i <= gridDivisions; i++) {
+                // Lines parallel to X axis
+                let x1 = -gridSize;
+                let z1 = i * gridStepZ;
+                let x2 = gridSize;
+                let z2 = i * gridStepZ;
+                
+                drawPerspectiveLine(x1, 0, z1, x2, 0, z2, camX, camY, camZ);
+                
+                // Lines parallel to Z axis
+                x1 = i * gridStepX;
+                z1 = -gridSize;
+                x2 = i * gridStepX;
+                z2 = gridSize;
+                
+                drawPerspectiveLine(x1, 0, z1, x2, 0, z2, camX, camY, camZ);
+            }
+        }
+
+        // Draw a line in 3D space with perspective
+        function drawPerspectiveLine(x1, y1, z1, x2, y2, z2, camX, camY, camZ) {
+            // Translate coordinates relative to camera position
+            x1 = x1 - camX;
+            z1 = z1 - camZ;
+            y1 = y1 - camY;
+            x2 = x2 - camX;
+            z2 = z2 - camZ;
+            y2 = y2 - camY;
+            
+            // Rotate points around the y-axis (yaw) based on plane angle
+            let rotX1 = x1 * Math.cos(-plane.angle) - z1 * Math.sin(-plane.angle);
+            let rotZ1 = x1 * Math.sin(-plane.angle) + z1 * Math.cos(-plane.angle);
+            let rotX2 = x2 * Math.cos(-plane.angle) - z2 * Math.sin(-plane.angle);
+            let rotZ2 = x2 * Math.sin(-plane.angle) + z2 * Math.cos(-plane.angle);
+            
+            // Don't draw if behind the camera
+            if (rotZ1 < 1 && rotZ2 < 1) return;
+            
+            // Handle one point behind camera case
+            if (rotZ1 < 1) {
+                // Calculate intersection with near plane
+                let t = (1 - rotZ1) / (rotZ2 - rotZ1);
+                rotX1 = rotX1 + t * (rotX2 - rotX1);
+                y1 = y1 + t * (y2 - y1);
+                rotZ1 = 1;
+            }
+            if (rotZ2 < 1) {
+                let t = (1 - rotZ2) / (rotZ1 - rotZ2);
+                rotX2 = rotX2 + t * (rotX1 - rotX2);
+                y2 = y2 + t * (y1 - y2);
+                rotZ2 = 1;
+            }
+            
+            // Calculate perspective
+            let scale1 = viewDistance / rotZ1;
+            let scale2 = viewDistance / rotZ2;
+            
+            // Project to 2D screen coordinates
+            let screenX1 = canvas.width/2 + rotX1 * scale1;
+            let screenY1 = adjustedHorizonY - y1 * scale1;
+            
+            let screenX2 = canvas.width/2 + rotX2 * scale2;
+            let screenY2 = adjustedHorizonY - y2 * scale2;
+            
+            // Draw the line
+            ctx.beginPath();
+            ctx.moveTo(screenX1, screenY1);
+            ctx.lineTo(screenX2, screenY2);
+            ctx.stroke();
+        }
+
+        // Draw clouds in 3D space
+        function drawClouds(camX, camY, camZ) {
+            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+            
+            for (let cloud of clouds) {
+                // Calculate relative position to camera
+                let relX = cloud.x - camX;
+                let relY = cloud.y - camY;
+                let relZ = cloud.z - camZ;
+                
+                // Rotate around y-axis (yaw)
+                let rotX = relX * Math.cos(-plane.angle) - relZ * Math.sin(-plane.angle);
+                let rotZ = relX * Math.sin(-plane.angle) + relZ * Math.cos(-plane.angle);
+                
+                // If behind camera, don't render
+                if (rotZ < 1) continue;
+                
+                // Calculate perspective scale
+                let scale = viewDistance / rotZ;
+                
+                // Calculate screen position
+                let screenX = canvas.width/2 + rotX * scale;
+                let screenY = adjustedHorizonY - relY * scale;
+                let screenSize = cloud.size * scale;
+                
+                // Don't draw if too small or off-screen
+                if (screenSize < 1 || 
+                    screenX < -screenSize || 
+                    screenX > canvas.width + screenSize || 
+                    screenY < -screenSize || 
+                    screenY > canvas.height + screenSize) {
+                    continue;
+                }
+                
+                // Draw cloud (simple circle)
+                ctx.beginPath();
+                ctx.arc(screenX, screenY, screenSize, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Draw a 3D point with perspective
+        function draw3DPoint(x, y, z, camX, camY, camZ) {
+            // Calculate relative position to camera
+            let relX = x - camX;
+            let relY = y - camY;
+            let relZ = z - camZ;
+            
+            // Rotate around y-axis (yaw) based on plane angle
+            let rotX = relX * Math.cos(-plane.angle) - relZ * Math.sin(-plane.angle);
+            let rotZ = relX * Math.sin(-plane.angle) + relZ * Math.cos(-plane.angle);
+            
+            // If behind camera, return null
+            if (rotZ < 1) return null;
+            
+            // Calculate perspective scale
+            let scale = viewDistance / rotZ;
+            
+            // Project to 2D screen coordinates
+            let screenX = canvas.width/2 + rotX * scale;
+            let screenY = adjustedHorizonY - relY * scale;
+            
+            return {
+                x: screenX,
+                y: screenY,
+                scale: scale
+            };
+        }
+
+        // Draw the airplane in 3rd person view
+        function drawAirplane3D(camX, camY, camZ) {
+            // Define the vertices of a simple plane model
+            // Main body (fuselage)
+            const fuselageLength = 60;
+            const fuselageWidth = 15;
+            const fuselageHeight = 15;
+            
+            // Wings
+            const wingSpan = 80;
+            const wingWidth = 30;
+            const wingHeight = 5;
+            const wingOffset = 0; // Position along fuselage
+            
+            // Tail
+            const tailHeight = 20;
+            const tailWidth = 25;
+            const tailThickness = 5;
+            
+            // Create vertices for the airplane body
+            const vertices = [
+                // Fuselage - Nose
+                { x: plane.x + fuselageLength/2, y: plane.y, z: plane.z },
+                // Fuselage - Tail
+                { x: plane.x - fuselageLength/2, y: plane.y, z: plane.z },
+                // Fuselage - Top middle
+                { x: plane.x, y: plane.y + fuselageHeight/2, z: plane.z },
+                // Fuselage - Bottom middle
+                { x: plane.x, y: plane.y - fuselageHeight/2, z: plane.z },
+                // Fuselage - Left middle
+                { x: plane.x, y: plane.y, z: plane.z - fuselageWidth/2 },
+                // Fuselage - Right middle
+                { x: plane.x, y: plane.y, z: plane.z + fuselageWidth/2 },
+                
+                // Left wing tip
+                { x: plane.x + wingOffset, y: plane.y, z: plane.z - wingSpan/2 },
+                // Right wing tip
+                { x: plane.x + wingOffset, y: plane.y, z: plane.z + wingSpan/2 },
+                
+                // Tail top
+                { x: plane.x - fuselageLength/2, y: plane.y + tailHeight, z: plane.z },
+                // Tail left
+                { x: plane.x - fuselageLength/2, y: plane.y, z: plane.z - tailWidth/2 },
+                // Tail right
+                { x: plane.x - fuselageLength/2, y: plane.y, z: plane.z + tailWidth/2 },
+            ];
+            
+            // Rotate the vertices based on the plane's orientation
+            rotateVertices(vertices, plane.pitch, plane.roll, plane.angle);
+            
+            // Project the vertices to 2D screen coordinates
+            const projectedVertices = [];
+            for (const vertex of vertices) {
+                const projected = draw3DPoint(vertex.x, vertex.y, vertex.z, camX, camY, camZ);
+                if (projected) {
+                    projectedVertices.push(projected);
+                }
+            }
+            
+            // If not enough vertices are visible, don't draw the plane
+            if (projectedVertices.length < 4) return;
+            
+            // Draw the plane body (white)
+            ctx.fillStyle = "#FFFFFF";
+            ctx.strokeStyle = "#000000";
+            ctx.lineWidth = 1;
+            
+            // Draw fuselage (simplified as a polygon)
+            if (projectedVertices.length >= 3) {
+                ctx.beginPath();
+                ctx.moveTo(projectedVertices[0].x, projectedVertices[0].y); // Nose
+                ctx.lineTo(projectedVertices[2].x, projectedVertices[2].y); // Top
+                ctx.lineTo(projectedVertices[1].x, projectedVertices[1].y); // Tail
+                ctx.lineTo(projectedVertices[3].x, projectedVertices[3].y); // Bottom
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            }
+            
+            // Draw wings
+            if (projectedVertices.length >= 8) {
+                // Left wing
+                ctx.beginPath();
+                ctx.moveTo(projectedVertices[0].x, projectedVertices[0].y); // Nose reference
+                ctx.lineTo(projectedVertices[4].x, projectedVertices[4].y); // Fuselage left
+                ctx.lineTo(projectedVertices[6].x, projectedVertices[6].y); // Left wing tip
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+                
+                // Right wing
+                ctx.beginPath();
+                ctx.moveTo(projectedVertices[0].x, projectedVertices[0].y); // Nose reference
+                ctx.lineTo(projectedVertices[5].x, projectedVertices[5].y); // Fuselage right
+                ctx.lineTo(projectedVertices[7].x, projectedVertices[7].y); // Right wing tip
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            }
+            
+            // Draw tail
+            if (projectedVertices.length >= 11) {
+                // Vertical stabilizer
+                ctx.beginPath();
+                ctx.moveTo(projectedVertices[1].x, projectedVertices[1].y); // Tail base
+                ctx.lineTo(projectedVertices[8].x, projectedVertices[8].y); // Tail top
+                ctx.lineTo(projectedVertices[0].x, projectedVertices[0].y); // Reference point to close
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+                
+                // Horizontal stabilizers
+                ctx.beginPath();
+                ctx.moveTo(projectedVertices[1].x, projectedVertices[1].y); // Tail base
+                ctx.lineTo(projectedVertices[9].x, projectedVertices[9].y); // Tail left
+                ctx.lineTo(projectedVertices[10].x, projectedVertices[10].y); // Tail right
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        // Rotate vertices based on plane orientation
+        function rotateVertices(vertices, pitchAngle, rollAngle, yawAngle) {
+            for (let i = 0; i < vertices.length; i++) {
+                const vertex = vertices[i];
+                
+                // Translate vertex relative to plane position
+                let x = vertex.x - plane.x;
+                let y = vertex.y - plane.y;
+                let z = vertex.z - plane.z;
+                
+                // Apply pitch (rotation around X-axis)
+                let pitchY = y * Math.cos(pitchAngle) - z * Math.sin(pitchAngle);
+                let pitchZ = y * Math.sin(pitchAngle) + z * Math.cos(pitchAngle);
+                
+                // Apply roll (rotation around Z-axis)
+                let rollX = x * Math.cos(rollAngle) - pitchY * Math.sin(rollAngle);
+                let rollY = x * Math.sin(rollAngle) + pitchY * Math.cos(rollAngle);
+                
+                // Apply yaw (rotation around Y-axis)
+                let yawX = rollX * Math.cos(yawAngle) - pitchZ * Math.sin(yawAngle);
+                let yawZ = rollX * Math.sin(yawAngle) + pitchZ * Math.cos(yawAngle);
+                
+                // Update the vertex position
+                vertex.x = yawX + plane.x;
+                vertex.y = rollY + plane.y;
+                vertex.z = yawZ + plane.z;
+            }
+        }
+
+        // Main game loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        gameLoop();
+    </script>
+</body>
+</html>
