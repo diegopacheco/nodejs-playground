@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web APIs Fun</title>
+    <style>
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #spaceImage {
+            transition: opacity 0.5s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #4d5b75, #5a7ebc);
+            color: white;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .paused {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .playing {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Space Audio Visualizer</h1>
+    <audio src="sound.mp3" ></audio>
+    <button class="paused">Play</button>
+    <br />
+    <input type="range" min="0" max="1" step="0.01" value="1" class="volume" />
+    <div class="image-container">
+        <img id="spaceImage" src="" alt="Space/Alien Image"
+             style="width: 400px; height: 300px; object-fit: cover; border-radius: 10px; margin-top: 20px;">
+    </div>
+    <script src="./src/index.js"></script>
+</body>
+</html>
