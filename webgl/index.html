@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Spinning Sun with Rain</title>
+    <style>
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #1a1a2e;
+        }
+
+        #textOverlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: Arial, sans-serif;
+            font-size: 54px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="glCanvas"></canvas>
+    <div id="textOverlay">SUN</div>
+    <script>
+        const canvas = document.getElementById("glCanvas");
+        const gl = canvas.getContext("webgl", {
+            antialias: true,
+            alpha: false,
+            powerPreference: "high-performance"
+        });
+
+        if (!gl) {
+            alert("WebGL not supported");
+            throw new Error("WebGL not supported");
+        }
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+        const circleVsSource = `
+    attribute vec2 aVertexPosition;
+    uniform float uTime;
+    uniform float uAspectRatio;
+    void main() {
+      float angle = uTime * 2.0;
+      float cos_a = cos(angle);
+      float sin_a = sin(angle);
+      
+      vec2 rotated = vec2(
+        aVertexPosition.x * cos_a - aVertexPosition.y * sin_a,
+        aVertexPosition.x * sin_a + aVertexPosition.y * cos_a
+      );
+      
+      // Apply aspect ratio correction to make perfect circle
+      rotated.x /= uAspectRatio;
+      
+      gl_Position = vec4(rotated * 0.2, 0.0, 1.0);
+    }
+  `;
+
+        const circleFsSource = `
+    void main() {
+      gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0); // Yellow color like sun
+    }
+  `;
+
+        const rainVsSource = `
+    attribute vec2 aVertexPosition;
+    attribute vec2 aOffset;
+    uniform float uTime;
+    void main() {
+      vec2 pos = aVertexPosition;
+      pos.y += mod(uTime * 3.0 + aOffset.y, 4.0) - 2.0;
+      pos.x += aOffset.x;
+      gl_Position = vec4(pos, 0.0, 1.0);
+      gl_PointSize = 2.0;
+    }
+  `;
+
+        const rainFsSource = `
+    void main() {
+      gl_FragColor = vec4(0.7, 0.8, 1.0, 0.6); // Light blue rain
+    }
+  `;
+
+        function createShader(gl, type, source) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error('Shader compile failed:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
+
+        function createProgram(gl, vsSource, fsSource) {
+            const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+            const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+            const program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error('Program failed to link:', gl.getProgramInfoLog(program));
+            }
+            return program;
+        }
+
+        const circleProgram = createProgram(gl, circleVsSource, circleFsSource);
+        const rainProgram = createProgram(gl, rainVsSource, rainFsSource);
+
+        function createCircleVertices(segments = 64) {
+            const vertices = [0.0, 0.0];
+            for (let i = 0; i <= segments; i++) {
+                const angle = (i / segments) * 2 * Math.PI;
+                vertices.push(Math.cos(angle), Math.sin(angle));
+            }
+            return new Float32Array(vertices);
+        }
+
+        const circleVertices = createCircleVertices();
+        const circleBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, circleBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, circleVertices, gl.STATIC_DRAW);
+
+        const rainDrops = [];
+        const rainOffsets = [];
+        for (let i = 0; i < 200; i++) {
+            rainDrops.push(0.0, 0.0);
+            rainOffsets.push(
+                (Math.random() - 0.5) * 4.0,
+                Math.random() * 4.0
+            );
+        }
+
+        const rainBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, rainBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rainDrops), gl.STATIC_DRAW);
+
+        const rainOffsetBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, rainOffsetBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(rainOffsets), gl.STATIC_DRAW);
+
+        const textOverlay = document.getElementById('textOverlay');
+
+        function render(time) {
+            time *= 0.001;
+
+            gl.clearColor(0.1, 0.1, 0.18, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            const aspectRatio = canvas.width / canvas.height;
+
+            gl.useProgram(rainProgram);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, rainBuffer);
+            const rainPosAttrib = gl.getAttribLocation(rainProgram, "aVertexPosition");
+            gl.enableVertexAttribArray(rainPosAttrib);
+            gl.vertexAttribPointer(rainPosAttrib, 2, gl.FLOAT, false, 0, 0);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, rainOffsetBuffer);
+            const rainOffsetAttrib = gl.getAttribLocation(rainProgram, "aOffset");
+            gl.enableVertexAttribArray(rainOffsetAttrib);
+            gl.vertexAttribPointer(rainOffsetAttrib, 2, gl.FLOAT, false, 0, 0);
+
+            const rainTimeUniform = gl.getUniformLocation(rainProgram, "uTime");
+            gl.uniform1f(rainTimeUniform, time);
+
+            gl.drawArrays(gl.POINTS, 0, 200);
+
+            gl.useProgram(circleProgram);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, circleBuffer);
+            const circlePosAttrib = gl.getAttribLocation(circleProgram, "aVertexPosition");
+            gl.enableVertexAttribArray(circlePosAttrib);
+            gl.vertexAttribPointer(circlePosAttrib, 2, gl.FLOAT, false, 0, 0);
+
+            const circleTimeUniform = gl.getUniformLocation(circleProgram, "uTime");
+            gl.uniform1f(circleTimeUniform, time);
+            
+            const aspectRatioUniform = gl.getUniformLocation(circleProgram, "uAspectRatio");
+            gl.uniform1f(aspectRatioUniform, aspectRatio);
+
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, circleVertices.length / 2);
+
+            const rotation = time * 2.0 * (180 / Math.PI); // Convert to degrees
+            textOverlay.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+
+            requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+    </script>
+</body>
+</html>
