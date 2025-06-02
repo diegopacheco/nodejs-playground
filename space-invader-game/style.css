@@ -1,0 +1,22 @@
+canvas {
+    background: black;
+    display: block;
+    margin: auto;
+}
+
+#status {
+    color: white;
+    text-align: center;
+    font-family: monospace;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+#game-over {
+    color: red;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+    display: none;
+}
