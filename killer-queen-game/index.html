@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Killer Queen</title>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            margin: 0;
+            background: #000;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: black;
+            border: 2px solid #333;
+            background-image: url('killer-queen-bg.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const yellowQueenImg = new Image();
+        yellowQueenImg.src = 'yellow-queen.png';
+
+        const blueQueenImg = new Image();
+        blueQueenImg.src = 'blue-queen.png';
+
+        const bg = new Image();
+        bg.src = 'killer-queen-bg.png';
+        bg.onload = () => {
+            ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+            startGame();
+        };
+
+        function startGame() {
+            const game = {
+                players: [],
+                berries: [],
+                hive: { x: 700, y: 250, width: 40, height: 100 },
+                gates: [{ x: 300, y: 200 }, { x: 300, y: 400 }],
+                winCondition: {
+                    berries: 5,
+                    queenKills: 3,
+                },
+                scores: {
+                    gold: { berries: 0, queenKills: 0 },
+                    blue: { berries: 0, queenKills: 0 },
+                },
+                running: true,
+            };
+
+            class Player {
+                constructor(x, y, color, isQueen = false) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                    this.radius = 10;
+                    this.speed = 2;
+                    this.isQueen = isQueen;
+                    this.hasBerry = false;
+                    this.alive = true;
+                }
+
+                move(dx, dy) {
+                    if (!this.alive) return;
+                    this.x += dx * this.speed;
+                    this.y += dy * this.speed;
+                    this.x = Math.max(0, Math.min(canvas.width, this.x));
+                    this.y = Math.max(0, Math.min(canvas.height, this.y));
+                }
+
+                draw() {
+                    if (!this.alive) return;
+                    if (this.isQueen) {
+                        const img = this.color === 'gold' ? yellowQueenImg : blueQueenImg;
+                        ctx.drawImage(img, this.x - 16, this.y - 16, 32, 32);
+                    } else {
+                        ctx.fillStyle = this.color;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            function spawnBerries() {
+                for (let i = 0; i < 10; i++) {
+                    game.berries.push({
+                        x: Math.random() * 700,
+                        y: Math.random() * 500,
+                        radius: 5,
+                        taken: false,
+                    });
+                }
+            }
+
+            function checkCollisions(player) {
+                if (!player.alive) return;
+
+                for (const berry of game.berries) {
+                    if (!berry.taken && Math.hypot(player.x - berry.x, player.y - berry.y) < player.radius + berry.radius) {
+                        berry.taken = true;
+                        player.hasBerry = true;
+                    }
+                }
+
+                const hive = game.hive;
+                if (
+                    player.hasBerry &&
+                    player.x > hive.x &&
+                    player.x < hive.x + hive.width &&
+                    player.y > hive.y &&
+                    player.y < hive.y + hive.height
+                ) {
+                    player.hasBerry = false;
+                    game.scores[player.color].berries++;
+                }
+
+                for (const other of game.players) {
+                    if (
+                        other !== player &&
+                        player.isQueen &&
+                        other.isQueen &&
+                        other.color !== player.color &&
+                        other.alive &&
+                        Math.hypot(player.x - other.x, player.y - other.y) < player.radius * 2
+                    ) {
+                        other.alive = false;
+                        game.scores[player.color].queenKills++;
+                    }
+                }
+            }
+
+            function drawGame() {
+                ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "purple";
+                ctx.fillRect(game.hive.x, game.hive.y, game.hive.width, game.hive.height);
+
+                for (const berry of game.berries) {
+                    if (!berry.taken) {
+                        ctx.fillStyle = "orange";
+                        ctx.beginPath();
+                        ctx.arc(berry.x, berry.y, berry.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                for (const p of game.players) {
+                    p.draw();
+                }
+
+                ctx.fillStyle = "black";
+                ctx.fillText(`Gold: ${game.scores.gold.berries} berries, ${game.scores.gold.queenKills} kills`, 10, 20);
+                ctx.fillText(`Blue: ${game.scores.blue.berries} berries, ${game.scores.blue.queenKills} kills`, 10, 40);
+            }
+
+            function updateGame() {
+                for (const p of game.players) {
+                    checkCollisions(p);
+                }
+                drawGame();
+                requestAnimationFrame(updateGame);
+            }
+
+            function setupGame() {
+                game.players.push(new Player(50, 100, "gold"));
+                game.players.push(new Player(100, 100, "gold", true));
+                game.players.push(new Player(50, 300, "blue"));
+                game.players.push(new Player(100, 300, "blue", true));
+                spawnBerries();
+                updateGame();
+            }
+
+            document.addEventListener("keydown", (e) => {
+                const goldWorker = game.players[0];
+                const goldQueen = game.players[1];
+                switch (e.key) {
+                    case "ArrowUp": goldWorker.move(0, -1); break;
+                    case "ArrowDown": goldWorker.move(0, 1); break;
+                    case "ArrowLeft": goldWorker.move(-1, 0); break;
+                    case "ArrowRight": goldWorker.move(1, 0); break;
+
+                    case "w": goldQueen.move(0, -1); break;
+                    case "s": goldQueen.move(0, 1); break;
+                    case "a": goldQueen.move(-1, 0); break;
+                    case "d": goldQueen.move(1, 0); break;
+                }
+            });
+            setupGame();
+        }
+    </script>
+</body>
+</html>
