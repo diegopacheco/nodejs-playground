@@ -24,6 +24,13 @@
     .toolbar .center {
       font-weight: bold;
     }
+    .toolbar input {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-left: 10px;
+      width: 200px;
+    }
     .user-grid {
       display: flex;
       flex-wrap: wrap;
@@ -61,6 +68,11 @@
       background: #1e1e1e;
       color: white;
     }
+    body.dark .toolbar input {
+      background: #2a2a2a;
+      color: white;
+      border-color: #555;
+    }
   </style>
 </head>
 <body>
@@ -69,7 +81,10 @@
       <button onclick="toggleTheme()">🌕|🌑</button>
       <span id="userCount"></span>
     </div>
-    <div class="center">GitHub Frequency Dashboard</div>
+    <div class="center">
+      GitHub Frequency Dashboard
+      <input type="text" id="userFilter" placeholder="Filter users (comma-separated)" onkeyup="handleFilterChange()" />
+    </div>
     <div>
       <label for="yearSelect">Year:</label>
       <select id="yearSelect" onchange="renderUsers()"></select>
@@ -78,7 +93,7 @@
   <div class="user-grid" id="userGrid"></div>
 
   <script>
-    const users = [
+    const allUsers = [
       'diegopacheco', 'diegoumpierre', 'andremayer', 'jefersonlemos', 'mikaelhadler', 'Thorugoh', 'andeerlb', 'rafaritter44',
       'LucasKonrath', 'alex-carvalho', 'dadpig', 'tpresa', 'vfurinii', 'brunohaetinger', 'gabrielSpassos', 'rRickson',
       'gfnogueira', 'deividfsantos', 'luisfneu', 'codegik', 'Lucasbritx', 'xmacedo', 'nordras', 'Soto92', 'karane', 'brscherer',
@@ -90,6 +105,23 @@
     const yearSelect = document.getElementById('yearSelect');
     const userGrid = document.getElementById('userGrid');
     const userCount = document.getElementById('userCount');
+    const userFilter = document.getElementById('userFilter');
+
+    function getFilteredUsers() {
+      const filterValue = userFilter.value.trim();
+      if (!filterValue) return allUsers;
+      
+      const filterUsers = filterValue.split(',').map(u => u.trim()).filter(u => u);
+      return filterUsers.length > 0 ? filterUsers : allUsers;
+    }
+
+    // Debounce the filter to avoid too many API calls
+    function handleFilterChange() {
+      clearTimeout(window.filterTimeout);
+      window.filterTimeout = setTimeout(() => {
+        renderUsers();
+      }, 300);
+    }
 
     function populateYearSelector() {
       const currentYear = new Date().getFullYear();
@@ -115,7 +147,9 @@
 
     async function renderUsers() {
       const year = yearSelect.value;
+      const users = getFilteredUsers();
       userGrid.innerHTML = '';
+      
       const allData = await Promise.all(users.map(user => getContributions(user, year)));
       allData.sort((a, b) => b.total - a.total);
       userCount.textContent = `Total: ${allData.length}`;
