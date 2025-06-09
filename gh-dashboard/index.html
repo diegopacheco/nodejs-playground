@@ -24,11 +24,15 @@
     .toolbar .center {
       font-weight: bold;
     }
+    .toolbar .right-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
     .toolbar input {
       padding: 5px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      margin-left: 10px;
       width: 200px;
     }
     .user-grid {
@@ -83,11 +87,13 @@
     </div>
     <div class="center">
       GitHub Frequency Dashboard
-      <input type="text" id="userFilter" placeholder="Filter users (comma-separated)" onkeyup="handleFilterChange()" />
     </div>
-    <div>
-      <label for="yearSelect">Year:</label>
-      <select id="yearSelect" onchange="renderUsers()"></select>
+    <div class="right-section">
+      <input type="text" id="userFilter" placeholder="Filter users (comma-separated)" onkeyup="handleFilterChange()" />
+      <div>
+        <label for="yearSelect">Year:</label>
+        <select id="yearSelect" onchange="renderUsers()"></select>
+      </div>
     </div>
   </div>
   <div class="user-grid" id="userGrid"></div>
@@ -173,7 +179,7 @@
         chart.alt = `${user}'s GitHub chart`;
         card.appendChild(chart);
 
-        userGrid.appendChild(card);
+        userGrid.appendChild(chart);
       }
     }
 
