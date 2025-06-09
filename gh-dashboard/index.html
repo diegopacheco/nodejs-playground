@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub Commit Frequency Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .toolbar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: #ffffff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .toolbar .center {
+      font-weight: bold;
+    }
+    .user-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .user-card {
+      width: 250px;
+      margin: 5px;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+    }
+    .user-card img.profile {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin-bottom: 5px;
+    }
+    .user-card img.chart {
+      width: 100%;
+      height: auto;
+      margin-top: 8px;
+    }
+    body.dark {
+      background: #121212;
+      color: white;
+    }
+    body.dark .toolbar, body.dark .user-card {
+      background: #1e1e1e;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div>
+      <button onclick="toggleTheme()">🌕|🌑</button>
+      <span id="userCount"></span>
+    </div>
+    <div class="center">GitHub Frequency Dashboard</div>
+    <div>
+      <label for="yearSelect">Year:</label>
+      <select id="yearSelect" onchange="renderUsers()"></select>
+    </div>
+  </div>
+  <div class="user-grid" id="userGrid"></div>
+
+  <script>
+    const users = [
+      'diegopacheco', 'diegoumpierre', 'andremayer', 'jefersonlemos', 'mikaelhadler', 'Thorugoh', 'andeerlb', 'rafaritter44',
+      'LucasKonrath', 'alex-carvalho', 'dadpig', 'tpresa', 'vfurinii', 'brunohaetinger', 'gabrielSpassos', 'rRickson',
+      'gfnogueira', 'deividfsantos', 'luisfneu', 'codegik', 'Lucasbritx', 'xmacedo', 'nordras', 'Soto92', 'karane', 'brscherer',
+      'g5l', 'henriqueidt', 'jonathansedrez', 'andreixmartins', 'kilpp', 'cireneuguilhermeteixeira', 'TiagoSD22', 'pedrohk',
+      'dungeoncraw','felipevisu', 'mateuzor', 'nicolasholanda', 'Reshzera', 'luizrebelatto', 'mateuslopes92', 'machado-vitor',
+      'marlonpg',
+    ];
+
+    const yearSelect = document.getElementById('yearSelect');
+    const userGrid = document.getElementById('userGrid');
+    const userCount = document.getElementById('userCount');
+
+    function populateYearSelector() {
+      const currentYear = new Date().getFullYear();
+      for (let i = 0; i < 3; i++) {
+        const y = currentYear - i;
+        const option = document.createElement('option');
+        option.value = y;
+        option.textContent = y;
+        yearSelect.appendChild(option);
+      }
+      yearSelect.value = currentYear;
+    }
+
+    async function getContributions(username, year) {
+      try {
+        const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}`);
+        const json = await res.json();
+        return { user: username, total: json.total[year] || 0 };
+      } catch (e) {
+        return { user: username, total: 0 };
+      }
+    }
+
+    async function renderUsers() {
+      const year = yearSelect.value;
+      userGrid.innerHTML = '';
+      const allData = await Promise.all(users.map(user => getContributions(user, year)));
+      allData.sort((a, b) => b.total - a.total);
+      userCount.textContent = `Total: ${allData.length}`;
+
+      for (const { user, total } of allData) {
+        const card = document.createElement('div');
+        card.className = 'user-card';
+
+        const img = document.createElement('img');
+        img.className = 'profile';
+        img.src = `https://github.com/${user}.png`;
+        card.appendChild(img);
+
+        const name = document.createElement('div');
+        name.innerHTML = `<a href="https://github.com/${user}" target="_blank">${user} (${total})</a>`;
+        card.appendChild(name);
+
+        const chart = document.createElement('img');
+        chart.className = 'chart';
+        chart.src = `https://ghchart.rshah.org/${user}`;
+        chart.alt = `${user}'s GitHub chart`;
+        card.appendChild(chart);
+
+        userGrid.appendChild(card);
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+
+    populateYearSelector();
+    renderUsers();
+  </script>
+</body>
+</html>
