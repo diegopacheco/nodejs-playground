@@ -53,6 +53,10 @@
       align-items: center;
       font-size: 12px;
     }
+    .user-card a.profile {
+      text-decoration: none;
+      color: inherit;
+    }
     .user-card img.profile {
       width: 80px;
       height: 80px;
@@ -116,12 +120,10 @@
     function getFilteredUsers() {
       const filterValue = userFilter.value.trim();
       if (!filterValue) return allUsers;
-      
       const filterUsers = filterValue.split(',').map(u => u.trim()).filter(u => u);
       return filterUsers.length > 0 ? filterUsers : allUsers;
     }
 
-    // Debounce the filter to avoid too many API calls
     function handleFilterChange() {
       clearTimeout(window.filterTimeout);
       window.filterTimeout = setTimeout(() => {
@@ -155,7 +157,7 @@
       const year = yearSelect.value;
       const users = getFilteredUsers();
       userGrid.innerHTML = '';
-      
+
       const allData = await Promise.all(users.map(user => getContributions(user, year)));
       allData.sort((a, b) => b.total - a.total);
       userCount.textContent = `Total: ${allData.length}`;
@@ -164,10 +166,16 @@
         const card = document.createElement('div');
         card.className = 'user-card';
 
+        const profileLink = document.createElement('a');
+        profileLink.href = `https://github.com/${user}`;
+        profileLink.target = '_blank';
+        profileLink.className = 'profile';
+
         const img = document.createElement('img');
         img.className = 'profile';
         img.src = `https://github.com/${user}.png`;
-        card.appendChild(img);
+        profileLink.appendChild(img);
+        card.appendChild(profileLink);
 
         const name = document.createElement('div');
         name.innerHTML = `<a href="https://github.com/${user}" target="_blank">${user} (${total})</a>`;
@@ -179,7 +187,7 @@
         chart.alt = `${user}'s GitHub chart`;
         card.appendChild(chart);
 
-        userGrid.appendChild(card); 
+        userGrid.appendChild(card);
       }
     }
 
