@@ -1,0 +1,14 @@
+{
+  "name": "capybara-pet-zoo-server",
+  "version": "1.0.0",
+  "description": "A simple server to host the Capybara Pet Zoo application.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "author": "",
+  "license": "ISC"
+}

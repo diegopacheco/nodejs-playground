@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Capybara Pet Zoo 🩷</title>
+  <style>
+    :root{
+      --bg:#f7f7fb; --ui:#ffffff; --ink:#1f2937; --muted:#6b7280;
+      --farm:#d2f4a4; --beach:#ffe8a3; --desert:#f7d9a7; --jungle:#c6f1ce; --snow:#e9f4ff;
+      --accent:#ff7aa2; --rain:#9ec9ff; --happy:#ffd166; --sleep:#b3b8c2;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink); background:var(--bg); display:grid; grid-template-rows:auto 1fr; gap:8px;
+    }
+    header{
+      display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between;
+      padding:10px 14px; background:var(--ui); box-shadow:0 2px 10px rgba(0,0,0,.05);
+      position:sticky; top:0; z-index:2; border-bottom:1px solid #eef2f7;
+    }
+    .controls{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+    .controls > *{margin:2px 0}
+    select, button{
+      font:inherit; padding:8px 12px; border-radius:12px; border:1px solid #e5e7eb; background:#fff;
+      box-shadow:0 1px 0 rgba(0,0,0,.03); cursor:pointer
+    }
+    button.primary{background:var(--accent); color:#fff; border-color:#ff5f92}
+    button.toggle.active{outline:2px solid var(--accent);}
+    .pill{padding:6px 10px; border-radius:999px; background:#f3f4f6; color:var(--muted); font-size:12px}
+
+    #stageWrap{position:relative; height:calc(100vh - 84px);}
+    canvas{width:100%; height:100%; display:block; background:var(--farm); border-radius:18px; box-shadow:0 12px 40px rgba(0,0,0,.08)}
+
+    .hud{
+      position:absolute; right:12px; top:12px; display:flex; flex-direction:column; gap:6px; z-index:3
+    }
+    .hud .chip{background:rgba(255,255,255,.9); border:1px solid #eef2f7; padding:6px 10px; border-radius:999px; font-size:12px}
+    .footerHint{position:absolute; left:12px; bottom:12px; font-size:12px; color:#475569; background:rgba(255,255,255,.9); padding:6px 10px; border-radius:999px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="controls">
+      <strong>Capybara Pet Zoo</strong>
+      <span class="pill">Click a capybara to select • Click again for ❤️</span>
+    </div>
+    <div class="controls">
+      <label>
+        Scenario
+        <select id="scenario">
+          <option value="farm">Farm</option>
+          <option value="beach">Beach</option>
+          <option value="desert">Desert</option>
+          <option value="jungle">Jungle</option>
+          <option value="snow">Snow</option>
+        </select>
+      </label>
+      <label>
+        Food
+        <select id="food">
+          <option>chocolate</option>
+          <option>corn</option>
+          <option>steak</option>
+        </select>
+      </label>
+      <button id="feed" class="primary" title="Feed selected capybara">Feed 🍽️</button>
+      <button id="sleep" title="Send all to sleep">Sleep 😴</button>
+      <button id="rain" class="toggle" title="Make it rain">Rain 🌧️</button>
+    </div>
+  </header>
+
+  <div id="stageWrap">
+    <canvas id="stage" width="1280" height="720"></canvas>
+    <div class="hud">
+      <span class="chip" id="fps">FPS: --</span>
+      <span class="chip" id="sel">Selected: none</span>
+    </div>
+    <div class="footerHint">Hearts on click • WASD/Arrows to nudge selected • Double‑tap Rain for storm</div>
+  </div>
+
+  <!-- Lightweight, type‑annotated JS (TypeScript via JSDoc, runs everywhere) -->
+  <script type="module">
+    // @ts-check
+    /** @typedef {{x:number,y:number}} Vec */
+    /** @typedef {{id:number,pos:Vec,vel:Vec,w:number,h:number,dir:number,face:number, mood:number, asleep:boolean, hunger:number, name:string, selected:boolean, color:string}} Capy */
+    /** @typedef {{x:number,y:number,vy:number,life:number}} Heart */
+    /** @typedef {{x:number,y:number,vx:number,vy:number,life:number}} Drop */
+
+    const canvas = /** @type {HTMLCanvasElement} */(document.getElementById('stage'));
+    const ctx = canvas.getContext('2d');
+    if(!ctx) throw new Error('No 2D context');
+
+    const ui = {
+      scenario: /** @type {HTMLSelectElement} */(document.getElementById('scenario')),
+      food: /** @type {HTMLSelectElement} */(document.getElementById('food')),
+      feed: /** @type {HTMLButtonElement} */(document.getElementById('feed')),
+      sleep: /** @type {HTMLButtonElement} */(document.getElementById('sleep')),
+      rain:  /** @type {HTMLButtonElement} */(document.getElementById('rain')),
+      fps:   /** @type {HTMLSpanElement} */(document.getElementById('fps')),
+      sel:   /** @type {HTMLSpanElement} */(document.getElementById('sel')),
+    };
+
+    const palettes = {
+      farm:   { sky:'#b9e6ff', ground:getComputedStyle(document.documentElement).getPropertyValue('--farm') },
+      beach:  { sky:'#b8f3ff', ground:getComputedStyle(document.documentElement).getPropertyValue('--beach') },
+      desert: { sky:'#ffe5c2', ground:getComputedStyle(document.documentElement).getPropertyValue('--desert') },
+      jungle: { sky:'#b6ffd1', ground:getComputedStyle(document.documentElement).getPropertyValue('--jungle') },
+      snow:   { sky:'#e8f5ff', ground:getComputedStyle(document.documentElement).getPropertyValue('--snow')  },
+    };
+
+    /** @type {Capy[]} */
+    const capys = [];
+    /** @type {Heart[]} */
+    const hearts = [];
+    /** @type {Drop[]} */
+    const rain = [];
+
+    let last = performance.now();
+    let acc = 0; const STEP = 1000/60; // fixed‑timestep for stability
+    let selId = -1; let raining = false; let storm = false;
+
+    const resize = () => {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    };
+    new ResizeObserver(resize).observe(canvas);
+    const rand = (a,b)=>a+Math.random()*(b-a);
+    const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+    const COLORS = ['#c48f65','#b67a57','#d09a6e','#a86e4a'];
+    const N = 6;
+    for (let i=0;i<N;i++) capys.push(createCapy(i));
+
+    function createCapy(id){
+      /** @type {Capy} */
+      const c = {
+        id,
+        pos:{x:rand(120, 900), y:rand(260, 560)},
+        vel:{x:rand(-0.15,0.15), y:0},
+        w:86, h:44, dir: Math.random()<.5?1:-1, face:0,
+        mood:0, asleep:false, hunger:0.3, name:`Capy #${id+1}`,
+        selected:false, color: COLORS[id%COLORS.length],
+      };
+      return c;
+    }
+
+    ui.feed.onclick = ()=>{
+      const c = capys.find(c=>c.selected);
+      if(!c) return flashSel();
+      const choice = ui.food.value;
+      if(choice==='chocolate') c.mood += 0.6, c.hunger = clamp(c.hunger+0.15,0,1);
+      if(choice==='corn')      c.mood += 0.8, c.hunger = clamp(c.hunger+0.25,0,1);
+      if(choice==='steak')     c.mood += 0.7, c.hunger = clamp(c.hunger+0.2 ,0,1);
+      popHearts(c.pos.x+c.w/2, c.pos.y-10, 6);
+    };
+    ui.sleep.onclick = ()=>{ capys.forEach(c=>{ c.asleep = !c.asleep; c.mood -= c.asleep?0: -0.2; }); };
+    ui.scenario.onchange = ()=>{ setBackground(ui.scenario.value); };
+    ui.rain.onclick = ()=>{ raining = !raining; storm = false; ui.rain.classList.toggle('active',raining); };
+    (function(){
+      let lastTap=0; ui.rain.addEventListener('click',()=>{ const t=performance.now(); if(t-lastTap<350 && raining){ storm = !storm; } lastTap=t; },{capture:false});
+    })();
+
+    function flashSel(){ ui.sel.textContent='Selected: none (click a capybara)'; setTimeout(updateSelHUD, 1200); }
+    function updateSelHUD(){ const c=capys.find(c=>c.selected); ui.sel.textContent = c?`Selected: ${c.name}`:'Selected: none'; }
+
+    canvas.addEventListener('click', (e)=>{
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX-rect.left);
+      const y = (e.clientY-rect.top);
+      let clicked=false;
+      for(const c of capys){
+        if(hitCapy(c,x,y)){
+          if(c.selected){ 
+            c.mood += 0.5; popHearts(x,y-10, 5); clicked=true; break;
+          } else {
+            capys.forEach(o=>o.selected=false); c.selected=true; selId=c.id; updateSelHUD(); clicked=true; break;
+          }
+        }
+      }
+      if(!clicked){ capys.forEach(o=>o.selected=false); selId=-1; updateSelHUD(); }
+    });
+
+    const keys = new Set();
+    addEventListener('keydown',e=>{keys.add(e.key)});
+    addEventListener('keyup',e=>{keys.delete(e.key)});
+
+    function setBackground(kind){
+      const pal = palettes[/** @type {keyof typeof palettes} */(kind)] || palettes.farm;
+      canvas.style.background = pal.ground;
+      document.body.style.setProperty('--sky', pal.sky);
+    }
+
+    setBackground('farm');
+
+    function hitCapy(c,x,y){
+      return x>c.pos.x && x<c.pos.x+c.w && y>c.pos.y-c.h*.2 && y<c.pos.y+c.h*.8;
+    }
+
+    function popHearts(x,y,count){
+      for(let i=0;i<count;i++) hearts.push({x:x+rand(-6,6), y:y+rand(-6,6), vy:rand(-0.6,-1.2), life:1});
+    }
+
+    function spawnRain(){
+      const count = storm? 12: 4;
+      for(let i=0;i<count;i++){
+        rain.push({x:rand(0, canvas.clientWidth), y:-10, vx:storm?rand(-2,-1):-0.8, vy:storm?rand(6,8):rand(4,6), life:1});
+      }
+    }
+
+    function drawScene(){
+      ctx.save();
+      ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--sky')||'#b9e6ff';
+      ctx.fillRect(0,0,canvas.width, canvas.height*0.45);
+      
+      ctx.beginPath(); ctx.arc(80,80,40,0,Math.PI*2);
+      ctx.fillStyle = '#ffd166'; ctx.fill();
+      
+      ctx.fillStyle = canvas.style.background || '#d2f4a4';
+      ctx.fillRect(0,canvas.height*0.45, canvas.width, canvas.height*0.55);
+
+      const scene = ui.scenario.value;
+      ctx.globalAlpha=0.9; ctx.fillStyle='#ffffff';
+      if(scene==='beach'){
+        ctx.fillStyle='#a0e7ff'; ctx.fillRect(0, canvas.height*0.72, canvas.width, canvas.height*0.1); // water strip
+        ctx.fillStyle='#fff'; cloud(220,120); cloud(420,90); cloud(720,130);
+      } else if(scene==='desert'){
+        dune(120, canvas.height*0.7); dune(480, canvas.height*0.75);
+        ctx.fillStyle='#fff'; cloud(220,110);
+      } else if(scene==='jungle'){
+        bush(160, canvas.height*0.65); bush(360, canvas.height*0.68); bush(760, canvas.height*0.7);
+      } else if(scene==='snow'){
+        ctx.fillStyle='#fff';
+        cloud(160,110); cloud(350,95); cloud(620,120); snowcaps();
+      } else {
+        bush(140, canvas.height*0.68); bush(540, canvas.height*0.7);
+        fence();
+      }
+      ctx.globalAlpha=1; ctx.restore();
+    }
+
+    function cloud(x,y){ ctx.beginPath(); ctx.arc(x,y,24,0,7); ctx.arc(x+28,y+6,20,0,7); ctx.arc(x-26,y+10,18,0,7); ctx.fill(); }
+    function bush(x,y){ ctx.fillStyle='#66cc88'; roundedRect(x,y,120,26,14,true); }
+    function dune(x,y){ ctx.fillStyle='#f3c88d'; roundedRect(x,y,200,30,20,true); }
+    function snowcaps(){ ctx.fillStyle='#fff'; for(let i=0;i<8;i++){ roundedRect(60+i*140, canvas.height*0.78, 80, 12, 8,true);} }
+    function fence(){
+      ctx.save(); ctx.fillStyle='#ffffffaa';
+      for(let x=40; x<canvas.width; x+=60){ roundedRect(x, canvas.height*0.62, 12, 58, 6,true); }
+      ctx.fillRect(40, canvas.height*0.7, canvas.width-80, 6);
+      ctx.restore();
+    }
+
+    function roundedRect(x,y,w,h,r,fill){
+      ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y, x+w,y+h, r); ctx.arcTo(x+w,y+h, x,y+h, r);
+      ctx.arcTo(x,y+h, x,y, r); ctx.arcTo(x,y, x+w,y, r); if(fill) ctx.fill(); else ctx.stroke();
+    }
+
+    function drawCapy(c){
+      ctx.save(); ctx.translate(c.pos.x, c.pos.y); ctx.scale(c.dir,1);
+      const w=c.w,h=c.h; ctx.fillStyle=c.asleep? 'var(--sleep)': c.color;
+      roundedRect(-w/2, -h/2, w, h, 22, true);
+      
+      roundedRect(w*0.12, -h*0.6, w*0.46, h*0.6, 18, true);
+      
+      ctx.fillStyle=c.asleep? '#9aa1aa' : '#8d5d3d';
+      roundedRect(-w*0.3, h*0.3, 16, 18, 6, true);
+      roundedRect(-w*0.05, h*0.34, 16, 18, 6, true);
+      roundedRect(w*0.2, h*0.34, 16, 18, 6, true);
+      ctx.fillStyle=c.asleep? '#a6acb6' : '#7f5a3f'; roundedRect(w*0.45, -h*0.7, 10, 12, 6, true);
+      ctx.fillStyle='#000'; ctx.globalAlpha=0.85;
+      const mood = c.asleep ? 'sleep' : (c.mood>0.6?'joy': c.mood>0.2?'smile': c.mood<-0.4?'sad':'neutral');
+     
+      if(c.asleep){ ctx.fillRect(w*0.42, -h*0.42, 16, 2); }
+      else { ctx.beginPath(); ctx.arc(w*0.48, -h*0.42, 3,0,7); ctx.fill(); }
+      ctx.lineWidth=2; ctx.beginPath();
+     
+      if(mood==='joy'){ arcLine(w*0.38, -h*0.30, 8, 0, Math.PI, false); }
+      else if(mood==='smile'){ arcLine(w*0.38, -h*0.28, 7, 0, Math.PI*0.8, false); }
+      else if(mood==='sad'){ arcLine(w*0.38, -h*0.22, 7, Math.PI, 0, true); }
+      else { ctx.moveTo(w*0.32, -h*0.28); ctx.lineTo(w*0.44, -h*0.28); }
+      ctx.stroke();
+      if(!c.asleep && c.mood>0.6){ ctx.globalAlpha=.25; ctx.fillStyle='var(--happy)'; ctx.beginPath(); ctx.arc(w*0.36, -h*0.34, 6,0,7); ctx.arc(w*0.60, -h*0.34, 6,0,7); ctx.fill(); }
+
+      if(c.selected){ ctx.globalAlpha=1; ctx.strokeStyle='var(--accent)'; ctx.lineWidth=3; ctx.strokeRect(-w/2-4, -h/2-4, w+8, h+8); }
+      ctx.restore();
+    }
+
+    function arcLine(x,y,r,a0,a1,flip){
+      ctx.beginPath(); ctx.arc(x,y,r,a0,a1,flip); ctx.stroke();
+    }
+
+    function drawHearts(){
+      ctx.save();
+      for(const h of hearts){ ctx.globalAlpha = h.life; ctx.fillStyle='var(--accent)'; heartShape(h.x, h.y, 8); }
+      ctx.restore();
+    }
+
+    function heartShape(x,y,s){
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x-s, y-s, x-2*s, y+s/2, x, y+2*s);
+      ctx.bezierCurveTo(x+2*s, y+s/2, x+s, y-s, x, y);
+      ctx.fill();
+    }
+
+    function drawRain(){
+      ctx.save(); ctx.strokeStyle='var(--rain)'; ctx.lineWidth=2; ctx.globalAlpha=0.85;
+      for(const d of rain){ ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d.x+d.vx*2, d.y+d.vy*2); ctx.stroke(); }
+      ctx.restore();
+    }
+
+    function physics(dt){
+      for(const c of capys){
+        if(c.asleep){ c.vel.x *= 0.9; }
+        else {
+          c.vel.x += (Math.random()-0.5)*0.02; c.vel.x = clamp(c.vel.x, -0.6, 0.6);
+          c.pos.x += c.vel.x * dt;
+          if(Math.abs(c.vel.x)>0.02) c.dir = c.vel.x>0?1:-1;
+        }
+        c.pos.y += Math.sin(performance.now()/500 + c.id)*0.05*dt;
+        const minX=60,maxX=canvas.clientWidth-60; c.pos.x=clamp(c.pos.x, minX, maxX);
+        c.mood = clamp(c.mood - dt*0.00008, -1, 1);
+      }
+      const c = capys.find(c=>c.selected);
+      if(c){ if(keys.has('ArrowLeft')||keys.has('a')) c.pos.x-=0.25*dt; if(keys.has('ArrowRight')||keys.has('d')) c.pos.x+=0.25*dt; }
+
+      for(const h of hearts){ h.y += h.vy*dt*0.06; h.life -= dt*0.0012; }
+      for(let i=hearts.length-1;i>=0;i--) if(hearts[i].life<=0) hearts.splice(i,1);
+
+      if(raining) spawnRain();
+      for(const d of rain){ d.x += d.vx*dt*0.06; d.y += d.vy*dt*0.06; d.life -= dt*0.001; }
+      for(let i=rain.length-1;i>=0;i--) if(rain[i].y>canvas.clientHeight+20 || rain[i].life<=0) rain.splice(i,1);
+    }
+
+    let frames=0, fpsTimer=0;
+    function loop(t){
+      const delta = t-last; last=t; acc += delta; physics(delta);
+
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      drawScene();
+      drawRain();
+      for(const c of capys) drawCapy(c);
+      drawHearts();
+
+      frames++; fpsTimer+=delta; if(fpsTimer>500){ ui.fps.textContent = `FPS: ${Math.round(frames*1000/fpsTimer)}`; frames=0; fpsTimer=0; }
+      requestAnimationFrame(loop);
+    }
+    resize(); updateSelHUD(); requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
