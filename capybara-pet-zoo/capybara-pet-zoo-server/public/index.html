@@ -69,6 +69,7 @@
       <button id="feed" class="primary" title="Feed selected capybara">Feed 🍽️</button>
       <button id="sleep" title="Send all to sleep">Sleep 😴</button>
       <button id="rain" class="toggle" title="Make it rain">Rain 🌧️</button>
+  <button id="spawn" title="Add a new capybara">Add Capybara ➕</button>
     </div>
   </header>
 
@@ -86,7 +87,7 @@
     // @ts-check
     /** @typedef {{x:number,y:number}} Vec */
     /** @typedef {{id:number,pos:Vec,vel:Vec,w:number,h:number,dir:number,face:number, mood:number, asleep:boolean, hunger:number, name:string, selected:boolean, color:string}} Capy */
-    /** @typedef {{x:number,y:number,vy:number,life:number}} Heart */
+  /** @typedef {{x:number,y:number,vy:number,life:number,color:string}} Heart */
     /** @typedef {{x:number,y:number,vx:number,vy:number,life:number}} Drop */
 
   const canvas = /** @type {HTMLCanvasElement} */(document.getElementById('stage'));
@@ -97,7 +98,8 @@
       food: /** @type {HTMLSelectElement} */(document.getElementById('food')),
       feed: /** @type {HTMLButtonElement} */(document.getElementById('feed')),
       sleep: /** @type {HTMLButtonElement} */(document.getElementById('sleep')),
-      rain:  /** @type {HTMLButtonElement} */(document.getElementById('rain')),
+  rain:  /** @type {HTMLButtonElement} */(document.getElementById('rain')),
+  spawn: /** @type {HTMLButtonElement} */(document.getElementById('spawn')),
       fps:   /** @type {HTMLSpanElement} */(document.getElementById('fps')),
       sel:   /** @type {HTMLSpanElement} */(document.getElementById('sel')),
     };
@@ -165,6 +167,13 @@
       let lastTap=0; ui.rain.addEventListener('click',()=>{ const t=performance.now(); if(t-lastTap<350 && raining){ storm = !storm; } lastTap=t; },{capture:false});
     })();
 
+    ui.spawn.onclick = ()=>{
+      const id = capys.length;
+      const c = createCapy(id);
+      capys.push(c);
+      updateSelHUD();
+    };
+
     function flashSel(){ ui.sel.textContent='Selected: none (click a capybara)'; setTimeout(updateSelHUD, 1200); }
     function updateSelHUD(){ const c=capys.find(c=>c.selected); ui.sel.textContent = c?`Selected: ${c.name}`:'Selected: none'; }
 
@@ -185,6 +194,20 @@
       if(!clicked){ capys.forEach(o=>o.selected=false); selId=-1; updateSelHUD(); }
     });
 
+    canvas.addEventListener('dblclick', (e)=>{
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX-rect.left);
+      const y = (e.clientY-rect.top);
+      for(const c of capys){
+        if(hitCapy(c,x,y)){
+          const color = Math.random() < 0.5 ? 'var(--heart)' : 'var(--accent)';
+          popHearts(x, y-10, 8, color);
+          c.mood += 0.4;
+          break;
+        }
+      }
+    });
+
     const keys = new Set();
     addEventListener('keydown',e=>{keys.add(e.key)});
     addEventListener('keyup',e=>{keys.delete(e.key)});
@@ -202,8 +225,8 @@
       return x>c.pos.x - w/2 && x<c.pos.x + w/2 && y>c.pos.y-h*.2 && y<c.pos.y+h*.8;
     }
 
-    function popHearts(x,y,count){
-      for(let i=0;i<count;i++) hearts.push({x:x+rand(-6,6), y:y+rand(-6,6), vy:rand(-0.6,-1.2), life:1});
+    function popHearts(x,y,count, color='var(--heart)'){
+      for(let i=0;i<count;i++) hearts.push({x:x+rand(-6,6), y:y+rand(-6,6), vy:rand(-0.6,-1.2), life:1, color});
     }
 
     function spawnRain(){
@@ -306,7 +329,6 @@
     }
 
     function getDims(c){
-      // Capybaras get fatter as hunger increases (from feeding)
       const wScale = clamp(1 + c.hunger*0.6, 1, 1.6);
       const hScale = clamp(1 + c.hunger*0.3, 1, 1.3);
       return { w: c.w * wScale, h: c.h * hScale };
@@ -318,7 +340,7 @@
 
     function drawHearts(){
       ctx.save();
-  for(const h of hearts){ ctx.globalAlpha = h.life; ctx.fillStyle='var(--heart)'; heartShape(h.x, h.y, 8); }
+      for(const h of hearts){ ctx.globalAlpha = h.life; ctx.fillStyle=h.color; heartShape(h.x, h.y, 8); }
       ctx.restore();
     }
 

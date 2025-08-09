@@ -2,6 +2,10 @@
 
 This project sets up a simple HTTP server to serve the Capybara Pet Zoo application.
 
+## Results
+
+<img src="capybara-pet-zoo.png" width="600" alt="Capybara Pet Zoo Screenshot">
+
 ## Project Structure
 
 ```
@@ -43,6 +47,3 @@ This project uses the following npm packages:
 
 - `express`: A minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
 
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
