@@ -1,0 +1,1 @@
+import{createApp as o}from"./app.js";import"./styles.css";import t from"./data.json";console.log("App starting with data:",t),o();

@@ -1,0 +1,95 @@
+{
+  "timestamp": "2025-08-16T00:36:26.449Z",
+  "system": {
+    "platform": "linux",
+    "nodeVersion": "v24.2.0"
+  },
+  "results": {
+    "webpack": {
+      "buildTimes": [
+        2181.2077260000005,
+        2202.968903000001,
+        1491.9135610000012,
+        1525.2192319999958,
+        1549.4194549999957
+      ],
+      "avgBuildTime": 1790.145775399999,
+      "minBuildTime": 1491.9135610000012,
+      "maxBuildTime": 2202.968903000001,
+      "successRate": 1,
+      "bundleSize": 7483
+    },
+    "vite": {
+      "buildTimes": [
+        484.67460700000083,
+        483.08342399999674,
+        526.6458019999991,
+        532.637450999995,
+        488.0543489999982
+      ],
+      "avgBuildTime": 503.019126599998,
+      "minBuildTime": 483.08342399999674,
+      "maxBuildTime": 532.637450999995,
+      "successRate": 1,
+      "bundleSize": 3789
+    },
+    "rspack": {
+      "buildTimes": [
+        470.0769270000019,
+        431.26791600000433,
+        431.3629589999982,
+        447.8884199999957,
+        497.95303300000523
+      ],
+      "avgBuildTime": 455.7098510000011,
+      "minBuildTime": 431.26791600000433,
+      "maxBuildTime": 497.95303300000523,
+      "successRate": 1,
+      "bundleSize": 5542
+    },
+    "esbuild": {
+      "buildTimes": [
+        360.52994399999443,
+        333.6270829999994,
+        237.47191100000055,
+        306.7148140000063,
+        233.16286799999943
+      ],
+      "avgBuildTime": 294.301324,
+      "minBuildTime": 233.16286799999943,
+      "maxBuildTime": 360.52994399999443,
+      "successRate": 1,
+      "bundleSize": 3199
+    },
+    "swc": {
+      "buildTimes": [],
+      "avgBuildTime": null,
+      "minBuildTime": null,
+      "maxBuildTime": null,
+      "successRate": 0,
+      "bundleSize": null
+    },
+    "rollup": {
+      "buildTimes": [
+        353.6429449999996,
+        354.1561159999983,
+        345.5865429999976,
+        360.3781240000026,
+        381.05525099999795
+      ],
+      "avgBuildTime": 358.9637957999992,
+      "minBuildTime": 345.5865429999976,
+      "maxBuildTime": 381.05525099999795,
+      "successRate": 1,
+      "bundleSize": 5547
+    },
+    "parcel": {
+      "buildTimes": [],
+      "avgBuildTime": null,
+      "minBuildTime": null,
+      "maxBuildTime": null,
+      "successRate": 0,
+      "bundleSize": null
+    }
+  }
+}

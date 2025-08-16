@@ -1,0 +1,1 @@
+import{utils as e}from"./utils/index.js";import{components as t}from"./components/index.js";export function createApp(){let n=document.getElementById("app")||document.body,o=document.createElement("div");o.innerHTML=t.header()+t.main(),n.appendChild(o),e.log("App created")}

@@ -1,0 +1,1 @@
+export const utils={log:e=>console.log("[Utils] "+e),format:e=>e.toUpperCase(),debounce:(e,o)=>{let t;return(...l)=>{clearTimeout(t),t=setTimeout(()=>e.apply(null,l),o)}}};

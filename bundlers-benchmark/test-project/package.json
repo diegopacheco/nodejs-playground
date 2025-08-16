@@ -2,19 +2,41 @@
   "name": "bundler-benchmark",
   "version": "1.0.0",
   "type": "module",
+  "targets": {
+    "default": {
+      "distDir": "dist-parcel"
+    }
+  },
   "scripts": {
     "build:webpack": "webpack --config webpack.config.js",
     "build:vite": "vite build --config vite.config.js",
     "build:rspack": "rspack build --config rspack.config.js",
+    "build:esbuild": "node build-esbuild.js",
+    "build:swc": "swc src -d dist-swc --config-file .swcrc",
+    "build:rollup": "rollup --config rollup.config.js",
+    "build:parcel": "parcel build index.html --dist-dir dist-parcel --no-cache",
     "dev:webpack": "webpack serve --config webpack.config.js",
     "dev:vite": "vite --config vite.config.js",
-    "dev:rspack": "rspack dev --config rspack.config.js"
+    "dev:rspack": "rspack dev --config rspack.config.js",
+    "dev:esbuild": "node dev-esbuild.js",
+    "dev:swc": "echo \"SWC dev server not available\"",
+    "dev:rollup": "echo \"Rollup dev server not available\"",
+    "dev:parcel": "parcel index.html --dist-dir dist-parcel --port 3007"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@rspack/cli": "^1.4.11",
     "@rspack/core": "^1.4.11",
+    "@swc/cli": "^0.7.8",
+    "@swc/core": "^1.13.3",
     "css-loader": "^7.1.2",
+    "esbuild": "^0.25.9",
     "html-webpack-plugin": "^5.6.4",
+    "parcel": "^2.15.4",
+    "rollup": "^4.46.2",
+    "rollup-plugin-css-only": "^4.5.2",
     "style-loader": "^4.0.0",
     "vite": "^7.1.2",
     "webpack": "^5.101.2",

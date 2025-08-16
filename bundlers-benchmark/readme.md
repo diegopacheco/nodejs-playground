@@ -33,31 +33,58 @@ npm run benchmark
 
 🏗️  BUILD PERFORMANCE
 ----------------------------------------
-🥇 RSPACK
-   Average: 447ms
-   Range: 416-496ms
+🥇 ESBUILD
+   Average: 216ms
+   Range: 208-226ms
+   Success Rate: 100.0%
+   Bundle Size: 3.1KB
+
+🥈 SWC
+   Average: 301ms
+   Range: 294-313ms
+   Success Rate: 100.0%
+   Bundle Size: 0.7KB
+
+🥉 ROLLUP
+   Average: 329ms
+   Range: 316-350ms
    Success Rate: 100.0%
    Bundle Size: 5.4KB
 
-🥈 VITE
-   Average: 476ms
-   Range: 443-491ms
+🥉 RSPACK
+   Average: 388ms
+   Range: 379-400ms
+   Success Rate: 100.0%
+   Bundle Size: 5.4KB
+
+🥉 VITE
+   Average: 445ms
+   Range: 424-464ms
    Success Rate: 100.0%
    Bundle Size: 3.7KB
 
+🥉 PARCEL
+   Average: 1108ms
+   Range: 1072-1162ms
+   Success Rate: 100.0%
+   Bundle Size: 3.3KB
+
 🥉 WEBPACK
-   Average: 1446ms
-   Range: 1377-1544ms
+   Average: 1392ms
+   Range: 1335-1451ms
    Success Rate: 100.0%
    Bundle Size: 7.3KB
 
 
 📦 BUNDLE SIZE
 ----------------------------------------
-🥇 vite: 3.7KB
-🥈 rspack: 5.4KB
+🥇 swc: 0.7KB
+🥈 esbuild: 3.1KB
+🥉 parcel: 3.3KB
+🥉 vite: 3.7KB
+🥉 rspack: 5.4KB
+🥉 rollup: 5.4KB
 🥉 webpack: 7.3KB
 
-💾 Results saved to benchmark-results-2025-08-16T00-26-22-143Z.json
-
+💾 Results saved to benchmark-results-2025-08-16T00-39-54-644Z.json
 ```

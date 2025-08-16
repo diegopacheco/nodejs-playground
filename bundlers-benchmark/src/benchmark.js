@@ -7,7 +7,7 @@ class BundlerBenchmark {
   constructor() {
     this.results = {};
     this.testProject = './test-project';
-    this.bundlers = ['webpack', 'vite', 'rspack'];
+    this.bundlers = ['webpack', 'vite', 'rspack', 'esbuild', 'swc', 'rollup', 'parcel'];
   }
 
   async setup() {
@@ -97,13 +97,26 @@ main { padding: 20px; background: #f5f5f5; }
         name: 'bundler-benchmark',
         version: '1.0.0',
         type: 'module',
+        targets: {
+          default: {
+            distDir: 'dist-parcel'
+          }
+        },
         scripts: {
           'build:webpack': 'webpack --config webpack.config.js',
           'build:vite': 'vite build --config vite.config.js',
           'build:rspack': 'rspack build --config rspack.config.js',
+          'build:esbuild': 'node build-esbuild.js',
+          'build:swc': 'swc src -d dist-swc --config-file .swcrc',
+          'build:rollup': 'rollup --config rollup.config.js',
+          'build:parcel': 'parcel build index.html --dist-dir dist-parcel --no-cache',
           'dev:webpack': 'webpack serve --config webpack.config.js',
           'dev:vite': 'vite --config vite.config.js',
-          'dev:rspack': 'rspack dev --config rspack.config.js'
+          'dev:rspack': 'rspack dev --config rspack.config.js',
+          'dev:esbuild': 'node dev-esbuild.js',
+          'dev:swc': 'echo "SWC dev server not available"',
+          'dev:rollup': 'echo "Rollup dev server not available"',
+          'dev:parcel': 'parcel index.html --dist-dir dist-parcel --port 3007'
         }
       }, null, 2)
     };
@@ -205,6 +218,113 @@ export default {
   }
 };
         `
+      },
+      esbuild: {
+        dependencies: ['esbuild'],
+        config: `
+import esbuild from 'esbuild';
+import fs from 'fs';
+import path from 'path';
+
+// Ensure dist directory exists
+const distDir = 'dist-esbuild';
+if (!fs.existsSync(distDir)) {
+  fs.mkdirSync(distDir, { recursive: true });
+}
+
+const cssPlugin = {
+  name: 'css',
+  setup(build) {
+    build.onLoad({ filter: /\\.css$/ }, async (args) => {
+      const css = await fs.promises.readFile(args.path, 'utf8');
+      return {
+        contents: \`
+          const style = document.createElement('style');
+          style.textContent = \${JSON.stringify(css)};
+          document.head.appendChild(style);
+        \`,
+        loader: 'js'
+      };
+    });
+  }
+};
+
+await esbuild.build({
+  entryPoints: ['src/index.js'],
+  bundle: true,
+  outfile: 'dist-esbuild/bundle.js',
+  minify: true,
+  sourcemap: false,
+  target: 'es2020',
+  format: 'iife',
+  plugins: [cssPlugin],
+  loader: {
+    '.json': 'json'
+  }
+});
+        `,
+        buildScript: `build-esbuild.js`
+      },
+      swc: {
+        dependencies: ['@swc/cli', '@swc/core'],
+        config: `{
+  "jsc": {
+    "parser": {
+      "syntax": "ecmascript",
+      "jsx": false,
+      "dynamicImport": true,
+      "privateMethod": false,
+      "functionBind": false,
+      "exportDefaultFrom": false,
+      "exportNamespaceFrom": false,
+      "decorators": false,
+      "decoratorsBeforeExport": false,
+      "topLevelAwait": false,
+      "importMeta": false
+    },
+    "target": "es2020",
+    "minify": {
+      "compress": true,
+      "mangle": true
+    }
+  },
+  "module": {
+    "type": "es6"
+  },
+  "minify": true
+}`,
+        configFile: `.swcrc`
+      },
+      rollup: {
+        dependencies: ['rollup', '@rollup/plugin-node-resolve', '@rollup/plugin-commonjs', '@rollup/plugin-json', 'rollup-plugin-css-only'],
+        config: `
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import css from 'rollup-plugin-css-only';
+
+export default {
+  input: 'src/index.js',
+  output: {
+    file: 'dist-rollup/bundle.js',
+    format: 'iife',
+    name: 'App'
+  },
+  plugins: [
+    nodeResolve(),
+    commonjs(),
+    json(),
+    css({ output: 'bundle.css' })
+  ]
+};
+        `
+      },
+      parcel: {
+        dependencies: ['parcel'],
+        config: `{
+  "extends": "@parcel/config-default"
+}`,
+        configFile: `.parcelrc`
       }
     };
 
@@ -213,8 +333,35 @@ export default {
     const depsToInstall = config.dependencies.join(' ');
     execSync(`cd ${this.testProject} && npm install ${depsToInstall} --save-dev`, { stdio: 'inherit' });
     
-    const configFileName = `${bundler}.config.js`;
-    await fs.writeFile(path.join(this.testProject, configFileName), config.config);
+    if (bundler === 'esbuild') {
+      await fs.writeFile(path.join(this.testProject, 'build-esbuild.js'), config.config);
+      const devScript = `
+import esbuild from 'esbuild';
+
+const ctx = await esbuild.context({
+  entryPoints: ['src/index.js'],
+  bundle: true,
+  outfile: 'dist-esbuild/bundle.js',
+  sourcemap: true,
+  target: 'es2020',
+  format: 'iife'
+});
+
+await ctx.watch();
+await ctx.serve({
+  servedir: 'dist-esbuild',
+  port: 3004
+});
+`;
+      await fs.writeFile(path.join(this.testProject, 'dev-esbuild.js'), devScript);
+    } else if (bundler === 'swc') {
+      await fs.writeFile(path.join(this.testProject, config.configFile), config.config);
+    } else if (bundler === 'parcel') {
+      await fs.writeFile(path.join(this.testProject, config.configFile), config.config);
+    } else {
+      const configFileName = `${bundler}.config.js`;
+      await fs.writeFile(path.join(this.testProject, configFileName), config.config);
+    }
   }
 
   async runBuildBenchmark() {
