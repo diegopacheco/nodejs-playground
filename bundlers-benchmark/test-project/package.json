@@ -1,0 +1,24 @@
+{
+  "name": "bundler-benchmark",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build:webpack": "webpack --config webpack.config.js",
+    "build:vite": "vite build --config vite.config.js",
+    "build:rspack": "rspack build --config rspack.config.js",
+    "dev:webpack": "webpack serve --config webpack.config.js",
+    "dev:vite": "vite --config vite.config.js",
+    "dev:rspack": "rspack dev --config rspack.config.js"
+  },
+  "devDependencies": {
+    "@rspack/cli": "^1.4.11",
+    "@rspack/core": "^1.4.11",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.4",
+    "style-loader": "^4.0.0",
+    "vite": "^7.1.2",
+    "webpack": "^5.101.2",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  }
+}
