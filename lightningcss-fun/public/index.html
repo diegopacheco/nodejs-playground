@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LightningCSS App</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">LightningCSS App</h1>
+            <p class="subtitle">Fast and modern CSS processing</p>
+        </header>
+        
+        <main class="main">
+            <section class="card">
+                <h2>Features</h2>
+                <ul class="feature-list">
+                    <li class="feature-item">Lightning-fast CSS parsing and transformation</li>
+                    <li class="feature-item">Modern CSS features support</li>
+                    <li class="feature-item">Automatic vendor prefixing</li>
+                    <li class="feature-item">CSS minification</li>
+                </ul>
+            </section>
+            
+            <section class="card">
+                <h2>Interactive App</h2>
+                <button class="demo-button" onclick="toggleTheme()">Toggle Dark Mode</button>
+                <div class="color-box"></div>
+            </section>
+        </main>
+        
+        <footer class="footer">
+            <p>&copy; 2025 LightningCSS App</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+        }
+    </script>
+</body>
+</html>
