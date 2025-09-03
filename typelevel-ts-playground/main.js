@@ -5,6 +5,7 @@ import { demonstrateStringManipulation } from './string-manipulation.js';
 import { demonstrateTupleOperations } from './tuple-operations.js';
 import { resultsCapitalCase } from './captalize.js';
 import { resultsPlus18 } from './pattern-matcher-type.js';
+import { resultNotNull } from './not-null.js';
 function main() {
     console.log("🚀 TypeScript Type-Level Programming Showcase\n");
     console.log("1. Conditional Types:");
@@ -47,5 +48,10 @@ function main() {
     console.log("   - Extracting and transforming nested properties");
     console.log("   - Enforcing invariants in complex types");
     resultsPlus18();
+    console.log("8. Not Null:");
+    console.log("   - Compile-time exclusion of null/undefined");
+    console.log("   - Ensures values are always present");
+    console.log("   - Demonstrates type-level filtering");
+    resultNotNull();
 }
 main();
