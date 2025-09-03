@@ -7,6 +7,7 @@ import { resultsCapitalCase } from './captalize.js';
 import { resultsPlus18 } from './pattern-matcher-type.js';
 import { resultNotNull } from './not-null.js';
 import { resultsPlusOne } from './plus-one.js';
+import { resultsExtract } from './extract.js';
 function main() {
     console.log("🚀 TypeScript Type-Level Programming Showcase\n");
     console.log("1. Conditional Types:");
@@ -58,5 +59,9 @@ function main() {
     console.log("   - Increments each number in a tuple");
     console.log("   - Demonstrates mapped type transformations");
     resultsPlusOne();
+    console.log("10. Extract Path:");
+    console.log("   - Extracts path segments from URLs");
+    console.log("   - Demonstrates recursive string parsing");
+    resultsExtract();
 }
 main();
