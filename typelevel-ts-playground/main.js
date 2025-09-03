@@ -6,6 +6,7 @@ import { demonstrateTupleOperations } from './tuple-operations.js';
 import { resultsCapitalCase } from './captalize.js';
 import { resultsPlus18 } from './pattern-matcher-type.js';
 import { resultNotNull } from './not-null.js';
+import { resultsPlusOne } from './plus-one.js';
 function main() {
     console.log("🚀 TypeScript Type-Level Programming Showcase\n");
     console.log("1. Conditional Types:");
@@ -53,5 +54,9 @@ function main() {
     console.log("   - Ensures values are always present");
     console.log("   - Demonstrates type-level filtering");
     resultNotNull();
+    console.log("9. Plus One:");
+    console.log("   - Increments each number in a tuple");
+    console.log("   - Demonstrates mapped type transformations");
+    resultsPlusOne();
 }
 main();
