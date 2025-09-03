@@ -1,8 +1,10 @@
-import { demonstrateConditionalTypes } from './conditional-types';
-import { demonstrateMappedTransformations } from './mapped-transformations';
-import { demonstrateRecursiveParsing } from './recursive-parsing';
-import { demonstrateStringManipulation } from './string-manipulation';
-import { demonstrateTupleOperations } from './tuple-operations';
+import { demonstrateConditionalTypes } from './conditional-types.js';
+import { demonstrateMappedTransformations } from './mapped-transformations.js';
+import { demonstrateRecursiveParsing } from './recursive-parsing.js';
+import { demonstrateStringManipulation } from './string-manipulation.js';
+import { demonstrateTupleOperations } from './tuple-operations.js';
+import { resultsCapitalCase } from './captalize.js';
+import { resultsPlus18 } from './pattern-matcher-type.js'
 
 function main() {
   console.log("🚀 TypeScript Type-Level Programming Showcase\n");
@@ -41,8 +43,19 @@ function main() {
   console.log("   - Filtering and mapping at type-level");
   demonstrateTupleOperations();
   console.log("");
+
+  console.log("6. Capitalize Function:");
+  console.log("   - Capitalizes the first letter of a string");
+  console.log("   - Preserves the rest of the string");
+  console.log("   - Demonstrates type-level transformations");
+  resultsCapitalCase();
+
+  console.log("7. Pattern Matching:");
+  console.log("   - Compile-time validation of data structures");
+  console.log("   - Extracting and transforming nested properties");
+  console.log("   - Enforcing invariants in complex types");
+  resultsPlus18();
+
 }
 
-if (require.main === module) {
-  main();
-}
+main();
