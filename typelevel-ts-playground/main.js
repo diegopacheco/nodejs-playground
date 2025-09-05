@@ -63,5 +63,11 @@ function main() {
     console.log("   - Extracts path segments from URLs");
     console.log("   - Demonstrates recursive string parsing");
     resultsExtract();
+    console.log("11. If Type:");
+    console.log("   - Conditional type selection based on boolean");
+    console.log("   - Demonstrates basic type-level logic");
+    import('./if.js').then(module => {
+        module.resultsIF();
+    });
 }
 main();
