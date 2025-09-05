@@ -69,5 +69,11 @@ function main() {
     import('./if.js').then(module => {
         module.resultsIF();
     });
+    console.log("12. Only Numbers:");
+    console.log("   - Filters out non-number types from a tuple");
+    console.log("   - Demonstrates recursive type parsing");
+    import('./onlyNumbers.js').then(module => {
+        module.resultOnlyNumbers();
+    });
 }
 main();
