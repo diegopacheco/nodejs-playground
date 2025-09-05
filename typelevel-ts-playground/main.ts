@@ -8,6 +8,7 @@ import { resultsPlus18 } from './pattern-matcher-type.js'
 import { resultNotNull } from './not-null.js';
 import { resultsPlusOne } from './plus-one.js';
 import { resultsExtract } from './extract.js';
+import { resultsFunc } from './func.js';
 
 function main() {
   console.log("🚀 TypeScript Type-Level Programming Showcase\n");
@@ -88,6 +89,12 @@ function main() {
   import('./onlyNumbers.js').then(module => {
     module.resultOnlyNumbers();
   });
+
+  console.log("13. Function Types:");
+  console.log("   - Currying and composition at type-level");
+  console.log("   - Extracting parameters and return types");
+  console.log("   - Variadic pipeline inference");
+  resultsFunc();
 
 }
 
