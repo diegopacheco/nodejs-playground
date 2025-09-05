@@ -96,6 +96,13 @@ function main() {
   console.log("   - Variadic pipeline inference");
   resultsFunc();
 
+  console.log("14. Luhn Validation:");
+  console.log("   - Compile-time credit card number validation");
+  console.log("   - Implements Luhn algorithm at type-level");
+  import('./Luhn.js').then(module => {
+    module.resultsLuhn();
+  });
+
 }
 
 main();
