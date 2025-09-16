@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "antlr-ng": "^1.0.10"
+  },
+  "dependencies": {
+    "memfs": "^4.39.0"
+  }
+}
