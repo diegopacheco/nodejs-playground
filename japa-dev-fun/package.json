@@ -1,0 +1,15 @@
+{
+  "name": ".",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --enable-source-maps bin/test.ts"
+  },
+  "version": "0.0.0",
+  "devDependencies": {
+    "@japa/expect": "^3.0.6",
+    "@japa/runner": "^4.4.0",
+    "typescript": "^5.9.2"
+  }
+}
