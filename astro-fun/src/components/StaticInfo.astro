@@ -1,0 +1,10 @@
+---
+const currentTime = new Date().toLocaleString();
+---
+
+<div style="padding: 20px; background-color: #f0f0f0; border-radius: 8px; margin: 10px 0;">
+  <h3>Static Content (No Hydration)</h3>
+  <p>This content is rendered at build time and is completely static.</p>
+  <p>Build time: {currentTime}</p>
+  <p>This section has no JavaScript and doesn't need client-side hydration.</p>
+</div>

@@ -1,0 +1,56 @@
+---
+import Counter from '../components/Counter.jsx';
+import ClickTracker from '../components/ClickTracker.jsx';
+import StaticInfo from '../components/StaticInfo.astro';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro Islands Architecture</title>
+  </head>
+  <body>
+    <main style="max-width: 1200px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif;">
+      <h1>Astro Islands Architecture & Partial Hydration</h1>
+
+      <section style="margin: 20px 0;">
+        <h2>What is Islands Architecture?</h2>
+        <p>Islands architecture enables mixing static and interactive content. Only interactive components are hydrated with JavaScript, while the rest remains static HTML.</p>
+      </section>
+
+      <StaticInfo />
+
+      <section style="margin: 20px 0;">
+        <h2>Hydration Strategies</h2>
+        <p>Below are interactive islands with different hydration strategies:</p>
+      </section>
+
+      <h3>client:load (Hydrates immediately)</h3>
+      <Counter client:load initialCount={0} />
+
+      <h3>client:idle (Hydrates when browser is idle)</h3>
+      <Counter client:idle initialCount={10} />
+
+      <h3>client:visible (Hydrates when visible in viewport)</h3>
+      <Counter client:visible initialCount={100} />
+
+      <h3>client:only (Only renders on client, skips SSR)</h3>
+      <ClickTracker client:only="react" />
+
+      <StaticInfo />
+
+      <section style="margin: 20px 0; padding: 20px; background-color: #fff3cd; border-radius: 8px;">
+        <h2>Performance Benefits</h2>
+        <ul>
+          <li>Zero JavaScript for static content</li>
+          <li>Partial hydration reduces bundle size</li>
+          <li>Interactive islands load independently</li>
+          <li>Faster initial page load</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
