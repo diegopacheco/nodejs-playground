@@ -1,0 +1,9 @@
+{
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "start": "deno run --allow-net server.ts"
+  },
+  "imports": {
+    "@oak/oak": "jsr:@oak/oak@^17"
+  }
+}
