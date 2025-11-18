@@ -1,0 +1,15 @@
+{
+  "name": "princejs-fun",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "princejs": "^1.6.6"
+  }
+}
