@@ -1,5 +1,8 @@
 import { prince } from "princejs";
 
-const app = prince();
+export const app = prince();
 app.get("/", () => ({ message: "Hello!" }));
-app.listen(3000);
+
+if (import.meta.main) {
+  app.listen(3000);
+}
