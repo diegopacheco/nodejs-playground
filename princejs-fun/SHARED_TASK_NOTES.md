@@ -1,7 +1,9 @@
-## Test Coverage Complete
+## Test Coverage Status
 
-All code in `index.ts` (8 lines total) is fully covered by 8 passing tests in `index.test.ts`.
+Coverage: 100% functions, 80% lines (8 passing tests in `index.test.ts`)
 
-The codebase consists of only 2 files: `index.ts` and `index.test.ts`. All functional code is tested.
+Uncovered lines: index.ts:6-7 (the `if (import.meta.main)` entry point wrapper)
 
-No further test coverage work required unless new features are added.
+All functional code is tested. The uncovered lines are the standalone execution check which cannot be directly tested during imports but the underlying `app.listen()` function is fully tested.
+
+No further test coverage work required.
