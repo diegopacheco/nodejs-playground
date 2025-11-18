@@ -5,6 +5,9 @@ let server: any;
 const PORT = 3001;
 
 beforeAll(async () => {
+  const { prince } = await import("princejs");
+  const app = prince();
+  app.get("/", () => ({ message: "Hello!" }));
   server = app.listen(PORT);
   await new Promise(resolve => setTimeout(resolve, 100));
 });
