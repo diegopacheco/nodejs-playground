@@ -88,6 +88,7 @@
     <div>
       <button onclick="toggleTheme()">🌕|🌑</button>
       <span id="userCount"></span>
+      <span id="progressBar" style="margin-left: 15px; font-weight: bold; color: #0066cc;"></span>
     </div>
     <div class="center">
       GitHub Frequency Dashboard
@@ -158,8 +159,20 @@
       const year = yearSelect.value;
       const users = getFilteredUsers();
       userGrid.innerHTML = '';
+      const progressBar = document.getElementById('progressBar');
+      const total = users.length;
+      let completed = 0;
 
-      const allData = await Promise.all(users.map(user => getContributions(user, year)));
+      progressBar.textContent = `Loading: 0/${total} done`;
+
+      const allData = await Promise.all(users.map(async (user) => {
+        const result = await getContributions(user, year);
+        completed++;
+        progressBar.textContent = `Loading: ${completed}/${total} done`;
+        return result;
+      }));
+
+      progressBar.textContent = '';
       allData.sort((a, b) => b.total - a.total);
       userCount.textContent = `Total: ${allData.length}`;
 
