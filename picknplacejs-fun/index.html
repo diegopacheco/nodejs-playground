@@ -15,12 +15,12 @@
             font-family: Arial, sans-serif;
             background: #1a1a1a;
             color: #fff;
-            overflow-x: hidden;
+            padding: 40px 20px;
+            min-height: 200vh;
         }
 
         .container {
-            padding: 40px 20px;
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -30,74 +30,197 @@
             color: #4CAF50;
         }
 
-        .scroll-container {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px;
-            background: #2a2a2a;
-            border-radius: 10px;
-            cursor: grab;
+        .pnp-list {
+            list-style: none;
+            position: relative;
+            transition: height 0.3s;
         }
 
-        .scroll-container:active {
-            cursor: grabbing;
+        .pnp-list.is-ready .pnp-real {
+            opacity: 0;
+            pointer-events: none;
         }
 
-        .item {
-            min-width: 200px;
-            height: 200px;
+        .pnp-item {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 8px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            flex-shrink: 0;
-            user-select: none;
+            transition: all 0.3s;
         }
 
-        .item:nth-child(2n) {
+        .pnp-item:nth-child(2n) {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
-        .item:nth-child(3n) {
+        .pnp-item:nth-child(3n) {
             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
 
-        .item:nth-child(4n) {
+        .pnp-item:nth-child(4n) {
             background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         }
 
+        .pnp-clone {
+            transition: transform 0.3s;
+            will-change: transform;
+        }
+
+        .pnp-ghost {
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: none;
+        }
+
+        .pnp-picked {
+            opacity: 0.3;
+        }
+
+        .pnp-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .pnp-pick {
+            background: #fff;
+            color: #333;
+        }
+
+        .pnp-pick:hover {
+            transform: scale(1.05);
+        }
+
+        .pnp-cancel {
+            background: #f44336;
+            color: #fff;
+        }
+
+        .pnp-place {
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        .pnp-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: 12px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+        }
+
+        .pnp-controls.is-active {
+            display: flex;
+        }
+
+        .pnp-controls button {
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+
         .info {
-            margin-top: 20px;
+            margin-top: 40px;
             padding: 20px;
             background: #2a2a2a;
             border-radius: 10px;
             text-align: center;
         }
+
+        .info p {
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>PickNPlace Drag Scroll</h1>
+        <h1>PickNPlace</h1>
 
-        <div class="scroll-container" id="scrollContainer">
-            <div class="item">Item 1</div>
-            <div class="item">Item 2</div>
-            <div class="item">Item 3</div>
-            <div class="item">Item 4</div>
-            <div class="item">Item 5</div>
-            <div class="item">Item 6</div>
-            <div class="item">Item 7</div>
-            <div class="item">Item 8</div>
-            <div class="item">Item 9</div>
-            <div class="item">Item 10</div>
+        <ol class="pnp-list">
+            <li class="pnp-item pnp-real">
+                <span>Item One</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Two</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Three</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Four</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Five</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Six</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Seven</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Eight</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Nine</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+            <li class="pnp-item pnp-real">
+                <span>Item Ten</span>
+                <div class="pnp-buttons">
+                    <button class="pnp-pick" type="button">Pick</button>
+                </div>
+            </li>
+        </ol>
+
+        <div class="pnp-controls">
+            <button class="pnp-cancel" type="button">Cancel</button>
+            <button class="pnp-place" type="button">Place</button>
         </div>
 
         <div class="info">
-            Drag horizontally to scroll through items
+            <p>Click Pick to select an item, scroll to position, then click Place or press Enter</p>
+            <p>Press Escape to cancel</p>
         </div>
     </div>
 
