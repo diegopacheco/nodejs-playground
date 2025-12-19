@@ -2,435 +2,115 @@ export function createPickPlace(options = {}) {
   const root = options.root || document;
   const listSelector = options.listSelector || ".pnp-list";
   const itemSelector = options.itemSelector || ".pnp-item";
-  const controlsSelector = options.controlsSelector || ".pnp-controls";
-  const buttonsSelector = options.buttonsSelector || ".pnp-buttons";
   const pickSelector = options.pickSelector || ".pnp-pick";
-  const placeSelector = options.placeSelector || ".pnp-place";
-  const cancelSelector = options.cancelSelector || ".pnp-cancel";
-  const pickedClass = options.pickedClass || "pnp-picked";
-  const realClass = options.realClass || "pnp-real";
-  const ghostClass = options.ghostClass || "pnp-ghost";
-  const cloneClass = options.cloneClass || "pnp-clone";
 
-  let initialized = false;
-  let $ghost = null;
-  let scrollDirY = 0;
-  let lastScrollY = window.scrollY;
-  let targetIndex = null;
-  let $controls = null;
-  let ghostTop = 0;
-  let ghostOffset = 0;
-
-  let state = {
-    mode: "idle",
-    $list: null,
-    $item: null,
-    originalTop: 0,
-    positions: [],
-    currentIndex: null,
-  };
-
-  const reduce = (state, event) => {
-    switch (event.type) {
-      case "pick":
-        return {
-          mode: "picking",
-          $item: event.$item,
-          $list: event.$list,
-          originalTop: event.originalTop,
-          positions: event.positions,
-          currentIndex: event.currentIndex,
-        };
-
-      case "place":
-        return {
-          mode: "idle",
-          $list: null,
-          $item: null,
-          originalTop: 0,
-          positions: [],
-          currentIndex: null,
-        };
-
-      case "cancel":
-        return {
-          mode: "idle",
-          $list: null,
-          $item: null,
-          originalTop: 0,
-          positions: [],
-          currentIndex: null,
-        };
-
-      default:
-        return state;
-    }
-  };
-
-  const dispatch = (event) => {
-    const prev = state;
-    const next = reduce(state, event);
-
-    if (next === prev) {
-      return;
-    }
-
-    state = next;
-
-    if (event.type === "pick") {
-      targetIndex = event.currentIndex;
-    } else {
-      targetIndex = null;
-    }
-
-    const $list = prev.$list || next.$list;
-
-    if ($list) {
-      $list.dataset.mode = next.mode;
-    }
-
-    if (next.mode === "picking") {
-      next.$item?.classList.add(pickedClass);
-      setPickingMode();
-      next.$list?.classList.add("is-ready");
-      createGhost(next.$item);
-      console.log("Picked item, ghost created");
-
-      const allPickButtons = next.$list.querySelectorAll(pickSelector);
-      allPickButtons.forEach(btn => {
-        btn.textContent = "Place";
-      });
-
-      if ($controls) {
-        $controls.classList.add("is-active");
-      }
-    }
-
-    if (next.mode === "idle") {
-      prev.$item?.classList.remove(pickedClass);
-
-      if (prev.$list) {
-        prev.$list.classList.remove("is-ready");
-        setIdleMode(prev.$list);
-
-        const allPickButtons = prev.$list.querySelectorAll(pickSelector);
-        allPickButtons.forEach(btn => {
-          btn.textContent = "Pick";
-        });
-      }
-
-      if ($controls) {
-        $controls.classList.remove("is-active");
-      }
-
-      destroyGhost();
-    }
-
-    if (event.type === "place") {
-      console.log("Placing item");
-      sortDomByNewIndices(prev.$list, prev.positions);
-    }
-  };
-
-  const sortDomByNewIndices = ($list, positions) => {
-    const ordered = positions
-      .slice()
-      .sort((a, b) => a.currentIndex - b.currentIndex);
-
-    const frag = document.createDocumentFragment();
-    for (const p of ordered) frag.appendChild(p.el);
-
-    $list.appendChild(frag);
-  };
+  let pickedItem = null;
+  let ghost = null;
 
   const createGhost = (item) => {
-    destroyGhost();
-
-    const clone = item.cloneNode(true);
-    clone.classList.add(ghostClass);
-
+    ghost = item.cloneNode(true);
+    ghost.classList.add("pnp-ghost");
     const rect = item.getBoundingClientRect();
-
-    Object.assign(clone.style, {
-      position: "fixed",
-      width: `${rect.width}px`,
-      height: `${rect.height}px`,
-      transform: `translate(${rect.left}px, calc(${rect.top}px + var(--offset))`,
-    });
-    ghostTop = rect.top;
-
-    const buttons = clone.querySelector(buttonsSelector);
-
-    if (buttons) {
-      buttons.innerHTML = `
-        <button class="pnp-pick" type="button">Place</button>
-      `;
-    }
-
-    document.body.appendChild(clone);
-    $ghost = clone;
+    ghost.style.position = "fixed";
+    ghost.style.width = rect.width + "px";
+    ghost.style.pointerEvents = "none";
+    ghost.style.left = rect.left + "px";
+    ghost.style.top = rect.top + "px";
+    document.body.appendChild(ghost);
   };
 
   const destroyGhost = () => {
-    if ($ghost) {
-      $ghost.remove();
-    }
-
-    $ghost = null;
-  };
-
-  const onKeyDown = (event) => {
-    if (event.key === "Escape") {
-      return dispatch({
-        type: "cancel",
-      });
-    }
-
-    if (event.key === "Enter") {
-      return dispatch({
-        type: "place",
-      });
+    if (ghost) {
+      ghost.remove();
+      ghost = null;
     }
   };
 
-  const onClick = (event) => {
-    const target = event.target;
+  const moveGhost = (e) => {
+    if (!ghost) return;
+    ghost.style.left = e.clientX - ghost.offsetWidth / 2 + "px";
+    ghost.style.top = e.clientY - ghost.offsetHeight / 2 + "px";
+  };
 
-    if (!(target instanceof Element)) {
-      return;
-    }
-
-    const cancelBtn = target.closest(cancelSelector);
-
-    if (cancelBtn) {
-      return dispatch({
-        type: "cancel",
-      });
-    }
-
-    const placeBtn = target.closest(placeSelector);
-
-    if (placeBtn) {
-      return dispatch({
-        type: "place",
-      });
-    }
-
-    const pickBtn = target.closest(pickSelector);
-
-    if (pickBtn) {
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (state.mode === "picking") {
-        return dispatch({
-          type: "place",
-        });
+  const getItemUnderMouse = (e) => {
+    const items = document.querySelectorAll(itemSelector);
+    for (const item of items) {
+      if (item === pickedItem) continue;
+      const rect = item.getBoundingClientRect();
+      if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+        return item;
       }
-
-      const $item = pickBtn.closest(itemSelector);
-      const $list = $item?.closest(listSelector);
-
-      if (!$item || !$list) {
-        return;
-      }
-
-      const listRect = $list.getBoundingClientRect();
-
-      const $items = Array.from($list.children);
-      const currentIndex = $items.indexOf($item);
-
-      const positions = $items.map((el, index) => {
-        const rect = el.getBoundingClientRect();
-
-        return {
-          el,
-          clone: null,
-          originalIndex: index,
-          currentIndex: index,
-          originalTop: rect.top,
-          rect,
-        };
-      });
-
-      return dispatch({
-        type: "pick",
-        $list,
-        $item,
-        originalTop: listRect.top,
-        positions,
-        currentIndex,
-      });
     }
+    return null;
   };
 
-  const swapByIndex = (positions, indexA, indexB) => {
-    if (indexA === indexB) return;
+  const onMouseMove = (e) => {
+    if (!pickedItem) return;
+    moveGhost(e);
 
-    const a = positions.find((p) => p.currentIndex === indexA);
-    const b = positions.find((p) => p.currentIndex === indexB);
+    const target = getItemUnderMouse(e);
+    if (target) {
+      const list = target.closest(listSelector);
+      const items = Array.from(list.children);
+      const pickedIdx = items.indexOf(pickedItem);
+      const targetIdx = items.indexOf(target);
 
-    if (!a || !b) return;
-
-    a.currentIndex = indexB;
-    b.currentIndex = indexA;
-  };
-
-  let scrollRaf = null;
-
-  const onScroll = (event) => {
-    console.log("Scroll event fired, mode:", state.mode, "ghost:", !!$ghost, "raf:", !!scrollRaf);
-
-    if (state.mode !== "picking" || !$ghost || scrollRaf) {
-      return;
-    }
-
-    const y = window.scrollY;
-    scrollDirY = y - lastScrollY;
-    lastScrollY = y;
-
-    console.log("Processing scroll, scrollY:", y, "dir:", scrollDirY);
-
-    scrollRaf = requestAnimationFrame(() => {
-      scrollRaf = null;
-
-      const ghostRect = $ghost.getBoundingClientRect();
-      const ghostCenter = {
-        x: ghostRect.left + ghostRect.width / 2,
-        y: ghostRect.top + ghostRect.height / 2,
-      };
-
-      const $items = Array.from(state.$list.children).filter(
-        (x) => !x.classList.contains(cloneClass)
-      );
-
-      let newTargetIndex;
-
-      const listRect = state.$list.getBoundingClientRect();
-      const listSpacing = parseFloat(getComputedStyle(state.$list).paddingTop);
-
-      if (listRect.top + listSpacing > ghostTop) {
-        ghostOffset = listRect.top - ghostTop + listSpacing;
-      } else if (
-        ghostTop >
-        listRect.top + listRect.height - ghostRect.height - listSpacing
-      ) {
-        const diff =
-          listRect.top + listRect.height - ghostRect.height - listSpacing;
-        ghostOffset = -1 * ghostTop + diff;
+      if (pickedIdx < targetIdx) {
+        target.after(pickedItem);
       } else {
-        ghostOffset = 0;
+        target.before(pickedItem);
       }
-
-      $ghost.style.setProperty("--offset", `${ghostOffset}px`);
-
-      if (ghostCenter.y > listRect.top + listRect.height) {
-        newTargetIndex = $items.length - 1;
-      } else if (scrollDirY >= 0) {
-        for (const [index, $item] of $items.entries()) {
-          const rect = $item.getBoundingClientRect();
-
-          if (ghostCenter.y < rect.top) {
-            newTargetIndex = index - 1;
-            break;
-          }
-
-          newTargetIndex = $items.length - 1;
-        }
-      } else {
-        for (const [index, $item] of $items.entries()) {
-          const rect = $item.getBoundingClientRect();
-
-          if (ghostCenter.y < rect.bottom) {
-            newTargetIndex = index;
-            break;
-          }
-
-          newTargetIndex = 0;
-        }
-      }
-
-      if (newTargetIndex !== targetIndex) {
-        console.log("Swapping from", targetIndex, "to", newTargetIndex);
-        swapByIndex(state.positions, targetIndex, newTargetIndex);
-        transformItems();
-        targetIndex = newTargetIndex;
-      }
-    });
-  };
-
-  const setPickingMode = () => {
-    const listRect = state.$list.getBoundingClientRect();
-
-    for (const position of state.positions) {
-      const { el, rect } = position;
-      const clone = el.cloneNode(true);
-      clone.classList.remove(realClass);
-      clone.classList.add(cloneClass);
-      position.clone = clone;
-
-      Object.assign(clone.style, {
-        position: "absolute",
-        left: "0px",
-        top: "0px",
-        width: `${rect.width}px`,
-        transform: `translate(
-          ${rect.left - listRect.left}px,
-          ${rect.top - listRect.top}px
-        )`,
-      });
-
-      state.$list.appendChild(clone);
     }
   };
 
-  const transformItems = () => {
-    const listRect = state.$list.getBoundingClientRect();
+  const onClick = (e) => {
+    const pickBtn = e.target.closest(pickSelector);
+    if (!pickBtn) return;
 
-    for (const position of state.positions) {
-      const { clone, currentIndex, rect } = position;
+    e.preventDefault();
+    e.stopPropagation();
 
-      let top = rect.top;
+    const item = pickBtn.closest(itemSelector);
+    if (!item) return;
 
-      const found = state.positions.find(
-        (pos) => currentIndex === pos.originalIndex
-      );
+    if (pickedItem) {
+      pickedItem.classList.remove("pnp-picked");
+      destroyGhost();
 
-      if (found && found.originalTop) {
-        top = found.originalTop;
-      }
+      const allButtons = document.querySelectorAll(pickSelector);
+      allButtons.forEach(btn => btn.textContent = "Pick");
 
-      Object.assign(clone.style, {
-        transform: `translate(
-          ${rect.left - listRect.left}px,
-          ${top - state.originalTop}px
-        )`,
-      });
+      pickedItem = null;
+      document.removeEventListener("mousemove", onMouseMove);
+    } else {
+      pickedItem = item;
+      pickedItem.classList.add("pnp-picked");
+      createGhost(item);
+
+      const allButtons = document.querySelectorAll(pickSelector);
+      allButtons.forEach(btn => btn.textContent = "Place");
+
+      document.addEventListener("mousemove", onMouseMove);
     }
   };
 
-  const setIdleMode = ($list) => {
-    const clones = $list.querySelectorAll(`.${cloneClass}`);
+  const onKeyDown = (e) => {
+    if (e.key === "Escape" && pickedItem) {
+      pickedItem.classList.remove("pnp-picked");
+      destroyGhost();
 
-    for (const clone of clones) {
-      clone.remove();
+      const allButtons = document.querySelectorAll(pickSelector);
+      allButtons.forEach(btn => btn.textContent = "Pick");
+
+      pickedItem = null;
+      document.removeEventListener("mousemove", onMouseMove);
     }
   };
 
   const init = () => {
-    if (initialized) {
-      return;
-    }
-
-    $controls = root.querySelector(controlsSelector);
     root.addEventListener("click", onClick, true);
     root.addEventListener("keydown", onKeyDown, true);
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    initialized = true;
   };
 
-  return {
-    init,
-  };
+  return { init };
 }

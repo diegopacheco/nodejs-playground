@@ -46,10 +46,6 @@
             transition: height 0.3s;
         }
 
-        .pnp-list.is-ready .pnp-real {
-            opacity: 0;
-            pointer-events: none;
-        }
 
         .pnp-item {
             background: #2a2a2a;
@@ -69,10 +65,6 @@
             border-color: #555;
         }
 
-        .pnp-clone {
-            transition: transform 0.3s;
-            will-change: transform;
-        }
 
         .pnp-ghost {
             z-index: 1000;
@@ -86,10 +78,6 @@
             opacity: 0.3;
         }
 
-        .pnp-buttons {
-            display: flex;
-            gap: 8px;
-        }
 
         button {
             padding: 14px 28px;
@@ -111,24 +99,6 @@
             background: #f0f0f0;
         }
 
-        .pnp-cancel {
-            background: #f44336;
-            color: #fff;
-        }
-
-        .pnp-place {
-            background: #4CAF50;
-            color: #fff;
-        }
-
-        .pnp-controls {
-            display: none;
-        }
-
-        .pnp-controls button {
-            padding: 16px 32px;
-            font-size: 20px;
-        }
 
         .info {
             margin-top: 40px;
@@ -151,78 +121,54 @@
         <h2>Order by your preference</h2>
 
         <ol class="pnp-list">
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>JavaScript</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>Python</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>Java</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>Go</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>Rust</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>TypeScript</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>C++</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>Ruby</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>PHP</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
-            <li class="pnp-item pnp-real">
+            <li class="pnp-item">
                 <span>Swift</span>
-                <div class="pnp-buttons">
-                    <button class="pnp-pick" type="button">Pick</button>
-                </div>
+                <button class="pnp-pick" type="button">Pick</button>
             </li>
         </ol>
 
-        <div class="pnp-controls">
-            <button class="pnp-cancel" type="button">Cancel</button>
-            <button class="pnp-place" type="button">Place</button>
-        </div>
 
         <div class="info">
             <p><strong>How to use:</strong></p>
             <p>1. Click Pick on any language</p>
-            <p>2. Scroll the page - the item will move over other items</p>
-            <p>3. Click the button again to Place it in the new position</p>
+            <p>2. Move your mouse over other items to reorder</p>
+            <p>3. Click any Place button to confirm</p>
             <p>4. Press Escape to cancel</p>
         </div>
     </div>
