@@ -76,7 +76,12 @@ export function createPickPlace(options = {}) {
     }
 
     state = next;
-    targetIndex = null;
+
+    if (event.type === "pick") {
+      targetIndex = event.currentIndex;
+    } else {
+      targetIndex = null;
+    }
 
     const $list = prev.$list || next.$list;
 
@@ -89,6 +94,12 @@ export function createPickPlace(options = {}) {
       setPickingMode();
       next.$list?.classList.add("is-ready");
       createGhost(next.$item);
+      console.log("Picked item, ghost created");
+
+      const allPickButtons = next.$list.querySelectorAll(pickSelector);
+      allPickButtons.forEach(btn => {
+        btn.textContent = "Place";
+      });
 
       if ($controls) {
         $controls.classList.add("is-active");
@@ -101,6 +112,11 @@ export function createPickPlace(options = {}) {
       if (prev.$list) {
         prev.$list.classList.remove("is-ready");
         setIdleMode(prev.$list);
+
+        const allPickButtons = prev.$list.querySelectorAll(pickSelector);
+        allPickButtons.forEach(btn => {
+          btn.textContent = "Pick";
+        });
       }
 
       if ($controls) {
@@ -111,6 +127,7 @@ export function createPickPlace(options = {}) {
     }
 
     if (event.type === "place") {
+      console.log("Placing item");
       sortDomByNewIndices(prev.$list, prev.positions);
     }
   };
@@ -146,8 +163,7 @@ export function createPickPlace(options = {}) {
 
     if (buttons) {
       buttons.innerHTML = `
-        <button class="pnp-cancel" type="button">Cancel</button>
-        <button class="pnp-place" type="button">Place</button>
+        <button class="pnp-pick" type="button">Place</button>
       `;
     }
 
@@ -208,7 +224,7 @@ export function createPickPlace(options = {}) {
 
       if (state.mode === "picking") {
         return dispatch({
-          type: "cancel",
+          type: "place",
         });
       }
 
@@ -263,6 +279,8 @@ export function createPickPlace(options = {}) {
   let scrollRaf = null;
 
   const onScroll = (event) => {
+    console.log("Scroll event fired, mode:", state.mode, "ghost:", !!$ghost, "raf:", !!scrollRaf);
+
     if (state.mode !== "picking" || !$ghost || scrollRaf) {
       return;
     }
@@ -270,6 +288,8 @@ export function createPickPlace(options = {}) {
     const y = window.scrollY;
     scrollDirY = y - lastScrollY;
     lastScrollY = y;
+
+    console.log("Processing scroll, scrollY:", y, "dir:", scrollDirY);
 
     scrollRaf = requestAnimationFrame(() => {
       scrollRaf = null;
@@ -331,6 +351,7 @@ export function createPickPlace(options = {}) {
       }
 
       if (newTargetIndex !== targetIndex) {
+        console.log("Swapping from", targetIndex, "to", newTargetIndex);
         swapByIndex(state.positions, targetIndex, newTargetIndex);
         transformItems();
         targetIndex = newTargetIndex;
