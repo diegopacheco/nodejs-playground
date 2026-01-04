@@ -10,9 +10,7 @@ class BubblesEffect extends Effect {
         this.particles = [];
     }
 
-    render() {
-        this.clearBackground();
-
+    update() {
         if (Math.random() < 0.1) {
             const colors = [
                 'rgba(255, 159, 243, 0.6)',

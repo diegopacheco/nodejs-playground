@@ -16,9 +16,7 @@ class TornadoEffect extends Effect {
         this.particles = [];
     }
 
-    render() {
-        this.clearBackground();
-
+    update() {
         this.angle += 0.1;
         const centerX = this.canvas.width / 2;
         const baseY = this.canvas.height;

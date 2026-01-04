@@ -1,8 +1,7 @@
 import Effect from '../Effect.js';
 
 class ConfettiEffect extends Effect {
-    render() {
-        this.clearBackground();
+    update() {
         if (Math.random() < 0.3) {
             const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#1dd1a1'];
             this.addParticle(Math.random() * this.canvas.width, -20, {

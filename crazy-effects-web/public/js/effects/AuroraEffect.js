@@ -21,8 +21,7 @@ class AuroraEffect extends Effect {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    render() {
-        this.clearBackground();
+    update() {
         this.time += 0.02;
 
         const colors = [
