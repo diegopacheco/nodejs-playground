@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LiftKit Components</title>
+  <link rel="stylesheet" href="src/lib/css/liftkit-core.css">
+  <link rel="stylesheet" href="src/lib/css/typography.css">
+  <link rel="stylesheet" href="src/lib/css/background-colors.css">
+  <link rel="stylesheet" href="src/lib/css/text-color.css">
+  <link rel="stylesheet" href="src/lib/css/shadows.css">
+  <link rel="stylesheet" href="src/lib/css/padding.css">
+  <link rel="stylesheet" href="src/lib/css/margins.css">
+  <link rel="stylesheet" href="src/lib/css/gaps.css">
+  <link rel="stylesheet" href="src/lib/css/flexboxes.css">
+  <link rel="stylesheet" href="src/lib/css/display.css">
+  <link rel="stylesheet" href="src/lib/css/width.css">
+  <link rel="stylesheet" href="src/lib/css/height.css">
+  <link rel="stylesheet" href="src/lib/css/border-radius.css">
+  <link rel="stylesheet" href="src/lib/css/text-alignment.css">
+  <link rel="stylesheet" href="src/components/button/button.css">
+  <link rel="stylesheet" href="src/components/card/card.css">
+  <link rel="stylesheet" href="src/components/row/row.css">
+  <link rel="stylesheet" href="src/components/column/column.css">
+  <link rel="stylesheet" href="src/components/section/section.css">
+  <link rel="stylesheet" href="src/components/state-layer/state-layer.css">
+  <link rel="stylesheet" href="src/components/badge/badge.css">
+  <style>
+    .showcase-section { margin-bottom: var(--lk-size-2xl); }
+    .showcase-label { margin-bottom: var(--lk-size-sm); opacity: 0.6; }
+    .color-swatch {
+      width: 120px;
+      height: 80px;
+      border-radius: var(--lk-size-xs);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--caption-font-size);
+    }
+  </style>
+</head>
+<body>
+  <section data-lk-section-padding="md">
+    <div data-lk-component="section">
+
+      <div data-lk-component="column" data-lk-column-align-items="stretch" data-lk-column-gap="xl">
+
+        <h1 class="display1-bold">LiftKit</h1>
+        <div class="body" style="max-width: 600px;">A golden-ratio-based design system with Material Design 3 color tokens, proportional typography, and composable layout primitives.</div>
+
+        <div class="showcase-section">
+          <div class="capline showcase-label">Typography Scale</div>
+          <div data-lk-component="column" data-lk-column-align-items="start" data-lk-column-gap="xs">
+            <div class="display1-bold">Display 1 Bold</div>
+            <div class="display2-bold">Display 2 Bold</div>
+            <div class="title1-bold">Title 1 Bold</div>
+            <div class="title2-bold">Title 2 Bold</div>
+            <div class="title3-bold">Title 3 Bold</div>
+            <div class="heading-bold">Heading Bold</div>
+            <div class="subheading-bold">Subheading Bold</div>
+            <div class="body">Body</div>
+            <div class="callout">Callout</div>
+            <div class="label">Label</div>
+            <div class="caption">Caption</div>
+            <div class="capline">Capline</div>
+          </div>
+        </div>
+
+        <div class="showcase-section">
+          <div class="capline showcase-label">Buttons</div>
+          <div data-lk-component="row" data-lk-row-align-items="center" data-lk-row-gap="md" data-lk-row-wrap-children="true">
+            <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="sm" class="bg-primary color-onprimary">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Small</span></div>
+            </button>
+            <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="md" class="bg-primary color-onprimary">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Primary</span></div>
+            </button>
+            <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="lg" class="bg-primary color-onprimary">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Large</span></div>
+            </button>
+            <button data-lk-component="button" data-lk-button-variant="outline" data-lk-button-size="md" class="color-primary">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Outline</span></div>
+            </button>
+            <button data-lk-component="button" data-lk-button-variant="text" data-lk-button-size="md" class="color-primary">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Text</span></div>
+            </button>
+          </div>
+          <div data-lk-component="row" data-lk-row-align-items="center" data-lk-row-gap="md" data-lk-row-wrap-children="true" style="margin-top: var(--lk-size-sm);">
+            <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="md" class="bg-secondary color-onsecondary">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Secondary</span></div>
+            </button>
+            <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="md" class="bg-tertiary color-ontertiary">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Tertiary</span></div>
+            </button>
+            <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="md" class="bg-error color-onerror">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Error</span></div>
+            </button>
+            <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="md" class="bg-success color-onsuccess">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Success</span></div>
+            </button>
+            <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="md" class="bg-warning color-onwarning">
+              <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Warning</span></div>
+            </button>
+          </div>
+        </div>
+
+        <div class="showcase-section">
+          <div class="capline showcase-label">Cards</div>
+          <div data-lk-component="row" data-lk-row-gap="md" data-lk-row-wrap-children="true" data-lk-row-align-items="stretch">
+            <div data-lk-component="card" data-lk-card-variant="fill" data-lk-card-scale-factor="body" data-lk-card-material="flat" style="background-color: var(--lk-surfacecontainer); flex: 1; min-width: 200px;">
+              <div data-lk-card-element="padding-box" data-lk-card-optical-correction="none">
+                <div data-lk-component="slot" data-lk-slot="children">
+                  <div class="heading-bold">Surface Card</div>
+                  <div class="body" style="margin-top: var(--lk-size-xs);">A card using the surface container color token with body text.</div>
+                </div>
+              </div>
+            </div>
+            <div data-lk-component="card" data-lk-card-variant="outline" data-lk-card-scale-factor="body" data-lk-card-material="flat" style="flex: 1; min-width: 200px;">
+              <div data-lk-card-element="padding-box" data-lk-card-optical-correction="none">
+                <div data-lk-component="slot" data-lk-slot="children">
+                  <div class="heading-bold">Outline Card</div>
+                  <div class="body" style="margin-top: var(--lk-size-xs);">A card with outline variant showing the border style.</div>
+                </div>
+              </div>
+            </div>
+            <div data-lk-component="card" data-lk-card-variant="fill" data-lk-card-scale-factor="title2" data-lk-card-material="flat" class="bg-primarycontainer" style="flex: 1; min-width: 200px;">
+              <div data-lk-card-element="padding-box" data-lk-card-optical-correction="top">
+                <div data-lk-component="slot" data-lk-slot="children">
+                  <div class="title2-bold">Primary</div>
+                  <div class="body" style="margin-top: var(--lk-size-xs);">Scaled to title2 with optical correction on top.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="showcase-section">
+          <div class="capline showcase-label">Color Tokens</div>
+          <div data-lk-component="row" data-lk-row-gap="xs" data-lk-row-wrap-children="true">
+            <div class="color-swatch bg-primary">primary</div>
+            <div class="color-swatch bg-secondary">secondary</div>
+            <div class="color-swatch bg-tertiary">tertiary</div>
+            <div class="color-swatch bg-error">error</div>
+            <div class="color-swatch bg-success">success</div>
+            <div class="color-swatch bg-warning">warning</div>
+            <div class="color-swatch bg-info">info</div>
+          </div>
+          <div data-lk-component="row" data-lk-row-gap="xs" data-lk-row-wrap-children="true" style="margin-top: var(--lk-size-xs);">
+            <div class="color-swatch bg-primarycontainer">primary ctr</div>
+            <div class="color-swatch bg-secondarycontainer">secondary ctr</div>
+            <div class="color-swatch bg-tertiarycontainer">tertiary ctr</div>
+            <div class="color-swatch bg-errorcontainer">error ctr</div>
+            <div class="color-swatch bg-successcontainer">success ctr</div>
+            <div class="color-swatch bg-warningcontainer">warning ctr</div>
+            <div class="color-swatch bg-infocontainer">info ctr</div>
+          </div>
+          <div data-lk-component="row" data-lk-row-gap="xs" data-lk-row-wrap-children="true" style="margin-top: var(--lk-size-xs);">
+            <div class="color-swatch bg-surface">surface</div>
+            <div class="color-swatch bg-surfacecontainerlow">srf low</div>
+            <div class="color-swatch bg-surfacecontainer">srf ctr</div>
+            <div class="color-swatch bg-surfacecontainerhigh">srf high</div>
+            <div class="color-swatch bg-surfacecontainerhighest">srf highest</div>
+            <div class="color-swatch bg-inversesurface">inverse srf</div>
+          </div>
+        </div>
+
+        <div class="showcase-section">
+          <div class="capline showcase-label">Layout: Row + Column</div>
+          <div data-lk-component="row" data-lk-row-gap="md" data-lk-row-align-items="stretch" data-lk-row-wrap-children="true">
+            <div data-lk-component="column" data-lk-column-gap="sm" data-lk-column-align-items="stretch" style="flex: 1; min-width: 200px;">
+              <div class="bg-surfacecontainerhigh" style="padding: var(--lk-size-sm); border-radius: var(--lk-size-xs);">
+                <div class="label">Column Item 1</div>
+              </div>
+              <div class="bg-surfacecontainerhigh" style="padding: var(--lk-size-sm); border-radius: var(--lk-size-xs);">
+                <div class="label">Column Item 2</div>
+              </div>
+              <div class="bg-surfacecontainerhigh" style="padding: var(--lk-size-sm); border-radius: var(--lk-size-xs);">
+                <div class="label">Column Item 3</div>
+              </div>
+            </div>
+            <div data-lk-component="column" data-lk-column-gap="sm" data-lk-column-align-items="stretch" style="flex: 2; min-width: 200px;">
+              <div data-lk-component="card" data-lk-card-variant="fill" data-lk-card-scale-factor="heading" data-lk-card-material="flat" style="background-color: var(--lk-surfacecontainer);">
+                <div data-lk-card-element="padding-box" data-lk-card-optical-correction="none">
+                  <div data-lk-component="slot" data-lk-slot="children">
+                    <div class="heading-bold">Nested Card in Column</div>
+                    <div class="body" style="margin-top: var(--lk-size-xs);">Cards compose with Row and Column layout primitives using the golden ratio spacing scale.</div>
+                    <div data-lk-component="row" data-lk-row-gap="sm" style="margin-top: var(--lk-size-sm);">
+                      <button data-lk-component="button" data-lk-button-variant="fill" data-lk-button-size="sm" class="bg-primary color-onprimary">
+                        <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Action</span></div>
+                      </button>
+                      <button data-lk-component="button" data-lk-button-variant="outline" data-lk-button-size="sm" class="color-primary">
+                        <div data-lk-button-content-wrap="true"><span data-lk-button-child="button-text">Cancel</span></div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="showcase-section">
+          <div class="capline showcase-label">Shadows</div>
+          <div data-lk-component="row" data-lk-row-gap="lg" data-lk-row-wrap-children="true" data-lk-row-align-items="center">
+            <div style="width: 120px; height: 80px; background: var(--lk-surfacecontainer); border-radius: var(--lk-size-xs); box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: center;" class="caption">shadow-sm</div>
+            <div style="width: 120px; height: 80px; background: var(--lk-surfacecontainer); border-radius: var(--lk-size-xs); box-shadow: var(--shadow-md); display: flex; align-items: center; justify-content: center;" class="caption">shadow-md</div>
+            <div style="width: 120px; height: 80px; background: var(--lk-surfacecontainer); border-radius: var(--lk-size-xs); box-shadow: var(--shadow-lg); display: flex; align-items: center; justify-content: center;" class="caption">shadow-lg</div>
+            <div style="width: 120px; height: 80px; background: var(--lk-surfacecontainer); border-radius: var(--lk-size-xs); box-shadow: var(--shadow-xl); display: flex; align-items: center; justify-content: center;" class="caption">shadow-xl</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</body>
+</html>

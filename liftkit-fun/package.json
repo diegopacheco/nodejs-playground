@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "@chainlift/liftkit": "^0.2.0"
+  },
+  "scripts": {
+    "add": "liftkit add"
+  },
+  "dependencies": {
+    "@csstools/normalize.css": "^12.1.1",
+    "@material/material-color-utilities": "^0.4.0",
+    "lucide-react": "^0.564.0"
+  }
+}
