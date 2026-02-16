@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oat Fun</title>
+  <link rel="stylesheet" href="https://unpkg.com/@knadh/oat/oat.min.css">
+  <script src="https://unpkg.com/@knadh/oat/oat.min.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Oat Fun</h1>
+    <p>A simple app built with <a href="https://oat.ink">Oat UI</a> and Node.js.</p>
+
+    <h2>Alerts</h2>
+    <div role="alert">This is a default alert.</div>
+    <div role="alert" data-variant="success">Operation completed successfully!</div>
+    <div role="alert" data-variant="warning">Please review before continuing.</div>
+    <div role="alert" data-variant="error">Something went wrong.</div>
+
+    <h2>Buttons</h2>
+    <button>Primary</button>
+    <button data-variant="secondary">Secondary</button>
+    <button data-variant="danger">Danger</button>
+    <button class="outline">Outline</button>
+    <button class="ghost">Ghost</button>
+
+    <h2>Card</h2>
+    <article class="card">
+      <header><h3>Task Tracker</h3></header>
+      <p>Keep track of your daily tasks with this simple card layout.</p>
+      <footer>
+        <button class="small">Add Task</button>
+        <button class="small outline">Clear All</button>
+      </footer>
+    </article>
+
+    <h2>Form</h2>
+    <form onsubmit="event.preventDefault(); ot.toast('Form submitted!', 'Success', { variant: 'success' });">
+      <label data-field>
+        Name
+        <input type="text" placeholder="Your name" />
+      </label>
+      <label data-field>
+        Email
+        <input type="email" placeholder="you@mail.com" />
+      </label>
+      <label data-field>
+        Message
+        <textarea placeholder="Write something..."></textarea>
+      </label>
+      <label>
+        <input type="checkbox" role="switch"> Subscribe to updates
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+
+    <h2>Accordion</h2>
+    <details>
+      <summary>What is Oat?</summary>
+      <p>A minimal, semantic-first UI library that styles standard HTML elements.</p>
+    </details>
+    <details>
+      <summary>Do I need classes?</summary>
+      <p>Not for basic styling. Oat works with plain semantic HTML.</p>
+    </details>
+    <details>
+      <summary>Is it lightweight?</summary>
+      <p>Yes, it is very small and has zero dependencies.</p>
+    </details>
+
+    <h2>Table</h2>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Role</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Alice</td><td>Admin</td><td><span class="badge success">Active</span></td></tr>
+        <tr><td>Bob</td><td>Editor</td><td><span class="badge">Pending</span></td></tr>
+        <tr><td>Carol</td><td>Viewer</td><td><span class="badge danger">Inactive</span></td></tr>
+      </tbody>
+    </table>
+
+    <h2>Progress</h2>
+    <progress value="70" max="100"></progress>
+
+    <h2>Tabs</h2>
+    <ot-tabs>
+      <div role="tablist">
+        <button role="tab">Profile</button>
+        <button role="tab">Settings</button>
+        <button role="tab">Notifications</button>
+      </div>
+      <div role="tabpanel"><p>Manage your profile information here.</p></div>
+      <div role="tabpanel"><p>Adjust your application settings.</p></div>
+      <div role="tabpanel"><p>View and manage your notifications.</p></div>
+    </ot-tabs>
+
+    <br>
+    <h2>Toast</h2>
+    <button onclick="ot.toast('Hello!', 'Oat Toast', { variant: 'success' });">Show Toast</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+#!/bin/bash
+node server.js &
+sleep 1
+open http://localhost:3000
+wait
