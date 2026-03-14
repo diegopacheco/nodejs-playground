@@ -1,0 +1,52 @@
+vite-8-bun-fun/src/main.tsx
+  bd03fa34588c32ff 1-15
+vite-8-bun-fun/src/tabs/FeedbackTab.tsx
+  bd03fa34588c32ff 1-122
+vite-8-bun-fun/src/tabs/ReportTab.tsx
+  bd03fa34588c32ff 1-52
+vite-8-bun-fun/src/tabs/Top3Tab.tsx
+  bd03fa34588c32ff 1-27
+vite-8-bun-fun/src/App.tsx
+  bd03fa34588c32ff 1-34
+vite-8-bun-fun/package.json
+  bd03fa34588c32ff 5-9
+vite-8-bun-fun/src/store.ts
+  bd03fa34588c32ff 1-95
+vite-8-bun-fun/src/tabs/SearchTab.tsx
+  bd03fa34588c32ff 1-83
+vite-8-bun-fun/README.md
+  bd03fa34588c32ff 1-26
+vite-8-bun-fun/src/style.css
+  bd03fa34588c32ff 1-270
+vite-8-bun-fun/index.html
+  bd03fa34588c32ff 1-12
+vite-8-bun-fun/tsconfig.json
+  bd03fa34588c32ff 3,21-22
+vite-8-bun-fun/vite.config.ts
+  bd03fa34588c32ff 1-9
+vite-8-bun-fun/src/tabs/CrudTab.tsx
+  bd03fa34588c32ff 1-309
+vite-8-bun-fun/run.sh
+  bd03fa34588c32ff 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.10",
+  "base_commit_sha": "b490acffa3642c45ec0bbc513e41a48d641129dd",
+  "prompts": {
+    "bd03fa34588c32ff": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "24e2ed57-7448-47c9-ac3c-d3da9f438333",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>",
+      "messages": [],
+      "total_additions": 1065,
+      "total_deletions": 10,
+      "accepted_lines": 1065,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/12e9758a8d33ddfce8bedd7ea2283cafead36fbbd9712b930c3e3752c33a508b"
+    }
+  }
+}
