@@ -1,0 +1,44 @@
+bippy-fun/src/ProfilerTab.tsx
+  8d63268784f01840 1-213
+bippy-fun/src/App.tsx
+  8d63268784f01840 1-61
+bippy-fun/vite.config.ts
+  8d63268784f01840 1-6
+bippy-fun/index.html
+  8d63268784f01840 1-12
+bippy-fun/README.md
+  8d63268784f01840 1-14
+bippy-fun/package.json
+  8d63268784f01840 5,7-8
+bippy-fun/src/InspectorTab.tsx
+  8d63268784f01840 1-306
+bippy-fun/tsconfig.json
+  8d63268784f01840 1-17
+bippy-fun/src/main.tsx
+  8d63268784f01840 1-10
+bippy-fun/src/bippy-profiler.ts
+  8d63268784f01840 1-122
+bippy-fun/run.sh
+  8d63268784f01840 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.10",
+  "base_commit_sha": "4e0473c8523cfb74861eb3cd5c5e8d3828d58b75",
+  "prompts": {
+    "8d63268784f01840": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f9744682-d3ed-4e34-a8af-c556f6ebe678",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>",
+      "messages": [],
+      "total_additions": 768,
+      "total_deletions": 6,
+      "accepted_lines": 768,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/b361f7e69fd9ce87f9cf7fa49a0a11724d0db90acc9f69b816fcd4cda97c1262"
+    }
+  }
+}
