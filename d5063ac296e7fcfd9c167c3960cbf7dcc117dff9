@@ -1,0 +1,28 @@
+bippy-fun/src/bippy-profiler.ts
+  8d63268784f01840 25,29,39-44,47,50-56,63-64,112,116-117
+bippy-fun/src/InspectorTab.tsx
+  8d63268784f01840 1
+bippy-fun/src/ProfilerTab.tsx
+  8d63268784f01840 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.10",
+  "base_commit_sha": "d5063ac296e7fcfd9c167c3960cbf7dcc117dff9",
+  "prompts": {
+    "8d63268784f01840": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f9744682-d3ed-4e34-a8af-c556f6ebe678",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>",
+      "messages": [],
+      "total_additions": 33,
+      "total_deletions": 51,
+      "accepted_lines": 26,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/fa0b87579ff012a0ed0d9642188278527abb8d2dbf81620fa5a10cbbc4a9a50b"
+    }
+  }
+}
