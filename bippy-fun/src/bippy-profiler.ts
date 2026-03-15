@@ -22,15 +22,11 @@ export type RenderMap = Map<string, RenderEntry>;
 
 let renderMap: RenderMap = new Map();
 let listeners: Array<(map: RenderMap) => void> = [];
-let highlightListeners: Array<(els: HTMLElement[]) => void> = [];
-
-export function getRenderMap(): RenderMap {
-  return renderMap;
-}
+let processing = false;
 
 export function clearRenderMap(): void {
   renderMap = new Map();
-  notifyListeners();
+  scheduleNotify();
 }
 
 export function onRenderMapChange(cb: (map: RenderMap) => void): () => void {
@@ -40,27 +36,32 @@ export function onRenderMapChange(cb: (map: RenderMap) => void): () => void {
   };
 }
 
-export function onHighlight(cb: (els: HTMLElement[]) => void): () => void {
-  highlightListeners.push(cb);
-  return () => {
-    highlightListeners = highlightListeners.filter((l) => l !== cb);
-  };
+let pendingNotify = false;
+function scheduleNotify() {
+  if (pendingNotify) return;
+  pendingNotify = true;
+  requestAnimationFrame(() => {
+    pendingNotify = false;
+    const snapshot = new Map(renderMap);
+    listeners.forEach((cb) => cb(snapshot));
+  });
 }
 
-function notifyListeners() {
-  const snapshot = new Map(renderMap);
-  listeners.forEach((cb) => cb(snapshot));
-}
-
-function notifyHighlight(els: HTMLElement[]) {
-  highlightListeners.forEach((cb) => cb(els));
+function highlightElement(el: HTMLElement) {
+  el.style.outline = "2px solid #0f0";
+  el.style.outlineOffset = "-2px";
+  setTimeout(() => {
+    el.style.outline = "";
+    el.style.outlineOffset = "";
+  }, 300);
 }
 
 export function startInstrumentation() {
   instrument(
     secure({
       onCommitFiberRoot(_rendererID, root) {
-        const highlightEls: HTMLElement[] = [];
+        if (processing) return;
+        processing = true;
 
         traverseRenderedFibers(root, (fiber) => {
           const name = getDisplayName(fiber);
@@ -108,14 +109,12 @@ export function startInstrumentation() {
 
           const hostFiber = getNearestHostFiber(fiber);
           if (hostFiber?.stateNode instanceof HTMLElement) {
-            highlightEls.push(hostFiber.stateNode);
+            highlightElement(hostFiber.stateNode);
           }
         });
 
-        notifyListeners();
-        if (highlightEls.length > 0) {
-          notifyHighlight(highlightEls);
-        }
+        scheduleNotify();
+        processing = false;
       },
     })
   );

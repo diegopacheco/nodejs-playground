@@ -1,32 +1,15 @@
-import { useState, useEffect, useCallback, useContext, createContext } from "react";
-import { onRenderMapChange, onHighlight, clearRenderMap, type RenderEntry } from "./bippy-profiler";
+import { useState, useEffect, useContext, createContext } from "react";
+import { onRenderMapChange, clearRenderMap, type RenderEntry } from "./bippy-profiler";
 
 const ThemeContext = createContext("dark");
 ThemeContext.displayName = "ThemeContext";
 
 function ProfilerTab() {
   const [entries, setEntries] = useState<RenderEntry[]>([]);
-  const [highlightedEls, setHighlightedEls] = useState<Set<HTMLElement>>(new Set());
 
   useEffect(() => {
     const unsub = onRenderMapChange((map) => {
       setEntries(Array.from(map.values()).sort((a, b) => b.count - a.count));
-    });
-    return unsub;
-  }, []);
-
-  useEffect(() => {
-    const unsub = onHighlight((els) => {
-      els.forEach((el) => {
-        el.style.outline = "2px solid #0f0";
-        el.style.outlineOffset = "-2px";
-        setTimeout(() => {
-          el.style.outline = "";
-          el.style.outlineOffset = "";
-        }, 300);
-      });
-      setHighlightedEls(new Set(els));
-      setTimeout(() => setHighlightedEls(new Set()), 300);
     });
     return unsub;
   }, []);
