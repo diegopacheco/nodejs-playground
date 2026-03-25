@@ -1,0 +1,24 @@
+videojs-fun/README.md
+  cf883c3f518fc79f 32-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.17",
+  "base_commit_sha": "b9c99a3c634ab9b49f0f77d97727906623c2f5b5",
+  "prompts": {
+    "cf883c3f518fc79f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2f83fb65-8f7c-4532-ae60-6a26acc9e2bd",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 4,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/746cf00e160e69570606bf78c989a0a21f16202898b54d0cfd0b013fbb478ef7"
+    }
+  }
+}
