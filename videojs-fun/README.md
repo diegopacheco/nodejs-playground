@@ -29,6 +29,10 @@ and a new Streaming Processor Framework (SPF) engine for modular streaming.
 
 Then open http://localhost:4173 in your browser.
 
+## Result
+
+![videojs-result](videojs-result.png)
+
 ## Project Structure
 
 ```
