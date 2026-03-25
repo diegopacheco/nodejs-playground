@@ -3,6 +3,10 @@
 Terminal UI rendered in the browser using Gridland.io framework.
 Gridland uses a React reconciler to render components onto an HTML5 Canvas via the Yoga layout engine, no terminal emulator needed.
 
+## Result
+
+![Gridland Result](gridland-result.png)
+
 ## Stack
 
 * Node.js 24
