@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World Cup Shuffle Ceremony</title>
+<title>Shuffle Ceremony</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -415,15 +415,37 @@ h1 {
 
 .spinning-ball {
   width: 80px; height: 80px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff, #ffd700, #ff8c00);
   margin: 30px;
+  font-size: 5rem;
   animation: spin 0.6s linear infinite;
-  box-shadow: 0 0 40px rgba(255,215,0,0.6);
+  filter: drop-shadow(0 0 20px rgba(255,215,0,0.6));
 }
 
 @keyframes spin {
   100% { transform: rotate(360deg); }
+}
+
+.random-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0 10px;
+}
+
+.random-toggle label {
+  font-size: 1.05rem;
+  color: #ccc;
+  cursor: pointer;
+  letter-spacing: 1px;
+  user-select: none;
+}
+
+.random-toggle input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #ffd700;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -432,13 +454,13 @@ h1 {
 <div class="stars" id="stars"></div>
 <div class="confetti-container" id="confetti"></div>
 <div class="drum-roll-overlay" id="drumRoll">
-  <div class="spinning-ball"></div>
+  <div class="spinning-ball">&#128187;</div>
   <div class="drum-roll-text">Shuffling...</div>
 </div>
 
 <div class="container">
-  <div class="trophy">&#9917;</div>
-  <h1>World Cup Shuffle Ceremony</h1>
+  <div class="trophy">&#128187;</div>
+  <h1>Shuffle Ceremony</h1>
   <p class="subtitle">The draw of destiny awaits</p>
 
   <div class="section-title">Teams</div>
@@ -446,6 +468,11 @@ h1 {
 
   <div class="section-title">Draw Pools</div>
   <div class="lists-container" id="listsContainer"></div>
+
+  <div class="random-toggle">
+    <input type="checkbox" id="randomCheck" checked>
+    <label for="randomCheck">Random</label>
+  </div>
 
   <div class="shuffle-btn-container">
     <button class="shuffle-btn" id="shuffleBtn" onclick="startShuffle()">Shuffle</button>
@@ -538,7 +565,8 @@ function startShuffle() {
       var v = document.getElementById('list' + l + 'item' + j).value.trim();
       items.push(v || 'Item ' + (j + 1));
     }
-    lists.push(shuffle(items));
+    var isRandom = document.getElementById('randomCheck').checked;
+    lists.push(isRandom ? shuffle(items) : items);
   }
 
   var btn = document.getElementById('shuffleBtn');
