@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup Shuffle Ceremony</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a2e 0%, #1a1a4e 30%, #2d1b69 60%, #0a0a2e 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+.stars {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.star {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.5); }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3rem;
+  margin: 20px 0 10px;
+  background: linear-gradient(90deg, #ffd700, #ffaa00, #ffd700);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.subtitle {
+  text-align: center;
+  color: #aaa;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  letter-spacing: 2px;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  color: #ffd700;
+  margin: 25px 0 15px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.team-box {
+  background: linear-gradient(145deg, rgba(255,215,0,0.1), rgba(255,215,0,0.02));
+  border: 2px solid rgba(255,215,0,0.3);
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.team-box::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: conic-gradient(transparent, rgba(255,215,0,0.05), transparent 30%);
+  animation: rotate 6s linear infinite;
+}
+
+@keyframes rotate {
+  100% { transform: rotate(360deg); }
+}
+
+.team-box:hover {
+  border-color: #ffd700;
+  box-shadow: 0 0 30px rgba(255,215,0,0.2);
+  transform: translateY(-3px);
+}
+
+.team-label {
+  font-size: 0.85rem;
+  color: #ffd700;
+  margin-bottom: 8px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.team-box input {
+  width: 100%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 10px;
+  color: #fff;
+  font-size: 1rem;
+  text-align: center;
+  outline: none;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+}
+
+.team-box input:focus {
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255,215,0,0.2);
+}
+
+.lists-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.list-panel {
+  background: linear-gradient(145deg, rgba(100,100,255,0.08), rgba(100,100,255,0.02));
+  border: 2px solid rgba(100,150,255,0.25);
+  border-radius: 14px;
+  padding: 20px;
+  transition: all 0.3s;
+}
+
+.list-panel:hover {
+  border-color: rgba(100,150,255,0.5);
+  box-shadow: 0 0 25px rgba(100,150,255,0.15);
+}
+
+.list-label-input {
+  width: 100%;
+  background: rgba(255,215,0,0.1);
+  border: 1px dashed rgba(255,215,0,0.4);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #ffd700;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  outline: none;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+
+.list-label-input:focus {
+  border-style: solid;
+  border-color: #ffd700;
+  box-shadow: 0 0 15px rgba(255,215,0,0.2);
+}
+
+.list-item {
+  margin-bottom: 8px;
+}
+
+.list-item input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.list-item input:focus {
+  border-color: rgba(100,150,255,0.6);
+  box-shadow: 0 0 12px rgba(100,150,255,0.2);
+}
+
+.shuffle-btn-container {
+  text-align: center;
+  margin: 35px 0;
+}
+
+.shuffle-btn {
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  color: #1a1a2e;
+  border: none;
+  padding: 18px 60px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.shuffle-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: linear-gradient(transparent, rgba(255,255,255,0.2), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s;
+}
+
+.shuffle-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px rgba(255,215,0,0.5);
+}
+
+.shuffle-btn:hover::after {
+  left: 100%;
+}
+
+.shuffle-btn:active {
+  transform: scale(0.98);
+}
+
+.shuffle-btn.shuffling {
+  animation: pulse 0.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+  50% { box-shadow: 0 0 50px rgba(255,215,0,0.8); }
+}
+
+.results-section {
+  display: none;
+  margin-top: 30px;
+}
+
+.results-section.visible {
+  display: block;
+  animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.result-card {
+  background: linear-gradient(145deg, rgba(255,215,0,0.12), rgba(255,215,0,0.03));
+  border: 2px solid rgba(255,215,0,0.4);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.5) rotateY(90deg);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.result-card.revealed {
+  opacity: 1;
+  transform: scale(1) rotateY(0deg);
+}
+
+.result-card .team-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,215,0,0.3);
+}
+
+.result-card .drawn-item {
+  padding: 8px;
+  margin: 6px 0;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.4s ease;
+}
+
+.result-card .drawn-item.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.result-card .drawn-item .item-label {
+  color: rgba(100,180,255,0.8);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.result-card .drawn-item .item-value {
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 2px;
+}
+
+.confetti-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -20px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+.trophy {
+  font-size: 4rem;
+  text-align: center;
+  margin: 10px 0;
+  animation: bounce 2s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes cardGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+  50% { box-shadow: 0 0 35px rgba(255,215,0,0.5); }
+}
+
+.result-card.revealed {
+  animation: cardGlow 2s ease infinite;
+}
+
+.drum-roll-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 50;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.drum-roll-overlay.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.drum-roll-text {
+  font-size: 3rem;
+  color: #ffd700;
+  animation: drumPulse 0.4s ease infinite alternate;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+}
+
+@keyframes drumPulse {
+  from { transform: scale(1); opacity: 0.7; }
+  to { transform: scale(1.15); opacity: 1; }
+}
+
+.spinning-ball {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #ffd700, #ff8c00);
+  margin: 30px;
+  animation: spin 0.6s linear infinite;
+  box-shadow: 0 0 40px rgba(255,215,0,0.6);
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="confetti-container" id="confetti"></div>
+<div class="drum-roll-overlay" id="drumRoll">
+  <div class="spinning-ball"></div>
+  <div class="drum-roll-text">Shuffling...</div>
+</div>
+
+<div class="container">
+  <div class="trophy">&#9917;</div>
+  <h1>World Cup Shuffle Ceremony</h1>
+  <p class="subtitle">The draw of destiny awaits</p>
+
+  <div class="section-title">Teams</div>
+  <div class="teams-grid" id="teamsGrid"></div>
+
+  <div class="section-title">Draw Pools</div>
+  <div class="lists-container" id="listsContainer"></div>
+
+  <div class="shuffle-btn-container">
+    <button class="shuffle-btn" id="shuffleBtn" onclick="startShuffle()">Shuffle</button>
+  </div>
+
+  <div class="results-section" id="resultsSection">
+    <div class="section-title">The Draw Results</div>
+    <div class="results-grid" id="resultsGrid"></div>
+  </div>
+</div>
+
+<script>
+var starsEl = document.getElementById('stars');
+for (var i = 0; i < 100; i++) {
+  var star = document.createElement('div');
+  star.className = 'star';
+  star.style.left = Math.random() * 100 + '%';
+  star.style.top = Math.random() * 100 + '%';
+  star.style.animationDelay = Math.random() * 2 + 's';
+  star.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+  starsEl.appendChild(star);
+}
+
+var teamsGrid = document.getElementById('teamsGrid');
+for (var t = 0; t < 6; t++) {
+  var box = document.createElement('div');
+  box.className = 'team-box';
+  box.innerHTML =
+    '<div class="team-label">TEAM ' + (t + 1) + '</div>' +
+    '<input type="text" id="team' + t + '" placeholder="Enter team name...">';
+  teamsGrid.appendChild(box);
+}
+
+var defaultLabels = ['Pot A', 'Pot B', 'Pot C'];
+var listsContainer = document.getElementById('listsContainer');
+for (var l = 0; l < 3; l++) {
+  var panel = document.createElement('div');
+  panel.className = 'list-panel';
+  var html = '<input type="text" class="list-label-input" id="listLabel' + l + '" value="' + defaultLabels[l] + '">';
+  for (var j = 0; j < 6; j++) {
+    html += '<div class="list-item"><input type="text" id="list' + l + 'item' + j + '" placeholder="Item ' + (j + 1) + '..."></div>';
+  }
+  panel.innerHTML = html;
+  listsContainer.appendChild(panel);
+}
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i];
+    a[i] = a[j];
+    a[j] = tmp;
+  }
+  return a;
+}
+
+function launchConfetti() {
+  var container = document.getElementById('confetti');
+  container.innerHTML = '';
+  var colors = ['#ffd700','#ff6b6b','#4ecdc4','#45b7d1','#f9ca24','#ff9ff3','#54a0ff','#5f27cd'];
+  for (var i = 0; i < 150; i++) {
+    var c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    c.style.width = (5 + Math.random() * 10) + 'px';
+    c.style.height = (5 + Math.random() * 10) + 'px';
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+    c.style.animationDuration = (2 + Math.random() * 3) + 's';
+    c.style.animationDelay = Math.random() * 2 + 's';
+    container.appendChild(c);
+  }
+  setTimeout(function() { container.innerHTML = ''; }, 6000);
+}
+
+function startShuffle() {
+  var teams = [];
+  for (var t = 0; t < 6; t++) {
+    var val = document.getElementById('team' + t).value.trim();
+    teams.push(val || 'Team ' + (t + 1));
+  }
+
+  var lists = [];
+  var labels = [];
+  for (var l = 0; l < 3; l++) {
+    labels.push(document.getElementById('listLabel' + l).value.trim() || defaultLabels[l]);
+    var items = [];
+    for (var j = 0; j < 6; j++) {
+      var v = document.getElementById('list' + l + 'item' + j).value.trim();
+      items.push(v || 'Item ' + (j + 1));
+    }
+    lists.push(shuffle(items));
+  }
+
+  var btn = document.getElementById('shuffleBtn');
+  btn.classList.add('shuffling');
+  btn.disabled = true;
+
+  var overlay = document.getElementById('drumRoll');
+  overlay.classList.add('active');
+
+  setTimeout(function() {
+    overlay.classList.remove('active');
+    btn.classList.remove('shuffling');
+    btn.disabled = false;
+
+    var section = document.getElementById('resultsSection');
+    var grid = document.getElementById('resultsGrid');
+    grid.innerHTML = '';
+    section.classList.remove('visible');
+
+    for (var i = 0; i < 6; i++) {
+      var card = document.createElement('div');
+      card.className = 'result-card';
+      card.setAttribute('data-index', i);
+
+      var inner = '<div class="team-name">' + teams[i] + '</div>';
+      for (var k = 0; k < 3; k++) {
+        inner += '<div class="drawn-item" data-item="' + (i * 3 + k) + '">' +
+          '<div class="item-label">' + labels[k] + '</div>' +
+          '<div class="item-value">' + lists[k][i] + '</div>' +
+        '</div>';
+      }
+      card.innerHTML = inner;
+      grid.appendChild(card);
+    }
+
+    section.classList.add('visible');
+    launchConfetti();
+
+    var cards = grid.querySelectorAll('.result-card');
+    cards.forEach(function(card, idx) {
+      setTimeout(function() {
+        card.classList.add('revealed');
+        var items = card.querySelectorAll('.drawn-item');
+        items.forEach(function(item, ii) {
+          setTimeout(function() {
+            item.classList.add('show');
+          }, 300 + ii * 250);
+        });
+      }, idx * 400);
+    });
+
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 2500);
+}
+</script>
+</body>
+</html>
