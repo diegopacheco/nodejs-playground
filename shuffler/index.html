@@ -425,6 +425,30 @@ h1 {
   100% { transform: rotate(360deg); }
 }
 
+.reset-btn {
+  background: linear-gradient(135deg, #666, #444);
+  color: #fff;
+  border: none;
+  padding: 18px 40px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: all 0.3s;
+  margin-left: 15px;
+}
+
+.reset-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+}
+
+.reset-btn:active {
+  transform: scale(0.98);
+}
+
 .random-toggle {
   display: flex;
   align-items: center;
@@ -476,6 +500,7 @@ h1 {
 
   <div class="shuffle-btn-container">
     <button class="shuffle-btn" id="shuffleBtn" onclick="startShuffle()">Shuffle</button>
+    <button class="reset-btn" id="resetBtn" onclick="resetResults()">Reset</button>
   </div>
 
   <div class="results-section" id="resultsSection">
@@ -566,7 +591,7 @@ function startShuffle() {
       items.push(v || 'Item ' + (j + 1));
     }
     var isRandom = document.getElementById('randomCheck').checked;
-    lists.push(isRandom ? shuffle(items) : items);
+    lists.push((l < 2 || isRandom) ? shuffle(items) : items);
   }
 
   var btn = document.getElementById('shuffleBtn');
@@ -621,6 +646,51 @@ function startShuffle() {
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 2500);
 }
+
+function resetResults() {
+  var section = document.getElementById('resultsSection');
+  section.classList.remove('visible');
+  document.getElementById('resultsGrid').innerHTML = '';
+  document.getElementById('confetti').innerHTML = '';
+}
+
+function saveToLocalStorage() {
+  var data = {};
+  for (var t = 0; t < 6; t++) {
+    data['team' + t] = document.getElementById('team' + t).value;
+  }
+  for (var l = 0; l < 3; l++) {
+    data['listLabel' + l] = document.getElementById('listLabel' + l).value;
+    for (var j = 0; j < 6; j++) {
+      data['list' + l + 'item' + j] = document.getElementById('list' + l + 'item' + j).value;
+    }
+  }
+  data['randomCheck'] = document.getElementById('randomCheck').checked;
+  localStorage.setItem('shufflerData', JSON.stringify(data));
+}
+
+function loadFromLocalStorage() {
+  var raw = localStorage.getItem('shufflerData');
+  if (!raw) return;
+  var data = JSON.parse(raw);
+  for (var t = 0; t < 6; t++) {
+    if (data['team' + t] !== undefined) document.getElementById('team' + t).value = data['team' + t];
+  }
+  for (var l = 0; l < 3; l++) {
+    if (data['listLabel' + l] !== undefined) document.getElementById('listLabel' + l).value = data['listLabel' + l];
+    for (var j = 0; j < 6; j++) {
+      if (data['list' + l + 'item' + j] !== undefined) document.getElementById('list' + l + 'item' + j).value = data['list' + l + 'item' + j];
+    }
+  }
+  if (data['randomCheck'] !== undefined) document.getElementById('randomCheck').checked = data['randomCheck'];
+}
+
+loadFromLocalStorage();
+
+document.querySelectorAll('input').forEach(function(input) {
+  input.addEventListener('input', saveToLocalStorage);
+  input.addEventListener('change', saveToLocalStorage);
+});
 </script>
 </body>
 </html>
