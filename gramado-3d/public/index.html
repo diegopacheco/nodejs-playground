@@ -10,7 +10,7 @@
     canvas { display: block; }
     #loading {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #1a3a1a 0%, #0d1f0d 50%, #1a2a1a 100%);
+      background: linear-gradient(135deg, #3a7a3a 0%, #1a4a1a 50%, #2a5a2a 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       z-index: 1000; transition: opacity 1.5s ease;
     }
@@ -27,16 +27,17 @@
       width: 0%; height: 100%; background: linear-gradient(90deg, #c8a96e, #e8d9a0);
       transition: width 0.3s; border-radius: 2px;
     }
-    #loading p { color: rgba(255,255,255,0.4); margin-top: 20px; font-size: 0.9em; letter-spacing: 3px; }
+    #loading p { color: rgba(255,255,255,0.5); margin-top: 20px; font-size: 0.9em; letter-spacing: 3px; }
     #info {
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
       color: rgba(255,255,255,0.6); font-size: 12px; letter-spacing: 2px;
       pointer-events: none; z-index: 10;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
     #title-overlay {
       position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
-      color: #c8a96e; font-size: 1.4em; letter-spacing: 6px;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.8); pointer-events: none; z-index: 10;
+      color: #fff; font-size: 1.4em; letter-spacing: 6px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5); pointer-events: none; z-index: 10;
       opacity: 0; transition: opacity 2s ease; transition-delay: 1s;
     }
     #title-overlay.show { opacity: 1; }
@@ -70,17 +71,14 @@
     import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 
     const progressBar = document.getElementById('progress-bar');
-    let loadProgress = 0;
-    function setProgress(val) {
-      loadProgress = val;
-      progressBar.style.width = val + '%';
-    }
+    function setProgress(val) { progressBar.style.width = val + '%'; }
 
     const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87ceeb);
 
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.set(0, 8, 35);
-    camera.lookAt(0, 5, 0);
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera.position.set(0, 6, 32);
+    camera.lookAt(0, 6, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -88,796 +86,688 @@
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.8;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     document.body.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2.1;
-    controls.minDistance = 8;
+    controls.maxPolarAngle = Math.PI / 2.05;
+    controls.minDistance = 10;
     controls.maxDistance = 80;
-    controls.target.set(0, 4, 0);
+    controls.target.set(0, 5, 0);
 
     setProgress(10);
 
     const skyGeo = new THREE.SphereGeometry(500, 64, 64);
     const skyMat = new THREE.ShaderMaterial({
       uniforms: {
-        topColor: { value: new THREE.Color(0x1a6fc4) },
-        midColor: { value: new THREE.Color(0x87ceeb) },
-        bottomColor: { value: new THREE.Color(0xffffff) },
-        offset: { value: 20 },
-        exponent: { value: 0.4 }
+        topColor: { value: new THREE.Color(0x2277cc) },
+        midColor: { value: new THREE.Color(0x88ccee) },
+        bottomColor: { value: new THREE.Color(0xddeeff) },
+        sunColor: { value: new THREE.Color(0xffffee) },
+        sunDir: { value: new THREE.Vector3(0.4, 0.6, 0.3).normalize() }
       },
       vertexShader: `
         varying vec3 vWorldPosition;
         void main() {
-          vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-          vWorldPosition = worldPosition.xyz;
+          vec4 wp = modelMatrix * vec4(position, 1.0);
+          vWorldPosition = wp.xyz;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
       fragmentShader: `
-        uniform vec3 topColor;
-        uniform vec3 midColor;
-        uniform vec3 bottomColor;
-        uniform float offset;
-        uniform float exponent;
+        uniform vec3 topColor, midColor, bottomColor, sunColor;
+        uniform vec3 sunDir;
         varying vec3 vWorldPosition;
         void main() {
-          float h = normalize(vWorldPosition + offset).y;
-          float t = max(pow(max(h, 0.0), exponent), 0.0);
+          vec3 dir = normalize(vWorldPosition);
+          float h = dir.y;
+          float t = max(pow(max(h, 0.0), 0.4), 0.0);
           vec3 sky = mix(midColor, topColor, t);
-          float low = 1.0 - smoothstep(-0.02, 0.15, h);
+          float low = 1.0 - smoothstep(-0.02, 0.2, h);
           sky = mix(sky, bottomColor, low);
+          float sunDot = max(dot(dir, sunDir), 0.0);
+          sky += sunColor * pow(sunDot, 32.0) * 0.6;
+          sky += sunColor * pow(sunDot, 4.0) * 0.15;
           gl_FragColor = vec4(sky, 1.0);
         }
       `,
       side: THREE.BackSide
     });
     scene.add(new THREE.Mesh(skyGeo, skyMat));
-    scene.fog = new THREE.FogExp2(0x9fc5e8, 0.003);
+    scene.fog = new THREE.FogExp2(0xc8ddf0, 0.0015);
 
-    setProgress(20);
+    setProgress(15);
 
-    const sunLight = new THREE.DirectionalLight(0xfff4e0, 3.0);
-    sunLight.position.set(30, 40, 20);
+    const sunLight = new THREE.DirectionalLight(0xfffbe8, 4.0);
+    sunLight.position.set(25, 45, 20);
     sunLight.castShadow = true;
     sunLight.shadow.mapSize.width = 4096;
     sunLight.shadow.mapSize.height = 4096;
     sunLight.shadow.camera.near = 0.5;
     sunLight.shadow.camera.far = 150;
-    sunLight.shadow.camera.left = -40;
-    sunLight.shadow.camera.right = 40;
-    sunLight.shadow.camera.top = 40;
+    sunLight.shadow.camera.left = -50;
+    sunLight.shadow.camera.right = 50;
+    sunLight.shadow.camera.top = 50;
     sunLight.shadow.camera.bottom = -20;
-    sunLight.shadow.bias = -0.0005;
+    sunLight.shadow.bias = -0.0003;
     sunLight.shadow.normalBias = 0.02;
     scene.add(sunLight);
 
-    const fillLight = new THREE.DirectionalLight(0x8ecae6, 0.8);
-    fillLight.position.set(-20, 15, -10);
+    const fillLight = new THREE.DirectionalLight(0x8ecae6, 1.5);
+    fillLight.position.set(-20, 20, -10);
     scene.add(fillLight);
 
-    const ambientLight = new THREE.AmbientLight(0x405060, 0.6);
-    scene.add(ambientLight);
+    const backFill = new THREE.DirectionalLight(0xffeedd, 1.0);
+    backFill.position.set(0, 10, -30);
+    scene.add(backFill);
 
-    const hemiLight = new THREE.HemisphereLight(0x87ceeb, 0x3a5f0b, 0.7);
-    scene.add(hemiLight);
+    scene.add(new THREE.AmbientLight(0x90b0d0, 1.2));
+    scene.add(new THREE.HemisphereLight(0x88ccff, 0x44aa44, 1.0));
 
-    const rimLight = new THREE.DirectionalLight(0xffd700, 0.4);
-    rimLight.position.set(-15, 10, 30);
-    scene.add(rimLight);
+    setProgress(20);
 
-    setProgress(30);
-
-    function createStoneTexture() {
+    function createStoneTexture(baseColor, variation) {
       const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 1024;
+      canvas.width = 1024; canvas.height = 1024;
       const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#8B7355';
+      const bc = new THREE.Color(baseColor);
+      const r = Math.floor(bc.r * 255), g = Math.floor(bc.g * 255), b = Math.floor(bc.b * 255);
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
       ctx.fillRect(0, 0, 1024, 1024);
 
-      for (let i = 0; i < 3000; i++) {
-        const x = Math.random() * 1024;
-        const y = Math.random() * 1024;
-        const size = Math.random() * 8 + 2;
-        const shade = Math.floor(Math.random() * 40) + 100;
-        ctx.fillStyle = `rgb(${shade+30}, ${shade+15}, ${shade})`;
-        ctx.beginPath();
-        ctx.ellipse(x, y, size, size * 0.7, Math.random() * Math.PI, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      for (let row = 0; row < 16; row++) {
-        const y = row * 64 + (Math.random() * 10 - 5);
-        ctx.strokeStyle = 'rgba(60,45,30,0.4)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        for (let x = 0; x < 1024; x += 5) {
-          ctx.lineTo(x, y + Math.sin(x * 0.05) * 3);
-        }
-        ctx.stroke();
-
-        const offset = (row % 2) * 40;
-        for (let col = 0; col < 13; col++) {
-          const x = col * 80 + offset + (Math.random() * 10 - 5);
-          ctx.strokeStyle = 'rgba(60,45,30,0.3)';
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(x + Math.random() * 4, y + 64);
-          ctx.stroke();
+      for (let row = 0; row < 20; row++) {
+        const y = row * 52 + (Math.random() * 6 - 3);
+        ctx.strokeStyle = `rgba(80,60,40,0.35)`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1024, y); ctx.stroke();
+        const off = (row % 2) * 45;
+        for (let col = 0; col < 14; col++) {
+          const x = col * 75 + off + (Math.random() * 8 - 4);
+          ctx.strokeStyle = `rgba(80,60,40,0.25)`;
+          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.random()*3, y + 52); ctx.stroke();
         }
       }
 
-      for (let i = 0; i < 200; i++) {
-        ctx.fillStyle = `rgba(${Math.random() > 0.5 ? '90,110,60' : '70,85,50'}, ${Math.random() * 0.15})`;
-        const x = Math.random() * 1024;
-        const y = Math.random() * 1024;
-        ctx.fillRect(x, y, Math.random() * 20 + 5, Math.random() * 20 + 5);
+      for (let i = 0; i < 5000; i++) {
+        const x = Math.random() * 1024, y = Math.random() * 1024;
+        const v = Math.floor((Math.random() - 0.5) * variation);
+        ctx.fillStyle = `rgba(${r+v},${g+v},${b+v},0.5)`;
+        ctx.fillRect(x, y, Math.random() * 5 + 1, Math.random() * 5 + 1);
       }
 
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(2, 2);
-      return texture;
+      for (let i = 0; i < 300; i++) {
+        ctx.fillStyle = `rgba(100,120,80,${Math.random()*0.08})`;
+        ctx.fillRect(Math.random()*1024, Math.random()*1024, Math.random()*15+3, Math.random()*15+3);
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      return tex;
     }
 
-    function createStoneNormal() {
+    function createNormalMap() {
       const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
+      canvas.width = 512; canvas.height = 512;
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = '#8080ff';
       ctx.fillRect(0, 0, 512, 512);
-
-      for (let i = 0; i < 2000; i++) {
-        const x = Math.random() * 512;
-        const y = Math.random() * 512;
-        const r = Math.floor(128 + (Math.random() - 0.5) * 60);
-        const g = Math.floor(128 + (Math.random() - 0.5) * 60);
-        ctx.fillStyle = `rgb(${r}, ${g}, 255)`;
-        ctx.fillRect(x, y, Math.random() * 6 + 1, Math.random() * 6 + 1);
+      for (let i = 0; i < 3000; i++) {
+        const rr = Math.floor(128 + (Math.random()-0.5)*50);
+        const gg = Math.floor(128 + (Math.random()-0.5)*50);
+        ctx.fillStyle = `rgb(${rr},${gg},255)`;
+        ctx.fillRect(Math.random()*512, Math.random()*512, Math.random()*5+1, Math.random()*5+1);
       }
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(2, 2);
-      return texture;
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      return tex;
     }
 
-    function createRoofTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
+    const stoneTex = createStoneTexture(0xb0997a, 40);
+    stoneTex.repeat.set(2, 3);
+    const stoneNorm = createNormalMap();
+    stoneNorm.repeat.set(2, 3);
 
-      ctx.fillStyle = '#2a3a1a';
-      ctx.fillRect(0, 0, 512, 512);
-
-      for (let row = 0; row < 32; row++) {
-        for (let col = 0; col < 32; col++) {
-          const x = col * 16 + (row % 2) * 8;
-          const y = row * 16;
-          const shade = Math.floor(Math.random() * 30 + 30);
-          ctx.fillStyle = `rgb(${shade+10}, ${shade+25}, ${shade})`;
-          ctx.fillRect(x, y, 15, 14);
-          ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-          ctx.strokeRect(x, y, 15, 14);
-        }
-      }
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(3, 2);
-      return texture;
-    }
-
-    const stoneTex = createStoneTexture();
-    const stoneNormal = createStoneNormal();
-    const roofTex = createRoofTexture();
-
-    const stoneMaterial = new THREE.MeshStandardMaterial({
-      map: stoneTex,
-      normalMap: stoneNormal,
-      normalScale: new THREE.Vector2(1.5, 1.5),
-      roughness: 0.85,
-      metalness: 0.05,
-      color: 0x9a8468
+    const stoneMat = new THREE.MeshStandardMaterial({
+      map: stoneTex, normalMap: stoneNorm, normalScale: new THREE.Vector2(1.2, 1.2),
+      roughness: 0.82, metalness: 0.03, color: 0xc0a880
     });
 
+    const darkStoneTex = createStoneTexture(0x8a7a60, 30);
+    darkStoneTex.repeat.set(2, 3);
     const darkStoneMat = new THREE.MeshStandardMaterial({
-      map: stoneTex,
-      normalMap: stoneNormal,
-      normalScale: new THREE.Vector2(1.2, 1.2),
-      roughness: 0.9,
-      metalness: 0.02,
-      color: 0x6b5b47
+      map: darkStoneTex, normalMap: stoneNorm, normalScale: new THREE.Vector2(1.0, 1.0),
+      roughness: 0.88, metalness: 0.02, color: 0xa09070
     });
 
-    const roofMaterial = new THREE.MeshStandardMaterial({
-      map: roofTex,
-      roughness: 0.7,
-      metalness: 0.1,
-      color: 0x2d4a1d
-    });
+    setProgress(30);
 
-    setProgress(40);
+    function buildPortico() {
+      const portico = new THREE.Group();
 
-    function createPillar(x, z) {
-      const group = new THREE.Group();
+      const wallH = 10, wallW = 5, wallD = 5;
 
-      const baseGeo = new THREE.BoxGeometry(4.5, 1.2, 4.5);
-      const base = new THREE.Mesh(baseGeo, darkStoneMat);
-      base.position.y = 0.6;
-      base.castShadow = true;
-      base.receiveShadow = true;
-      group.add(base);
+      function buildWall(xPos) {
+        const g = new THREE.Group();
 
-      const pillarGeo = new THREE.BoxGeometry(3.8, 9, 3.8);
-      const pillar = new THREE.Mesh(pillarGeo, stoneMaterial);
-      pillar.position.y = 5.7;
-      pillar.castShadow = true;
-      pillar.receiveShadow = true;
-      group.add(pillar);
+        const baseGeo = new THREE.BoxGeometry(wallW + 0.6, 1.0, wallD + 0.6);
+        const base = new THREE.Mesh(baseGeo, darkStoneMat);
+        base.position.y = 0.5; base.castShadow = true; base.receiveShadow = true;
+        g.add(base);
 
-      for (let i = 0; i < 6; i++) {
-        const stoneGeo = new THREE.BoxGeometry(
-          3.9 + Math.random() * 0.3,
-          1.5 + Math.random() * 0.3,
-          3.9 + Math.random() * 0.3
-        );
-        const stone = new THREE.Mesh(stoneGeo, stoneMaterial);
-        stone.position.y = 1.5 + i * 1.5;
-        stone.rotation.y = Math.random() * 0.05;
-        stone.castShadow = true;
-        group.add(stone);
+        const mainGeo = new THREE.BoxGeometry(wallW, wallH, wallD);
+        const main = new THREE.Mesh(mainGeo, stoneMat);
+        main.position.y = wallH / 2 + 1; main.castShadow = true; main.receiveShadow = true;
+        g.add(main);
+
+        for (let row = 0; row < 7; row++) {
+          for (let col = 0; col < 3; col++) {
+            const sw = wallW / 3 + (Math.random()-0.5)*0.3;
+            const sh = wallH / 7 + (Math.random()-0.5)*0.2;
+            const sd = wallD + 0.08;
+            const stoneGeo = new THREE.BoxGeometry(sw, sh, sd);
+            const stone = new THREE.Mesh(stoneGeo, Math.random() > 0.5 ? stoneMat : darkStoneMat);
+            stone.position.set(
+              (col - 1) * (wallW / 3) + (Math.random()-0.5)*0.15,
+              1.5 + row * (wallH / 7) + (Math.random()-0.5)*0.1,
+              0
+            );
+            stone.castShadow = true;
+            g.add(stone);
+          }
+        }
+
+        const capGeo = new THREE.BoxGeometry(wallW + 0.4, 0.6, wallD + 0.4);
+        const cap = new THREE.Mesh(capGeo, darkStoneMat);
+        cap.position.y = wallH + 1.3; cap.castShadow = true;
+        g.add(cap);
+
+        const cornerStones = [
+          [-wallW/2, 0, -wallD/2], [-wallW/2, 0, wallD/2],
+          [wallW/2, 0, -wallD/2], [wallW/2, 0, wallD/2]
+        ];
+        cornerStones.forEach(([cx, cy, cz]) => {
+          for (let i = 0; i < 5; i++) {
+            const cGeo = new THREE.BoxGeometry(0.8, 2.2, 0.8);
+            const cMesh = new THREE.Mesh(cGeo, darkStoneMat);
+            cMesh.position.set(cx, 2 + i * 2.1, cz);
+            cMesh.castShadow = true;
+            g.add(cMesh);
+          }
+        });
+
+        g.position.x = xPos;
+        return g;
       }
 
-      const capGeo = new THREE.BoxGeometry(4.2, 0.8, 4.2);
-      const cap = new THREE.Mesh(capGeo, darkStoneMat);
-      cap.position.y = 10.6;
-      cap.castShadow = true;
-      group.add(cap);
+      const archSpan = 7;
+      portico.add(buildWall(-(archSpan / 2 + wallW / 2)));
+      portico.add(buildWall(archSpan / 2 + wallW / 2));
 
-      group.position.set(x, 0, z);
-      return group;
+      const beamGeo = new THREE.BoxGeometry(archSpan + wallW * 2 + 1, 2.5, wallD + 0.5);
+      const beam = new THREE.Mesh(beamGeo, stoneMat);
+      beam.position.set(0, wallH + 2.5, 0);
+      beam.castShadow = true; beam.receiveShadow = true;
+      portico.add(beam);
+
+      const topTrimGeo = new THREE.BoxGeometry(archSpan + wallW * 2 + 1.5, 0.5, wallD + 1);
+      const topTrim = new THREE.Mesh(topTrimGeo, darkStoneMat);
+      topTrim.position.set(0, wallH + 3.9, 0);
+      topTrim.castShadow = true;
+      portico.add(topTrim);
+
+      const bottomTrimGeo = new THREE.BoxGeometry(archSpan + wallW * 2 + 1.5, 0.4, wallD + 0.8);
+      const bottomTrim = new THREE.Mesh(bottomTrimGeo, darkStoneMat);
+      bottomTrim.position.set(0, wallH + 1.1, 0);
+      portico.add(bottomTrim);
+
+      for (let i = 0; i < 8; i++) {
+        const archStoneGeo = new THREE.BoxGeometry(0.8, 2.6, wallD + 0.15);
+        const archStone = new THREE.Mesh(archStoneGeo, Math.random()>0.5 ? stoneMat : darkStoneMat);
+        const xSpread = archSpan + wallW * 2;
+        archStone.position.set(-xSpread/2 + 0.5 + i * (xSpread / 7.5), wallH + 2.5, 0);
+        archStone.castShadow = true;
+        portico.add(archStone);
+      }
+
+      const archCurveSegs = 16;
+      const archRadius = archSpan / 2;
+      const archHeight = 2.5;
+      for (let i = 0; i <= archCurveSegs; i++) {
+        const t = i / archCurveSegs;
+        const angle = Math.PI * t;
+        const x = Math.cos(angle) * archRadius;
+        const y = Math.sin(angle) * archHeight;
+        const keystoneGeo = new THREE.BoxGeometry(1.2, 0.6, wallD + 0.2);
+        const keystone = new THREE.Mesh(keystoneGeo, darkStoneMat);
+        keystone.position.set(x, wallH + 0.8 + y, 0);
+        keystone.rotation.z = angle - Math.PI / 2;
+        portico.add(keystone);
+      }
+
+      const totalW = archSpan + wallW * 2 + 2;
+      const roofOverhang = 1.5;
+      const roofH = 5;
+
+      const roofShape = new THREE.Shape();
+      roofShape.moveTo(-(totalW/2 + roofOverhang), 0);
+      roofShape.lineTo(0, roofH);
+      roofShape.lineTo(totalW/2 + roofOverhang, 0);
+      roofShape.lineTo(-(totalW/2 + roofOverhang), 0);
+
+      function createRoofTex() {
+        const c = document.createElement('canvas');
+        c.width = 512; c.height = 512;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#2a4a1a';
+        ctx.fillRect(0, 0, 512, 512);
+        for (let row = 0; row < 40; row++) {
+          for (let col = 0; col < 32; col++) {
+            const x = col*16 + (row%2)*8, y = row*13;
+            const s = Math.floor(Math.random()*25+35);
+            ctx.fillStyle = `rgb(${s+10},${s+30},${s})`;
+            ctx.fillRect(x, y, 15, 12);
+            ctx.strokeStyle = `rgba(0,0,0,0.25)`;
+            ctx.strokeRect(x, y, 15, 12);
+          }
+        }
+        const tex = new THREE.CanvasTexture(c);
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(3, 2);
+        return tex;
+      }
+
+      const roofTex = createRoofTex();
+      const roofMat = new THREE.MeshStandardMaterial({
+        map: roofTex, roughness: 0.65, metalness: 0.08, color: 0x3a6a2a
+      });
+      const roofGeo = new THREE.ExtrudeGeometry(roofShape, { depth: wallD + 3, bevelEnabled: false });
+      const roof = new THREE.Mesh(roofGeo, roofMat);
+      roof.position.set(0, wallH + 3.9, -(wallD + 3) / 2);
+      roof.castShadow = true; roof.receiveShadow = true;
+      portico.add(roof);
+
+      const ridgeMat = new THREE.MeshStandardMaterial({ color: 0x5a4030, roughness: 0.7, metalness: 0.15 });
+      const ridgeGeo = new THREE.BoxGeometry(0.35, 0.35, wallD + 3.5);
+      const ridgeMesh = new THREE.Mesh(ridgeGeo, ridgeMat);
+      ridgeMesh.position.set(0, wallH + 3.9 + roofH, 0);
+      portico.add(ridgeMesh);
+
+      const eaveGeo = new THREE.BoxGeometry(totalW + roofOverhang*2 + 0.5, 0.2, wallD + 3.5);
+      const eaveMat = new THREE.MeshStandardMaterial({ color: 0x5a4530, roughness: 0.7 });
+      const eave = new THREE.Mesh(eaveGeo, eaveMat);
+      eave.position.set(0, wallH + 3.9, 0);
+      portico.add(eave);
+
+      const signCanvas = document.createElement('canvas');
+      signCanvas.width = 512; signCanvas.height = 128;
+      const sCtx = signCanvas.getContext('2d');
+      sCtx.fillStyle = '#f0e6cc';
+      sCtx.fillRect(0, 0, 512, 128);
+      sCtx.strokeStyle = '#6a5030';
+      sCtx.lineWidth = 4;
+      sCtx.strokeRect(8, 8, 496, 112);
+      sCtx.fillStyle = '#2a1a08';
+      sCtx.font = 'bold italic 68px Georgia, serif';
+      sCtx.textAlign = 'center';
+      sCtx.textBaseline = 'middle';
+      sCtx.fillText('Gramado', 256, 64);
+
+      const signTex = new THREE.CanvasTexture(signCanvas);
+      const signBg = new THREE.Mesh(
+        new THREE.BoxGeometry(7, 1.8, 0.25),
+        new THREE.MeshStandardMaterial({ color: 0xf0e6cc, roughness: 0.35 })
+      );
+      signBg.position.set(0, wallH + 2.5, wallD / 2 + 0.15);
+      signBg.castShadow = true;
+      portico.add(signBg);
+
+      const signFace = new THREE.Mesh(
+        new THREE.PlaneGeometry(7, 1.8),
+        new THREE.MeshStandardMaterial({ map: signTex, roughness: 0.3 })
+      );
+      signFace.position.set(0, wallH + 2.5, wallD / 2 + 0.29);
+      portico.add(signFace);
+
+      function createCoatOfArms() {
+        const g = new THREE.Group();
+        const shieldGeo = new THREE.BoxGeometry(1.4, 1.4, 0.15);
+        const shieldMat = new THREE.MeshStandardMaterial({ color: 0x1a6a2a, roughness: 0.4, metalness: 0.3 });
+        g.add(new THREE.Mesh(shieldGeo, shieldMat));
+        const borderGeo = new THREE.BoxGeometry(1.6, 1.6, 0.1);
+        const borderMat = new THREE.MeshStandardMaterial({ color: 0xc8a860, roughness: 0.3, metalness: 0.5 });
+        const border = new THREE.Mesh(borderGeo, borderMat);
+        border.position.z = -0.05;
+        g.add(border);
+        g.position.set(0, wallH + 5.5, wallD / 2 + 0.2);
+        return g;
+      }
+      portico.add(createCoatOfArms());
+
+      return portico;
     }
 
-    const leftPillar = createPillar(-6.5, 0);
-    const rightPillar = createPillar(6.5, 0);
-    scene.add(leftPillar);
-    scene.add(rightPillar);
-
-    setProgress(50);
-
-    const archGroup = new THREE.Group();
-
-    const beamGeo = new THREE.BoxGeometry(17.5, 2.5, 4.5);
-    const beam = new THREE.Mesh(beamGeo, stoneMaterial);
-    beam.position.set(0, 11.5, 0);
-    beam.castShadow = true;
-    beam.receiveShadow = true;
-    archGroup.add(beam);
-
-    const topBeamGeo = new THREE.BoxGeometry(18, 1.0, 5.0);
-    const topBeam = new THREE.Mesh(topBeamGeo, darkStoneMat);
-    topBeam.position.set(0, 13.0, 0);
-    topBeam.castShadow = true;
-    archGroup.add(topBeam);
-
-    const roofShape = new THREE.Shape();
-    roofShape.moveTo(-10, 0);
-    roofShape.lineTo(0, 4.5);
-    roofShape.lineTo(10, 0);
-    roofShape.lineTo(-10, 0);
-
-    const roofExtrudeSettings = { depth: 6, bevelEnabled: false };
-    const roofGeo = new THREE.ExtrudeGeometry(roofShape, roofExtrudeSettings);
-    const roof = new THREE.Mesh(roofGeo, roofMaterial);
-    roof.position.set(0, 13.2, -3);
-    roof.castShadow = true;
-    roof.receiveShadow = true;
-    archGroup.add(roof);
-
-    const roofEdgeMat = new THREE.MeshStandardMaterial({ color: 0x4a3520, roughness: 0.8, metalness: 0.1 });
-    const ridgeGeo = new THREE.BoxGeometry(0.4, 0.4, 7);
-    const ridge = new THREE.Mesh(ridgeGeo, roofEdgeMat);
-    ridge.position.set(0, 17.7, 0);
-    archGroup.add(ridge);
-
-    scene.add(archGroup);
+    scene.add(buildPortico());
 
     setProgress(55);
 
-    const signMat = new THREE.MeshStandardMaterial({
-      color: 0xf5e6c8,
-      roughness: 0.3,
-      metalness: 0.05
-    });
-    const signGeo = new THREE.BoxGeometry(8, 1.8, 0.3);
-    const sign = new THREE.Mesh(signGeo, signMat);
-    sign.position.set(0, 12.2, 2.4);
-    sign.castShadow = true;
-    scene.add(sign);
-
-    const signCanvas = document.createElement('canvas');
-    signCanvas.width = 512;
-    signCanvas.height = 128;
-    const signCtx = signCanvas.getContext('2d');
-    signCtx.fillStyle = '#f5e6c8';
-    signCtx.fillRect(0, 0, 512, 128);
-    signCtx.fillStyle = '#2a1a0a';
-    signCtx.font = 'bold 72px Georgia, serif';
-    signCtx.textAlign = 'center';
-    signCtx.textBaseline = 'middle';
-    signCtx.fillText('Gramado', 256, 64);
-    signCtx.strokeStyle = '#5a3a1a';
-    signCtx.lineWidth = 3;
-    signCtx.strokeRect(10, 10, 492, 108);
-
-    const signTexture = new THREE.CanvasTexture(signCanvas);
-    const signFaceMat = new THREE.MeshStandardMaterial({
-      map: signTexture,
-      roughness: 0.3,
-      metalness: 0.05
-    });
-    const signFaceGeo = new THREE.PlaneGeometry(8, 1.8);
-    const signFace = new THREE.Mesh(signFaceGeo, signFaceMat);
-    signFace.position.set(0, 12.2, 2.56);
-    scene.add(signFace);
-
-    setProgress(60);
-
-    function createRoadTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 2048;
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#3a3a3a';
+    function createRoadTex() {
+      const c = document.createElement('canvas');
+      c.width = 1024; c.height = 2048;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#505050';
       ctx.fillRect(0, 0, 1024, 2048);
-
-      for (let i = 0; i < 15000; i++) {
-        const x = Math.random() * 1024;
-        const y = Math.random() * 2048;
-        const shade = Math.floor(Math.random() * 30 + 45);
-        ctx.fillStyle = `rgb(${shade}, ${shade}, ${shade})`;
-        ctx.fillRect(x, y, Math.random() * 3 + 1, Math.random() * 3 + 1);
+      for (let i = 0; i < 20000; i++) {
+        const s = Math.floor(Math.random()*25+60);
+        ctx.fillStyle = `rgb(${s},${s},${s})`;
+        ctx.fillRect(Math.random()*1024, Math.random()*2048, Math.random()*3+1, Math.random()*3+1);
       }
-
-      ctx.strokeStyle = '#e8e8e8';
-      ctx.lineWidth = 6;
-      ctx.setLineDash([60, 40]);
-      ctx.beginPath();
-      ctx.moveTo(512, 0);
-      ctx.lineTo(512, 2048);
-      ctx.stroke();
-
+      ctx.strokeStyle = '#ddd';
+      ctx.lineWidth = 5;
+      ctx.setLineDash([50, 35]);
+      ctx.beginPath(); ctx.moveTo(512, 0); ctx.lineTo(512, 2048); ctx.stroke();
       ctx.setLineDash([]);
-      ctx.strokeStyle = '#cccccc';
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(50, 0);
-      ctx.lineTo(50, 2048);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(974, 0);
-      ctx.lineTo(974, 2048);
-      ctx.stroke();
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1, 4);
-      return texture;
+      ctx.strokeStyle = '#bbb'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(40, 0); ctx.lineTo(40, 2048); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(984, 0); ctx.lineTo(984, 2048); ctx.stroke();
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(1, 4);
+      return tex;
     }
 
-    const roadTex = createRoadTexture();
-    const roadMat = new THREE.MeshStandardMaterial({
-      map: roadTex,
-      roughness: 0.8,
-      metalness: 0.05,
-      color: 0x555555
-    });
-    const roadGeo = new THREE.PlaneGeometry(14, 120);
-    const road = new THREE.Mesh(roadGeo, roadMat);
+    const roadMat = new THREE.MeshStandardMaterial({ map: createRoadTex(), roughness: 0.75, color: 0x666666 });
+    const road = new THREE.Mesh(new THREE.PlaneGeometry(12, 140), roadMat);
     road.rotation.x = -Math.PI / 2;
-    road.position.set(0, 0.02, 30);
+    road.position.set(0, 0.03, 40);
     road.receiveShadow = true;
     scene.add(road);
 
-    const sidewalkMat = new THREE.MeshStandardMaterial({ color: 0xb0a090, roughness: 0.9 });
-    const sidewalkGeo = new THREE.BoxGeometry(5, 0.15, 120);
-    const leftSidewalk = new THREE.Mesh(sidewalkGeo, sidewalkMat);
-    leftSidewalk.position.set(-9.5, 0.07, 30);
-    leftSidewalk.receiveShadow = true;
-    scene.add(leftSidewalk);
+    const curbMat = new THREE.MeshStandardMaterial({ color: 0xccbbaa, roughness: 0.85 });
+    [-6.5, 6.5].forEach(x => {
+      const curb = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.2, 140), curbMat);
+      curb.position.set(x, 0.1, 40);
+      curb.receiveShadow = true;
+      scene.add(curb);
+    });
 
-    const rightSidewalk = new THREE.Mesh(sidewalkGeo, sidewalkMat);
-    rightSidewalk.position.set(9.5, 0.07, 30);
-    rightSidewalk.receiveShadow = true;
-    scene.add(rightSidewalk);
+    const sidewalkMat = new THREE.MeshStandardMaterial({ color: 0xc0b098, roughness: 0.9 });
+    [-10, 10].forEach(x => {
+      const sw = new THREE.Mesh(new THREE.BoxGeometry(4, 0.12, 140), sidewalkMat);
+      sw.position.set(x, 0.06, 40); sw.receiveShadow = true;
+      scene.add(sw);
+    });
 
-    setProgress(65);
+    setProgress(60);
 
-    function createGrassTexture() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#2d5a1e';
+    function createGrassTex() {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 512;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#3a7a2a';
       ctx.fillRect(0, 0, 512, 512);
-
-      for (let i = 0; i < 8000; i++) {
-        const x = Math.random() * 512;
-        const y = Math.random() * 512;
-        const h = Math.random() * 8 + 3;
-        const shade = Math.floor(Math.random() * 50);
-        ctx.strokeStyle = `rgb(${30+shade}, ${70+shade}, ${20+shade})`;
+      for (let i = 0; i < 10000; i++) {
+        const s = Math.floor(Math.random()*50);
+        ctx.strokeStyle = `rgb(${35+s},${75+s},${25+s})`;
         ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + (Math.random() - 0.5) * 4, y - h);
-        ctx.stroke();
+        const x = Math.random()*512, y = Math.random()*512;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x+(Math.random()-0.5)*4, y-Math.random()*7-3); ctx.stroke();
       }
-
-      const texture = new THREE.CanvasTexture(canvas);
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(20, 20);
-      return texture;
+      const tex = new THREE.CanvasTexture(c);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(30, 30);
+      return tex;
     }
 
-    const grassTex = createGrassTexture();
-    const grassMat = new THREE.MeshStandardMaterial({
-      map: grassTex,
-      roughness: 0.95,
-      metalness: 0.0,
-      color: 0x3a7a2a
-    });
-    const groundGeo = new THREE.PlaneGeometry(300, 300);
-    const ground = new THREE.Mesh(groundGeo, grassMat);
+    const grassMat = new THREE.MeshStandardMaterial({ map: createGrassTex(), roughness: 0.92, color: 0x4a9a35 });
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), grassMat);
     ground.rotation.x = -Math.PI / 2;
-    ground.position.y = 0;
     ground.receiveShadow = true;
     scene.add(ground);
 
-    setProgress(70);
+    setProgress(65);
 
-    function createFlowerBed(x, z, width, depth, color1, color2) {
-      const group = new THREE.Group();
+    function createFlowerBed(x, z, w, d, c1, c2) {
+      const g = new THREE.Group();
+      const bedMat = new THREE.MeshStandardMaterial({ color: 0x3a2a15, roughness: 1.0 });
+      const bed = new THREE.Mesh(new THREE.BoxGeometry(w, 0.35, d), bedMat);
+      bed.position.y = 0.17; bed.receiveShadow = true; g.add(bed);
 
-      const bedGeo = new THREE.BoxGeometry(width, 0.4, depth);
-      const bedMat = new THREE.MeshStandardMaterial({ color: 0x3a2a1a, roughness: 1.0 });
-      const bed = new THREE.Mesh(bedGeo, bedMat);
-      bed.position.y = 0.2;
-      bed.receiveShadow = true;
-      group.add(bed);
+      const borderMat = new THREE.MeshStandardMaterial({ color: 0x6a5a40, roughness: 0.9 });
+      [[-w/2, 0], [w/2, 0]].forEach(([bx]) => {
+        const b = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.5, d + 0.1), borderMat);
+        b.position.set(bx, 0.25, 0); g.add(b);
+      });
+      [[0, -d/2], [0, d/2]].forEach(([bx, bz]) => {
+        const b = new THREE.Mesh(new THREE.BoxGeometry(w + 0.1, 0.5, 0.15), borderMat);
+        b.position.set(bx, 0.25, bz); g.add(b);
+      });
 
-      const flowerCount = Math.floor(width * depth * 3);
-      for (let i = 0; i < flowerCount; i++) {
-        const fx = (Math.random() - 0.5) * (width - 0.5);
-        const fz = (Math.random() - 0.5) * (depth - 0.5);
+      const count = Math.floor(w * d * 4);
+      for (let i = 0; i < count; i++) {
+        const fx = (Math.random()-0.5) * (w-0.6);
+        const fz = (Math.random()-0.5) * (d-0.6);
+        const stemH = 0.35 + Math.random() * 0.25;
+        const stem = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.02, 0.03, stemH, 4),
+          new THREE.MeshStandardMaterial({ color: 0x2a7a18 })
+        );
+        stem.position.set(fx, 0.35 + stemH/2, fz); g.add(stem);
 
-        const stemGeo = new THREE.CylinderGeometry(0.03, 0.04, 0.5 + Math.random() * 0.3, 4);
-        const stemMat = new THREE.MeshStandardMaterial({ color: 0x2a6a1a });
-        const stem = new THREE.Mesh(stemGeo, stemMat);
-        stem.position.set(fx, 0.6 + Math.random() * 0.15, fz);
-        group.add(stem);
+        const pc = Math.random() > 0.5 ? c1 : c2;
+        const petalSize = 0.1 + Math.random()*0.08;
+        for (let p = 0; p < 5; p++) {
+          const petal = new THREE.Mesh(
+            new THREE.SphereGeometry(petalSize, 5, 5),
+            new THREE.MeshStandardMaterial({ color: pc, roughness: 0.5, emissive: pc, emissiveIntensity: 0.05 })
+          );
+          const pa = (p / 5) * Math.PI * 2;
+          petal.position.set(fx + Math.cos(pa)*0.08, 0.35 + stemH + 0.05, fz + Math.sin(pa)*0.08);
+          petal.scale.y = 0.5;
+          g.add(petal);
+        }
+        const center = new THREE.Mesh(
+          new THREE.SphereGeometry(petalSize * 0.5, 5, 5),
+          new THREE.MeshStandardMaterial({ color: 0xffee44, roughness: 0.5, emissive: 0xffee44, emissiveIntensity: 0.08 })
+        );
+        center.position.set(fx, 0.35 + stemH + 0.08, fz);
+        g.add(center);
 
-        const petalColor = Math.random() > 0.5 ? color1 : color2;
-        const flowerGeo = new THREE.SphereGeometry(0.15 + Math.random() * 0.1, 6, 6);
-        const flowerMat = new THREE.MeshStandardMaterial({
-          color: petalColor,
-          roughness: 0.6,
-          emissive: petalColor,
-          emissiveIntensity: 0.1
-        });
-        const flower = new THREE.Mesh(flowerGeo, flowerMat);
-        flower.position.set(fx, 0.85 + Math.random() * 0.15, fz);
-        flower.scale.y = 0.6;
-        group.add(flower);
-
-        if (Math.random() > 0.3) {
-          const leafGeo = new THREE.PlaneGeometry(0.2, 0.35);
-          const leafMat = new THREE.MeshStandardMaterial({
-            color: 0x2a7a1a, side: THREE.DoubleSide, roughness: 0.8
-          });
-          const leaf = new THREE.Mesh(leafGeo, leafMat);
-          leaf.position.set(fx + 0.1, 0.45, fz);
-          leaf.rotation.set(Math.random() * 0.5, Math.random() * Math.PI, 0);
-          group.add(leaf);
+        if (Math.random() > 0.4) {
+          const leaf = new THREE.Mesh(
+            new THREE.PlaneGeometry(0.18, 0.3),
+            new THREE.MeshStandardMaterial({ color: 0x2a8a1a, side: THREE.DoubleSide })
+          );
+          leaf.position.set(fx + 0.1, 0.35 + stemH * 0.4, fz);
+          leaf.rotation.set(0.3, Math.random()*Math.PI, 0.2);
+          g.add(leaf);
         }
       }
-
-      group.position.set(x, 0, z);
-      return group;
+      g.position.set(x, 0, z);
+      return g;
     }
 
-    scene.add(createFlowerBed(-4, 10, 6, 4, 0xff8c00, 0xffaa00));
-    scene.add(createFlowerBed(4, 10, 6, 4, 0xff6600, 0xffd700));
-    scene.add(createFlowerBed(-4, 14, 6, 3, 0xff4444, 0xff6666));
-    scene.add(createFlowerBed(4, 14, 6, 3, 0xffdd00, 0xff9900));
-    scene.add(createFlowerBed(0, 17, 12, 2, 0xff3300, 0xff8800));
+    scene.add(createFlowerBed(-3.5, 12, 5, 3.5, 0xff8800, 0xffaa00));
+    scene.add(createFlowerBed(3.5, 12, 5, 3.5, 0xff6600, 0xffd700));
+    scene.add(createFlowerBed(-3.5, 16, 5, 2.5, 0xff3333, 0xff6666));
+    scene.add(createFlowerBed(3.5, 16, 5, 2.5, 0xffcc00, 0xffaa00));
+    scene.add(createFlowerBed(0, 19.5, 10, 2, 0xff4400, 0xffbb00));
 
     setProgress(75);
 
-    function createTree(x, z, scale) {
-      const group = new THREE.Group();
+    function createPineTree(x, z, scale) {
+      const g = new THREE.Group();
+      const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.2*scale, 0.45*scale, 5*scale, 8),
+        new THREE.MeshStandardMaterial({ color: 0x4a3018, roughness: 0.95 })
+      );
+      trunk.position.y = 2.5*scale; trunk.castShadow = true; g.add(trunk);
 
-      const trunkGeo = new THREE.CylinderGeometry(0.3 * scale, 0.5 * scale, 4 * scale, 8);
-      const trunkMat = new THREE.MeshStandardMaterial({ color: 0x4a3020, roughness: 0.95 });
-      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
-      trunk.position.y = 2 * scale;
-      trunk.castShadow = true;
-      group.add(trunk);
-
-      const foliageColors = [0x1a5a1a, 0x2a6a2a, 0x1a4a1a, 0x2a5a1a];
-      for (let i = 0; i < 5; i++) {
-        const size = (3.5 - i * 0.4) * scale;
-        const foliageGeo = new THREE.SphereGeometry(size, 8, 8);
-        const foliageMat = new THREE.MeshStandardMaterial({
-          color: foliageColors[i % foliageColors.length],
-          roughness: 0.9,
-          metalness: 0.0
-        });
-        const foliage = new THREE.Mesh(foliageGeo, foliageMat);
-        foliage.position.set(
-          (Math.random() - 0.5) * 1.5 * scale,
-          (5 + i * 1.5) * scale,
-          (Math.random() - 0.5) * 1.5 * scale
+      for (let i = 0; i < 7; i++) {
+        const r = (3.8 - i * 0.48) * scale;
+        const h = 2.2 * scale;
+        const shade = 0.7 + Math.random() * 0.25;
+        const cone = new THREE.Mesh(
+          new THREE.ConeGeometry(r, h, 8),
+          new THREE.MeshStandardMaterial({
+            color: new THREE.Color(0.06*shade, 0.28*shade, 0.06*shade), roughness: 0.88
+          })
         );
-        foliage.castShadow = true;
-        foliage.receiveShadow = true;
-        group.add(foliage);
+        cone.position.y = (4.5 + i * 1.8) * scale;
+        cone.castShadow = true; cone.receiveShadow = true;
+        g.add(cone);
       }
-
-      group.position.set(x, 0, z);
-      return group;
+      g.position.set(x, 0, z);
+      return g;
     }
 
-    function createPineTree(x, z, scale) {
-      const group = new THREE.Group();
-
-      const trunkGeo = new THREE.CylinderGeometry(0.2 * scale, 0.4 * scale, 5 * scale, 8);
-      const trunkMat = new THREE.MeshStandardMaterial({ color: 0x3a2515, roughness: 0.95 });
-      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
-      trunk.position.y = 2.5 * scale;
-      trunk.castShadow = true;
-      group.add(trunk);
+    function createBroadTree(x, z, scale) {
+      const g = new THREE.Group();
+      const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.3*scale, 0.5*scale, 4*scale, 8),
+        new THREE.MeshStandardMaterial({ color: 0x4a3020, roughness: 0.95 })
+      );
+      trunk.position.y = 2*scale; trunk.castShadow = true; g.add(trunk);
 
       for (let i = 0; i < 6; i++) {
-        const radius = (3.5 - i * 0.5) * scale;
-        const height = 2.5 * scale;
-        const coneGeo = new THREE.ConeGeometry(radius, height, 8);
-        const shade = 0.6 + Math.random() * 0.3;
-        const coneMat = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(0.05 * shade, 0.25 * shade, 0.05 * shade),
-          roughness: 0.9
-        });
-        const cone = new THREE.Mesh(coneGeo, coneMat);
-        cone.position.y = (4 + i * 2) * scale;
-        cone.castShadow = true;
-        cone.receiveShadow = true;
-        group.add(cone);
+        const s = (3.2 - i*0.35) * scale;
+        const foliage = new THREE.Mesh(
+          new THREE.SphereGeometry(s, 8, 8),
+          new THREE.MeshStandardMaterial({
+            color: new THREE.Color(0.08+Math.random()*0.05, 0.3+Math.random()*0.1, 0.08+Math.random()*0.05),
+            roughness: 0.9
+          })
+        );
+        foliage.position.set(
+          (Math.random()-0.5)*1.5*scale,
+          (5+i*1.4)*scale,
+          (Math.random()-0.5)*1.5*scale
+        );
+        foliage.castShadow = true; foliage.receiveShadow = true;
+        g.add(foliage);
       }
-
-      group.position.set(x, 0, z);
-      return group;
+      g.position.set(x, 0, z);
+      return g;
     }
 
-    const treePositions = [
-      [-18, -10, 1.5], [-22, 5, 1.8], [-16, 15, 1.3], [-25, -5, 2.0],
-      [18, -10, 1.5], [22, 5, 1.8], [16, 15, 1.3], [25, -5, 2.0],
-      [-20, -20, 1.7], [20, -20, 1.7], [-30, 0, 2.2], [30, 0, 2.2],
-      [-15, -25, 1.4], [15, -25, 1.4], [-28, 15, 1.9], [28, 15, 1.9],
-      [-35, -15, 2.0], [35, -15, 2.0], [-12, 25, 1.2], [12, 25, 1.2]
+    const treePlacements = [
+      [-20, -8, 1.6], [-25, 5, 1.9], [-18, 18, 1.4], [-28, -4, 2.1],
+      [20, -8, 1.6], [25, 5, 1.9], [18, 18, 1.4], [28, -4, 2.1],
+      [-22, -20, 1.8], [22, -20, 1.8], [-32, 2, 2.3], [32, 2, 2.3],
+      [-17, -28, 1.5], [17, -28, 1.5], [-30, 18, 2.0], [30, 18, 2.0],
+      [-38, -12, 2.1], [38, -12, 2.1], [-14, 28, 1.3], [14, 28, 1.3],
+      [-15, 0, 1.3], [15, 0, 1.3], [-13, -5, 1.1], [13, -5, 1.1]
     ];
 
-    treePositions.forEach(([x, z, s]) => {
-      if (Math.random() > 0.4) {
-        scene.add(createPineTree(x, z, s));
-      } else {
-        scene.add(createTree(x, z, s));
-      }
+    treePlacements.forEach(([x, z, s]) => {
+      scene.add(Math.random() > 0.35 ? createPineTree(x, z, s) : createBroadTree(x, z, s));
     });
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 40; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const dist = 40 + Math.random() * 60;
-      const x = Math.cos(angle) * dist;
-      const z = Math.sin(angle) * dist;
-      const s = 1.5 + Math.random() * 1.5;
-      scene.add(createPineTree(x, z, s));
+      const dist = 45 + Math.random() * 70;
+      scene.add(createPineTree(Math.cos(angle)*dist, Math.sin(angle)*dist, 1.5 + Math.random()*1.5));
     }
 
     setProgress(85);
 
     function createMountains() {
-      const group = new THREE.Group();
-      const mountainColors = [0x2a5a2a, 0x1a4a2a, 0x2a6a3a, 0x1a5a1a];
-
-      for (let i = 0; i < 8; i++) {
-        const width = 60 + Math.random() * 80;
-        const height = 25 + Math.random() * 35;
-        const geo = new THREE.ConeGeometry(width, height, 6 + Math.floor(Math.random() * 4));
-        const mat = new THREE.MeshStandardMaterial({
-          color: mountainColors[i % mountainColors.length],
-          roughness: 0.95,
-          metalness: 0.0,
-          flatShading: true
-        });
-        const mountain = new THREE.Mesh(geo, mat);
-        const angle = (i / 8) * Math.PI * 2 + Math.random() * 0.5;
-        mountain.position.set(
-          Math.cos(angle) * (120 + Math.random() * 40),
-          height / 2 - 5,
-          Math.sin(angle) * (120 + Math.random() * 40)
+      const g = new THREE.Group();
+      const colors = [0x2a6a2a, 0x1a5a2a, 0x2a7a3a, 0x1a6a1a, 0x3a7a3a];
+      for (let i = 0; i < 12; i++) {
+        const w = 50 + Math.random() * 80;
+        const h = 20 + Math.random() * 40;
+        const m = new THREE.Mesh(
+          new THREE.ConeGeometry(w, h, 5 + Math.floor(Math.random()*4)),
+          new THREE.MeshStandardMaterial({ color: colors[i % colors.length], roughness: 0.95, flatShading: true })
         );
-        mountain.rotation.y = Math.random() * Math.PI;
-        mountain.receiveShadow = true;
-        group.add(mountain);
+        const a = (i / 12) * Math.PI * 2 + Math.random() * 0.4;
+        m.position.set(Math.cos(a)*(130+Math.random()*50), h/2 - 5, Math.sin(a)*(130+Math.random()*50));
+        m.rotation.y = Math.random() * Math.PI;
+        m.receiveShadow = true;
+        g.add(m);
       }
-
-      return group;
+      return g;
     }
-
     scene.add(createMountains());
 
     setProgress(90);
 
     function createLampPost(x, z) {
-      const group = new THREE.Group();
-
-      const poleGeo = new THREE.CylinderGeometry(0.08, 0.12, 5, 8);
-      const poleMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.3, metalness: 0.8 });
-      const pole = new THREE.Mesh(poleGeo, poleMat);
-      pole.position.y = 2.5;
-      pole.castShadow = true;
-      group.add(pole);
-
-      const lampGeo = new THREE.SphereGeometry(0.25, 8, 8);
-      const lampMat = new THREE.MeshStandardMaterial({
-        color: 0xffffee,
-        emissive: 0xffeecc,
-        emissiveIntensity: 0.5,
-        roughness: 0.2
-      });
-      const lamp = new THREE.Mesh(lampGeo, lampMat);
-      lamp.position.y = 5.2;
-      group.add(lamp);
-
-      const light = new THREE.PointLight(0xffeecc, 2, 15);
-      light.position.y = 5.2;
-      group.add(light);
-
-      group.position.set(x, 0, z);
-      return group;
+      const g = new THREE.Group();
+      const pole = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.06, 0.1, 4.5, 8),
+        new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.3, metalness: 0.8 })
+      );
+      pole.position.y = 2.25; pole.castShadow = true; g.add(pole);
+      const lamp = new THREE.Mesh(
+        new THREE.SphereGeometry(0.2, 8, 8),
+        new THREE.MeshStandardMaterial({ color: 0xfff8ee, emissive: 0xffeedd, emissiveIntensity: 0.3, roughness: 0.2 })
+      );
+      lamp.position.y = 4.7; g.add(lamp);
+      g.position.set(x, 0, z);
+      return g;
     }
-
-    scene.add(createLampPost(-9, 5));
-    scene.add(createLampPost(9, 5));
-    scene.add(createLampPost(-9, 20));
-    scene.add(createLampPost(9, 20));
-
-    const coatOfArmsGeo = new THREE.BoxGeometry(1.2, 1.2, 0.2);
-    const coatMat = new THREE.MeshStandardMaterial({
-      color: 0x1a6a1a,
-      roughness: 0.4,
-      metalness: 0.3,
-      emissive: 0x0a3a0a,
-      emissiveIntensity: 0.1
-    });
-    const coatOfArms = new THREE.Mesh(coatOfArmsGeo, coatMat);
-    coatOfArms.position.set(0, 14.8, 2.2);
-    scene.add(coatOfArms);
+    scene.add(createLampPost(-8.5, 6));
+    scene.add(createLampPost(8.5, 6));
+    scene.add(createLampPost(-8.5, 22));
+    scene.add(createLampPost(8.5, 22));
 
     setProgress(95);
 
     const VignetteShader = {
-      uniforms: {
-        tDiffuse: { value: null },
-        offset: { value: 0.95 },
-        darkness: { value: 1.2 }
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
+      uniforms: { tDiffuse: { value: null }, offset: { value: 1.0 }, darkness: { value: 0.8 } },
+      vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
       fragmentShader: `
-        uniform sampler2D tDiffuse;
-        uniform float offset;
-        uniform float darkness;
-        varying vec2 vUv;
+        uniform sampler2D tDiffuse; uniform float offset, darkness; varying vec2 vUv;
         void main() {
-          vec4 texel = texture2D(tDiffuse, vUv);
-          vec2 uv = (vUv - vec2(0.5)) * vec2(offset);
-          float vignette = 1.0 - dot(uv, uv);
-          texel.rgb *= smoothstep(0.0, 1.0, vignette + (1.0 - darkness));
-          gl_FragColor = texel;
+          vec4 t = texture2D(tDiffuse, vUv);
+          vec2 uv = (vUv - 0.5) * vec2(offset);
+          t.rgb *= smoothstep(0.0, 1.0, 1.0 - dot(uv,uv) + (1.0 - darkness));
+          gl_FragColor = t;
         }
       `
     };
 
-    const ColorCorrectionShader = {
-      uniforms: {
-        tDiffuse: { value: null },
-        saturation: { value: 1.15 },
-        contrast: { value: 1.08 },
-        brightness: { value: 0.02 }
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
+    const ColorShader = {
+      uniforms: { tDiffuse: { value: null }, saturation: { value: 1.2 }, contrast: { value: 1.05 }, brightness: { value: 0.03 } },
+      vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
       fragmentShader: `
-        uniform sampler2D tDiffuse;
-        uniform float saturation;
-        uniform float contrast;
-        uniform float brightness;
-        varying vec2 vUv;
+        uniform sampler2D tDiffuse; uniform float saturation, contrast, brightness; varying vec2 vUv;
         void main() {
-          vec4 texel = texture2D(tDiffuse, vUv);
-          vec3 color = texel.rgb + brightness;
-          float luminance = dot(color, vec3(0.2126, 0.7152, 0.0722));
-          color = mix(vec3(luminance), color, saturation);
-          color = (color - 0.5) * contrast + 0.5;
-          gl_FragColor = vec4(color, texel.a);
+          vec4 t = texture2D(tDiffuse, vUv);
+          vec3 c = t.rgb + brightness;
+          float lum = dot(c, vec3(0.2126,0.7152,0.0722));
+          c = mix(vec3(lum), c, saturation);
+          c = (c - 0.5) * contrast + 0.5;
+          gl_FragColor = vec4(c, t.a);
         }
       `
     };
 
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-
-    const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
-      0.15, 0.4, 0.85
-    );
-    composer.addPass(bloomPass);
-
-    const smaaPass = new SMAAPass(window.innerWidth, window.innerHeight);
-    composer.addPass(smaaPass);
-
-    const vignettePass = new ShaderPass(VignetteShader);
-    composer.addPass(vignettePass);
-
-    const colorPass = new ShaderPass(ColorCorrectionShader);
-    composer.addPass(colorPass);
+    composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.12, 0.3, 0.9));
+    composer.addPass(new SMAAPass(window.innerWidth, window.innerHeight));
+    composer.addPass(new ShaderPass(VignetteShader));
+    composer.addPass(new ShaderPass(ColorShader));
 
     setProgress(100);
-
     setTimeout(() => {
       document.getElementById('loading').classList.add('fade-out');
       document.getElementById('title-overlay').classList.add('show');
-    }, 500);
+    }, 400);
 
     const clock = new THREE.Clock();
-
     function animate() {
       requestAnimationFrame(animate);
-      const time = clock.getElapsedTime();
-
-      sunLight.position.x = 30 + Math.sin(time * 0.05) * 5;
-      sunLight.position.z = 20 + Math.cos(time * 0.05) * 5;
-
-      scene.fog.density = 0.003 + Math.sin(time * 0.1) * 0.0005;
-
+      const t = clock.getElapsedTime();
+      sunLight.position.x = 25 + Math.sin(t * 0.03) * 3;
       controls.update();
       composer.render();
     }
-
     animate();
 
     window.addEventListener('resize', () => {

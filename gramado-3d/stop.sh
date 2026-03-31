@@ -1,3 +1,3 @@
 #!/bin/bash
 lsof -ti:3000 | xargs kill -9 2>/dev/null
-npm install && node server.js
+echo "Gramado 3D stopped."
