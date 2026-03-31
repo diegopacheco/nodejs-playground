@@ -1,0 +1,26 @@
+shuffler/run.sh
+  81495c7454509a64 1-2
+shuffler/index.html
+  81495c7454509a64 1-598
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "9e29a52ba37a33d61270728c407a75aaeb81ffc4",
+  "prompts": {
+    "81495c7454509a64": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "75add948-2d36-4433-b11b-1d685db689b9",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>",
+      "messages": [],
+      "total_additions": 602,
+      "total_deletions": 2,
+      "accepted_lines": 600,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/d5437deb431e52673b98b903a9442f0278f0b6fa1138649e7915a7b6863b5b48"
+    }
+  }
+}
