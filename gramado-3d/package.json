@@ -1,0 +1,11 @@
+{
+  "name": "gramado-3d",
+  "version": "1.0.0",
+  "description": "Ultra-realistic 3D scene of the iconic Gramado entrance gate",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
