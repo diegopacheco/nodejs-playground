@@ -1,0 +1,32 @@
+gramado-3d/server.js
+  c7c117b7a33bc69d 1-15
+gramado-3d/package.json
+  c7c117b7a33bc69d 1-11
+gramado-3d/README.md
+  c7c117b7a33bc69d 1-40
+gramado-3d/public/index.html
+  c7c117b7a33bc69d 1-891
+gramado-3d/run.sh
+  c7c117b7a33bc69d 1-2
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "9ca03aab8db58b08930669eff8443c368ef4c5da",
+  "prompts": {
+    "c7c117b7a33bc69d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a85e27d9-f5be-4802-9071-5e6917436b8e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>",
+      "messages": [],
+      "total_additions": 959,
+      "total_deletions": 0,
+      "accepted_lines": 959,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/15b90b0a39cf847ffd883fe15b7c36cfde95a814a132eb4122f582bff6fb20cf"
+    }
+  }
+}
