@@ -1,0 +1,28 @@
+lean-fishbowl/package.json
+  8ac00ffc12d80c5f 1-8
+lean-fishbowl/README.md
+  8ac00ffc12d80c5f 1-32
+lean-fishbowl/index.html
+  8ac00ffc12d80c5f 1-681
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.6",
+  "base_commit_sha": "41551a95d1c3e6370d974346f847423fef6aeb72",
+  "prompts": {
+    "8ac00ffc12d80c5f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a9dd9433-347a-4d3a-8c3b-9f366b191937",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "diegopacheco",
+      "messages": [],
+      "total_additions": 721,
+      "total_deletions": 0,
+      "accepted_lines": 721,
+      "overriden_lines": 0,
+      "messages_url": "https://usegitai.com/cas/ba7861370bcf0cf9422e94db069cdd1ac3abe7ca17e07348d94e88437c6b1be0"
+    }
+  }
+}
