@@ -1,0 +1,8 @@
+{
+  "name": "lean-fishbowl",
+  "version": "1.0.0",
+  "description": "Lean Fishbowl timer app with Kanban-style columns for structured discussions",
+  "scripts": {
+    "start": "open index.html"
+  }
+}

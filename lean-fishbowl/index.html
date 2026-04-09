@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lean Fishbowl</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f1117;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    gap: 24px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #7dd3fc;
+  }
+
+  .timer-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    background: #1e2130;
+    border: 1px solid #2d3148;
+    border-radius: 16px;
+    padding: 20px 36px;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .timer-display {
+    font-size: 3.6rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.05em;
+    color: #f0f4ff;
+    cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+
+  .timer-display:hover { color: #7dd3fc; }
+
+  .timer-display.urgent { color: #f87171; animation: pulse 1s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+
+  .timer-edit-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .timer-edit-row input {
+    width: 72px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #3d4265;
+    background: #252840;
+    color: #e2e8f0;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .timer-edit-row label { font-size: 0.85rem; color: #94a3b8; }
+
+  .timer-controls {
+    display: flex;
+    gap: 10px;
+  }
+
+  button {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  button:active { transform: scale(0.96); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-primary { background: #3b82f6; color: #fff; }
+  .btn-primary:hover:not(:disabled) { background: #2563eb; }
+
+  .btn-danger { background: #ef4444; color: #fff; }
+  .btn-danger:hover:not(:disabled) { background: #dc2626; }
+
+  .btn-neutral { background: #334155; color: #e2e8f0; }
+  .btn-neutral:hover:not(:disabled) { background: #475569; }
+
+  .btn-success { background: #22c55e; color: #fff; }
+  .btn-success:hover:not(:disabled) { background: #16a34a; }
+
+  .board {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 960px;
+    align-items: flex-start;
+  }
+
+  .column {
+    flex: 1;
+    background: #1e2130;
+    border: 1px solid #2d3148;
+    border-radius: 14px;
+    padding: 16px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .column.drag-over {
+    border-color: #3b82f6;
+    background: #1e2845;
+  }
+
+  .column-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #2d3148;
+  }
+
+  .column-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .col-topics .column-title { color: #60a5fa; }
+  .col-talking .column-title { color: #f59e0b; }
+  .col-done .column-title { color: #4ade80; }
+
+  .col-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .col-topics .col-dot { background: #60a5fa; }
+  .col-talking .col-dot { background: #f59e0b; }
+  .col-done .col-dot { background: #4ade80; }
+
+  .card-count {
+    margin-left: auto;
+    font-size: 0.75rem;
+    background: #2d3148;
+    color: #94a3b8;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .cards-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .card {
+    background: #252840;
+    border: 1px solid #3d4265;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: grab;
+    transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+    user-select: none;
+  }
+
+  .card:hover { border-color: #5b6baf; box-shadow: 0 2px 12px rgba(59,130,246,0.15); }
+  .card.dragging { opacity: 0.4; cursor: grabbing; }
+
+  .col-talking .card {
+    border-color: #f59e0b;
+    background: #2a2518;
+    box-shadow: 0 0 0 1px #f59e0b40;
+  }
+
+  .col-done .card {
+    opacity: 0.65;
+    border-color: #4ade8060;
+  }
+
+  .card-text {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .card-btn {
+    padding: 3px 7px;
+    font-size: 0.7rem;
+    border-radius: 6px;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+
+  .card-btn-left { background: #1e2130; border-color: #3d4265; color: #94a3b8; }
+  .card-btn-left:hover { border-color: #60a5fa; color: #60a5fa; background: #1e2130; }
+
+  .card-btn-right { background: #1e2130; border-color: #3d4265; color: #94a3b8; }
+  .card-btn-right:hover { border-color: #4ade80; color: #4ade80; background: #1e2130; }
+
+  .card-btn-del { background: #1e2130; border-color: #3d4265; color: #94a3b8; }
+  .card-btn-del:hover { border-color: #ef4444; color: #ef4444; background: #1e2130; }
+
+  .add-card-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .add-card-row input {
+    flex: 1;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid #3d4265;
+    background: #252840;
+    color: #e2e8f0;
+    font-size: 0.88rem;
+  }
+
+  .add-card-row input:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+
+  .add-card-row button {
+    padding: 7px 14px;
+    font-size: 0.85rem;
+  }
+
+  .col-talking .cards-area {
+    min-height: 80px;
+  }
+
+  .empty-label {
+    font-size: 0.78rem;
+    color: #475569;
+    text-align: center;
+    padding: 16px 0;
+  }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: #1e2130;
+    border: 1px solid #2d3148;
+    border-radius: 18px;
+    padding: 32px;
+    max-width: 400px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .modal h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f0f4ff;
+    line-height: 1.4;
+  }
+
+  .modal p { font-size: 0.9rem; color: #94a3b8; }
+
+  .modal-add-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .modal-add-row input {
+    width: 72px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid #3d4265;
+    background: #252840;
+    color: #e2e8f0;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .modal-add-row label { font-size: 0.85rem; color: #94a3b8; }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .modal-actions button { flex: 1; }
+
+  @media (max-width: 640px) {
+    .board { flex-direction: column; }
+    .timer-display { font-size: 2.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Lean Fishbowl</h1>
+
+<div class="timer-section">
+  <div class="timer-display" id="timerDisplay" title="Click to edit time">5:00</div>
+  <div class="timer-edit-row">
+    <input type="number" id="timerInput" min="1" max="120" value="5" />
+    <label>min</label>
+  </div>
+  <div class="timer-controls">
+    <button class="btn-primary" id="btnStart" onclick="startTimer()">Start</button>
+    <button class="btn-neutral" id="btnPause" onclick="pauseTimer()" disabled>Pause</button>
+    <button class="btn-neutral" id="btnReset" onclick="resetTimer()">Reset</button>
+  </div>
+</div>
+
+<div class="board">
+  <div class="column col-topics" id="colTopics"
+    ondragover="onDragOver(event,'topics')"
+    ondragleave="onDragLeave(event)"
+    ondrop="onDrop(event,'topics')">
+    <div class="column-header">
+      <span class="col-dot"></span>
+      <span class="column-title">Topics</span>
+      <span class="card-count" id="countTopics">0</span>
+    </div>
+    <div class="cards-area" id="cardsTopics"></div>
+    <div class="add-card-row">
+      <input type="text" id="newTopicInput" placeholder="Add a topic…" onkeydown="if(event.key==='Enter')addCard()" />
+      <button class="btn-primary" onclick="addCard()">Add</button>
+    </div>
+  </div>
+
+  <div class="column col-talking" id="colTalking"
+    ondragover="onDragOver(event,'talking')"
+    ondragleave="onDragLeave(event)"
+    ondrop="onDrop(event,'talking')">
+    <div class="column-header">
+      <span class="col-dot"></span>
+      <span class="column-title">Talking</span>
+      <span class="card-count" id="countTalking">0</span>
+    </div>
+    <div class="cards-area" id="cardsTalking">
+      <div class="empty-label" id="talkingEmpty">Drag a topic here to discuss</div>
+    </div>
+  </div>
+
+  <div class="column col-done" id="colDone"
+    ondragover="onDragOver(event,'done')"
+    ondragleave="onDragLeave(event)"
+    ondrop="onDrop(event,'done')">
+    <div class="column-header">
+      <span class="col-dot"></span>
+      <span class="column-title">Done</span>
+      <span class="card-count" id="countDone">0</span>
+    </div>
+    <div class="cards-area" id="cardsDone"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>Time is up!</h2>
+    <p>The discussion time for this topic has ended. What would you like to do?</p>
+    <div class="modal-add-row">
+      <input type="number" id="extraMinInput" min="1" max="60" value="2" />
+      <label>extra minutes</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="addExtraTime()">Add Time &amp; Continue</button>
+      <button class="btn-success" onclick="markTalkingDone()">Mark Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  var state = {
+    cards: [],
+    nextId: 1,
+    timerSeconds: 300,
+    timerRunning: false,
+    intervalId: null,
+    draggingId: null
+  };
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+  function formatTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return m + ':' + pad(sec);
+  }
+
+  function updateTimerDisplay() {
+    var d = document.getElementById('timerDisplay');
+    d.textContent = formatTime(state.timerSeconds);
+    if (state.timerSeconds <= 30 && state.timerSeconds > 0) {
+      d.classList.add('urgent');
+    } else {
+      d.classList.remove('urgent');
+    }
+  }
+
+  function startTimer() {
+    if (state.timerRunning) return;
+    var inputVal = parseInt(document.getElementById('timerInput').value, 10);
+    if (!isNaN(inputVal) && inputVal > 0 && state.timerSeconds === 0) {
+      state.timerSeconds = inputVal * 60;
+    }
+    if (state.timerSeconds <= 0) {
+      state.timerSeconds = parseInt(document.getElementById('timerInput').value, 10) * 60 || 300;
+    }
+    state.timerRunning = true;
+    document.getElementById('btnStart').disabled = true;
+    document.getElementById('btnPause').disabled = false;
+    state.intervalId = setInterval(function() {
+      state.timerSeconds--;
+      updateTimerDisplay();
+      if (state.timerSeconds <= 0) {
+        clearInterval(state.intervalId);
+        state.timerRunning = false;
+        document.getElementById('btnStart').disabled = false;
+        document.getElementById('btnPause').disabled = true;
+        document.getElementById('timerDisplay').classList.remove('urgent');
+        document.getElementById('timerDisplay').textContent = '0:00';
+        openModal();
+      }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    if (!state.timerRunning) return;
+    clearInterval(state.intervalId);
+    state.timerRunning = false;
+    document.getElementById('btnStart').disabled = false;
+    document.getElementById('btnPause').disabled = true;
+  }
+
+  function resetTimer() {
+    pauseTimer();
+    var inputVal = parseInt(document.getElementById('timerInput').value, 10);
+    state.timerSeconds = (isNaN(inputVal) || inputVal <= 0) ? 300 : inputVal * 60;
+    updateTimerDisplay();
+  }
+
+  document.getElementById('timerDisplay').addEventListener('click', function() {
+    document.getElementById('timerInput').focus();
+    document.getElementById('timerInput').select();
+  });
+
+  document.getElementById('timerInput').addEventListener('change', function() {
+    var v = parseInt(this.value, 10);
+    if (isNaN(v) || v <= 0) { this.value = 5; v = 5; }
+    if (!state.timerRunning) {
+      state.timerSeconds = v * 60;
+      updateTimerDisplay();
+    }
+  });
+
+  function openModal() {
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  function addExtraTime() {
+    var extra = parseInt(document.getElementById('extraMinInput').value, 10);
+    if (isNaN(extra) || extra <= 0) extra = 2;
+    state.timerSeconds = extra * 60;
+    closeModal();
+    updateTimerDisplay();
+    startTimer();
+  }
+
+  function markTalkingDone() {
+    closeModal();
+    var talking = state.cards.filter(function(c) { return c.col === 'talking'; });
+    talking.forEach(function(c) { c.col = 'done'; });
+    render();
+  }
+
+  function addCard() {
+    var input = document.getElementById('newTopicInput');
+    var text = input.value.trim();
+    if (!text) return;
+    state.cards.push({ id: state.nextId++, text: text, col: 'topics' });
+    input.value = '';
+    render();
+  }
+
+  function moveCard(id, direction) {
+    var order = ['topics', 'talking', 'done'];
+    var card = state.cards.find(function(c) { return c.id === id; });
+    if (!card) return;
+    var idx = order.indexOf(card.col);
+    var nextIdx = idx + direction;
+    if (nextIdx < 0 || nextIdx >= order.length) return;
+    var targetCol = order[nextIdx];
+    if (targetCol === 'talking') {
+      var inTalking = state.cards.filter(function(c) { return c.col === 'talking'; });
+      if (inTalking.length > 0) {
+        alert('Only one topic can be in Talking at a time.');
+        return;
+      }
+    }
+    card.col = targetCol;
+    render();
+  }
+
+  function deleteCard(id) {
+    state.cards = state.cards.filter(function(c) { return c.id !== id; });
+    render();
+  }
+
+  function onDragStart(event, id) {
+    state.draggingId = id;
+    event.dataTransfer.effectAllowed = 'move';
+    setTimeout(function() {
+      var el = document.querySelector('[data-card-id="' + id + '"]');
+      if (el) el.classList.add('dragging');
+    }, 0);
+  }
+
+  function onDragEnd(event) {
+    var el = document.querySelector('.card.dragging');
+    if (el) el.classList.remove('dragging');
+    state.draggingId = null;
+  }
+
+  function onDragOver(event, col) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    var colEl = document.getElementById(col === 'topics' ? 'colTopics' : col === 'talking' ? 'colTalking' : 'colDone');
+    colEl.classList.add('drag-over');
+  }
+
+  function onDragLeave(event) {
+    var cols = document.querySelectorAll('.column');
+    cols.forEach(function(c) { c.classList.remove('drag-over'); });
+  }
+
+  function onDrop(event, targetCol) {
+    event.preventDefault();
+    onDragLeave();
+    if (state.draggingId === null) return;
+    var id = state.draggingId;
+    var card = state.cards.find(function(c) { return c.id === id; });
+    if (!card || card.col === targetCol) return;
+    if (targetCol === 'talking') {
+      var inTalking = state.cards.filter(function(c) { return c.col === 'talking' && c.id !== id; });
+      if (inTalking.length > 0) {
+        alert('Only one topic can be in Talking at a time.');
+        return;
+      }
+    }
+    card.col = targetCol;
+    render();
+  }
+
+  function makeCardEl(card) {
+    var order = ['topics', 'talking', 'done'];
+    var idx = order.indexOf(card.col);
+    var div = document.createElement('div');
+    div.className = 'card';
+    div.setAttribute('data-card-id', card.id);
+    div.draggable = true;
+    div.addEventListener('dragstart', function(e) { onDragStart(e, card.id); });
+    div.addEventListener('dragend', onDragEnd);
+
+    var span = document.createElement('span');
+    span.className = 'card-text';
+    span.textContent = card.text;
+
+    var actions = document.createElement('div');
+    actions.className = 'card-actions';
+
+    if (idx > 0) {
+      var btnL = document.createElement('button');
+      btnL.className = 'card-btn card-btn-left';
+      btnL.textContent = '←';
+      btnL.title = 'Move left';
+      btnL.onclick = function() { moveCard(card.id, -1); };
+      actions.appendChild(btnL);
+    }
+
+    if (idx < order.length - 1) {
+      var btnR = document.createElement('button');
+      btnR.className = 'card-btn card-btn-right';
+      btnR.textContent = '→';
+      btnR.title = 'Move right';
+      btnR.onclick = function() { moveCard(card.id, 1); };
+      actions.appendChild(btnR);
+    }
+
+    var btnDel = document.createElement('button');
+    btnDel.className = 'card-btn card-btn-del';
+    btnDel.textContent = '✕';
+    btnDel.title = 'Delete';
+    btnDel.onclick = function() { deleteCard(card.id); };
+    actions.appendChild(btnDel);
+
+    div.appendChild(span);
+    div.appendChild(actions);
+    return div;
+  }
+
+  function render() {
+    var cols = { topics: [], talking: [], done: [] };
+    state.cards.forEach(function(c) { cols[c.col].push(c); });
+
+    ['topics', 'talking', 'done'].forEach(function(col) {
+      var areaId = col === 'topics' ? 'cardsTopics' : col === 'talking' ? 'cardsTalking' : 'cardsDone';
+      var area = document.getElementById(areaId);
+      area.innerHTML = '';
+      if (col === 'talking' && cols.talking.length === 0) {
+        var empty = document.createElement('div');
+        empty.className = 'empty-label';
+        empty.textContent = 'Drag a topic here to discuss';
+        area.appendChild(empty);
+      } else {
+        cols[col].forEach(function(c) { area.appendChild(makeCardEl(c)); });
+      }
+    });
+
+    document.getElementById('countTopics').textContent = cols.topics.length;
+    document.getElementById('countTalking').textContent = cols.talking.length;
+    document.getElementById('countDone').textContent = cols.done.length;
+  }
+
+  render();
+  updateTimerDisplay();
+</script>
+</body>
+</html>
