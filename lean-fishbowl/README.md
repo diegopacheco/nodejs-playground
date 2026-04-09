@@ -1,5 +1,7 @@
 # Lean Fishbowl
 
+**[Live Demo](https://htmlpreview.github.io/?https://github.com/diegopacheco/nodejs-playground/blob/claude/read-lean-fishbowl-sfXR7/lean-fishbowl/index.html)**
+
 The Lean Fishbowl technique is a structured discussion format where one topic at a time occupies the center of attention (the "fishbowl"). A time-boxed timer keeps discussions focused and moving. When time runs out, the group decides to extend or mark the topic as done and move on.
 
 ## How to Run
