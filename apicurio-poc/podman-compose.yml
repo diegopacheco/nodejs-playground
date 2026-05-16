@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  postgres:
+    image: docker.io/library/postgres:17
+    container_name: apicurio-postgres
+    environment:
+      POSTGRES_USER: apicurio
+      POSTGRES_PASSWORD: apicurio
+      POSTGRES_DB: apicurio
+    ports:
+      - "55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U apicurio -d apicurio"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  apicurio:
+    image: quay.io/apicurio/apicurio-registry:latest-release
+    container_name: apicurio-registry
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      APICURIO_STORAGE_KIND: sql
+      APICURIO_STORAGE_SQL_KIND: postgresql
+      APICURIO_DATASOURCE_URL: jdbc:postgresql://postgres:5432/apicurio
+      APICURIO_DATASOURCE_USERNAME: apicurio
+      APICURIO_DATASOURCE_PASSWORD: apicurio
+      QUARKUS_HTTP_CORS_ORIGINS: "*"
+
+  apicurio-ui:
+    image: quay.io/apicurio/apicurio-registry-ui:latest-release
+    container_name: apicurio-ui
+    depends_on:
+      - apicurio
+    ports:
+      - "8888:8080"
+    environment:
+      REGISTRY_API_URL: http://localhost:8080/apis/registry/v3

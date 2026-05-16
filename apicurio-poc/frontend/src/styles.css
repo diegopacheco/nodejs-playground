@@ -1,0 +1,23 @@
+* { box-sizing: border-box; }
+body { font-family: -apple-system, system-ui, sans-serif; margin: 0; background: #0f1115; color: #e6e6e6; }
+.app { max-width: 980px; margin: 0 auto; padding: 24px; }
+header { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid #2a2d36; padding-bottom: 12px; margin-bottom: 24px; }
+header h1 { margin: 0; font-size: 22px; }
+nav a { color: #8ab4ff; margin-left: 16px; text-decoration: none; }
+nav a:hover { text-decoration: underline; }
+.form-row { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+.form-row input { background: #1a1d24; color: #e6e6e6; border: 1px solid #2a2d36; border-radius: 6px; padding: 8px 10px; }
+.hint { color: #8a8f9a; font-size: 13px; }
+.error { background: #3a1d20; border: 1px solid #6a2a30; color: #ffb4ba; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.card { background: #181b22; border: 1px solid #2a2d36; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+.card h3 { margin: 0; font-size: 16px; }
+.card .meta { color: #8a8f9a; font-size: 13px; }
+.card .price { font-weight: 600; }
+.card .stock { color: #8a8f9a; font-size: 13px; }
+.card button { margin-top: auto; background: #2d5fff; color: white; border: 0; border-radius: 6px; padding: 8px 12px; cursor: pointer; }
+.card button:disabled { background: #2a2d36; color: #8a8f9a; cursor: not-allowed; }
+table.rentals { width: 100%; border-collapse: collapse; }
+table.rentals th, table.rentals td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #2a2d36; }
+table.rentals button { background: #444; color: white; border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+pre.json { background: #181b22; border: 1px solid #2a2d36; border-radius: 8px; padding: 16px; overflow: auto; font-size: 12px; }
