@@ -1,0 +1,129 @@
+visual-ds-fun/src/domain/graph.ts
+  s_5b9b7b36b17747::t_30a9073487a53d 1-83
+visual-ds-fun/vite.config.ts
+  s_5b9b7b36b17747::t_43d36e480cd569 1-7
+visual-ds-fun/src/ui/store.ts
+  s_5b9b7b36b17747::t_33c24ed333b9d5 1-53
+visual-ds-fun/src/ui/components/Canvas.tsx
+  s_5b9b7b36b17747::t_9c9a0619a664ee 1-32
+visual-ds-fun/src/domain/queue.ts
+  s_5b9b7b36b17747::t_6da487da8fcf2e 1-47
+visual-ds-fun/src/domain/lsm.ts
+  s_5b9b7b36b17747::t_4bd399c8a61bff 1-74
+visual-ds-fun/src/domain/trie.ts
+  s_5b9b7b36b17747::t_c2f9648ce10ad9 1-98
+visual-ds-fun/src/ui/registry.ts
+  s_5b9b7b36b17747::t_806020db80a588 1-91
+visual-ds-fun/src/ui/components/OpBar.tsx
+  s_5b9b7b36b17747::t_a2e70f5106d643 1-51
+visual-ds-fun/src/domain/bplus.ts
+  s_5b9b7b36b17747::t_9763a916463196 1-143
+visual-ds-fun/src/memory/layout.ts
+  s_5b9b7b36b17747::t_98e77a560f99f0 1-167
+visual-ds-fun/src/java/queue.java.ts
+  s_5b9b7b36b17747::t_e185f5fc0c4c31 1-37
+visual-ds-fun/src/ui/components/canvases/QueueCanvas.tsx
+  s_5b9b7b36b17747::t_56b6036f37b4ef 1-38
+visual-ds-fun/src/ui/components/canvases/TrieCanvas.tsx
+  s_5b9b7b36b17747::t_e8bb9c91db1a22 1-61
+visual-ds-fun/tsconfig.node.json
+  s_5b9b7b36b17747::t_4250024bfbb7d3 17
+  s_5b9b7b36b17747::t_85afd2979abfc8 1-16,18
+visual-ds-fun/src/java/lsm.java.ts
+  s_5b9b7b36b17747::t_5ff42c6df72d1d 1-59
+visual-ds-fun/src/ui/components/canvases/GraphCanvas.tsx
+  s_5b9b7b36b17747::t_86243ed3724d88 1-43
+visual-ds-fun/src/ui/components/canvases/BPlusCanvas.tsx
+  s_5b9b7b36b17747::t_0c2a9c46fe358b 1-72
+visual-ds-fun/src/domain/__tests__/tree.test.ts
+  s_5b9b7b36b17747::t_e5527ade7f542e 1-43
+visual-ds-fun/run.sh
+  s_5b9b7b36b17747::t_cac0589d7b4129 1-7
+visual-ds-fun/src/domain/dll.ts
+  s_5b9b7b36b17747::t_c4cc8e7c512780 1-84
+visual-ds-fun/src/java/tree.java.ts
+  s_5b9b7b36b17747::t_77e29c30ac1e63 1-61
+visual-ds-fun/src/java/bplus.java.ts
+  s_5b9b7b36b17747::t_4ab81d757dcf6e 1-56
+visual-ds-fun/src/ui/components/canvases/DllCanvas.tsx
+  s_5b9b7b36b17747::t_256c3812ba6f89 1-44
+visual-ds-fun/vitest.config.ts
+  s_5b9b7b36b17747::t_d978d257da124f 1-4,6,8-9
+  s_5b9b7b36b17747::t_9d322f1ced4222 5,7
+visual-ds-fun/src/domain/__tests__/bplus.test.ts
+  s_5b9b7b36b17747::t_a88297ecc9264c 1-18
+visual-ds-fun/src/java/dll.java.ts
+  s_5b9b7b36b17747::t_35a44d6623c10e 1-48
+visual-ds-fun/src/java/stack.java.ts
+  s_5b9b7b36b17747::t_715582d4c6bb67 1-48
+visual-ds-fun/src/ui/components/CodePane.tsx
+  s_5b9b7b36b17747::t_86cad15a8c6c3a 1-56
+visual-ds-fun/src/domain/stack.ts
+  s_5b9b7b36b17747::t_4e328f7688f4bb 1-48
+visual-ds-fun/.gitignore
+  s_5b9b7b36b17747::t_dbc4678c35df99 1-5
+visual-ds-fun/src/domain/types.ts
+  s_5b9b7b36b17747::t_752026bbcd51c2 1-35
+visual-ds-fun/src/ui/components/canvases/StackCanvas.tsx
+  s_5b9b7b36b17747::t_3a4c40b51cb0ae 1-38
+visual-ds-fun/stop.sh
+  s_5b9b7b36b17747::t_c4e3b27c3f8b8e 1-14
+visual-ds-fun/src/domain/__tests__/lsm.test.ts
+  s_5b9b7b36b17747::t_efe7644b273513 1-24
+visual-ds-fun/src/domain/tree.ts
+  s_5b9b7b36b17747::t_119b6a98bcf8df 1-126
+visual-ds-fun/src/ui/components/MemoryPane.tsx
+  s_5b9b7b36b17747::t_908b8bd85d59dc 1-54
+visual-ds-fun/package.json
+  s_5b9b7b36b17747::t_cbbecc8187d18e 1-29
+visual-ds-fun/src/java/graph.java.ts
+  s_5b9b7b36b17747::t_3359a74aa58a64 1-55
+visual-ds-fun/tsconfig.json
+  s_5b9b7b36b17747::t_4ebc0dcfb4ceac 1-7
+visual-ds-fun/src/app.tsx
+  s_5b9b7b36b17747::t_a4cfb263752510 1-31
+visual-ds-fun/src/domain/__tests__/stack.test.ts
+  s_5b9b7b36b17747::t_50f7b09c6532eb 1-31
+visual-ds-fun/src/domain/__tests__/trie.test.ts
+  s_5b9b7b36b17747::t_a6669f81edaf3a 1-23
+visual-ds-fun/bun.lock
+  ai_agent 1-574
+visual-ds-fun/index.html
+  s_5b9b7b36b17747::t_73dbedbcd97f47 1-12
+visual-ds-fun/src/app.css
+  s_5b9b7b36b17747::t_89a98bc401bb4b 1-159
+visual-ds-fun/src/domain/__tests__/dll.test.ts
+  s_5b9b7b36b17747::t_88f2ea2b913642 1-27
+visual-ds-fun/src/java/index.ts
+  s_5b9b7b36b17747::t_43c8810801a724 1-24
+visual-ds-fun/src/java/trie.java.ts
+  s_5b9b7b36b17747::t_40fc739f962259 1-62
+visual-ds-fun/src/ui/components/DsPicker.tsx
+  s_5b9b7b36b17747::t_3b1fb33f3b1660 1-23
+visual-ds-fun/src/ui/components/canvases/LsmCanvas.tsx
+  s_5b9b7b36b17747::t_581074d13fff0f 1-48
+visual-ds-fun/src/main.tsx
+  s_5b9b7b36b17747::t_0ade8272d1419b 1-9
+visual-ds-fun/src/ui/components/canvases/TreeCanvas.tsx
+  s_5b9b7b36b17747::t_fd73b364e0f625 1-58
+visual-ds-fun/README.md
+  s_5b9b7b36b17747::t_aca8405e0a0b48 1-93
+visual-ds-fun/tsconfig.app.json
+  s_5b9b7b36b17747::t_8e83a1ef209f41 1-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "5c7c141bdc5afc9a5ea05d429cc4e5217869e7ad",
+  "prompts": {},
+  "sessions": {
+    "s_5b9b7b36b17747": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55ec845f-2e4d-415e-accf-c3cc08a8c0e3",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
