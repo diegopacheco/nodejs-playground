@@ -1,0 +1,159 @@
+:root {
+  --bg: #0f1115;
+  --panel: #161922;
+  --line: #232838;
+  --text: #e6e9ef;
+  --muted: #8a92a6;
+  --accent: #5cc8ff;
+  --ok: #4ade80;
+  --bad: #f87171;
+  --path: #fbbf24;
+  --affected: #5cc8ff;
+  --node: #2a3142;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.4 ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+.header h1 { font-size: 18px; margin: 0; font-weight: 600; }
+
+.ds-picker, .op-input, button, select {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font: inherit;
+}
+button { cursor: pointer; }
+button:hover { border-color: var(--accent); }
+.op-input { width: 110px; }
+
+.opbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+}
+.speed { display: flex; gap: 6px; align-items: center; color: var(--muted); margin-left: auto; }
+.status { padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+.status.ok { background: rgba(74, 222, 128, 0.15); color: var(--ok); }
+.status.bad { background: rgba(248, 113, 113, 0.15); color: var(--bad); }
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 12px;
+  padding: 12px;
+  overflow: hidden;
+  min-height: 0;
+}
+.pane {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  overflow: auto;
+  min-height: 0;
+}
+.pane h3 { margin: 0 0 8px; font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.canvas-svg {
+  width: 100%;
+  height: auto;
+  color: var(--muted);
+}
+.canvas-svg .node rect, .canvas-svg .node circle {
+  fill: var(--node);
+  stroke: var(--line);
+  stroke-width: 1.5;
+  transition: fill 300ms ease, stroke 300ms ease, transform 300ms ease;
+}
+.canvas-svg .node text {
+  fill: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  transition: fill 300ms ease;
+}
+.canvas-svg .label { fill: var(--muted); font-size: 12px; }
+.canvas-svg .edge { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+.canvas-svg .node.path rect, .canvas-svg .node.path circle {
+  fill: rgba(251, 191, 36, 0.18);
+  stroke: var(--path);
+  animation: pulse 600ms ease;
+}
+.canvas-svg .node.affected rect, .canvas-svg .node.affected circle {
+  fill: rgba(92, 200, 255, 0.25);
+  stroke: var(--affected);
+  animation: pop 400ms ease;
+}
+.canvas-svg .node.end circle { stroke-dasharray: 4 3; }
+.canvas-svg .node.leaf rect { fill: #1d2536; }
+.canvas-svg .node.tombstone rect { stroke: var(--bad); stroke-dasharray: 3 3; }
+
+@keyframes pulse {
+  0% { stroke-width: 1.5; }
+  50% { stroke-width: 3.5; }
+  100% { stroke-width: 1.5; }
+}
+@keyframes pop {
+  0% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
+
+.code-pane { overflow: auto; max-height: 100%; }
+.code-pane pre { margin: 0; font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.code-line {
+  display: flex;
+  white-space: pre;
+  padding: 0 8px;
+  transition: background 300ms ease;
+}
+.code-line.active { background: rgba(92, 200, 255, 0.12); }
+.gutter {
+  display: inline-block;
+  width: 32px;
+  text-align: right;
+  color: var(--muted);
+  user-select: none;
+  margin-right: 12px;
+}
+
+.mem-table { width: 100%; border-collapse: collapse; font: 12px ui-monospace, monospace; }
+.mem-table th, .mem-table td {
+  text-align: left;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.mem-table th { color: var(--muted); font-weight: 500; }
+.mem-table tr.path { background: rgba(251, 191, 36, 0.08); }
+.mem-table tr.affected { background: rgba(92, 200, 255, 0.12); }
+.mem-table .ref { display: inline-block; margin-right: 8px; color: var(--muted); }
+.mem-table .empty { text-align: center; color: var(--muted); padding: 20px; }
+
+@media (max-width: 1000px) {
+  .grid { grid-template-columns: 1fr; }
+}
