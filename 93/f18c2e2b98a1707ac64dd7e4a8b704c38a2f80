@@ -1,0 +1,21 @@
+visual-ds-fun/design-doc.md
+  s_5b9b7b36b17747::t_d562720db48559 167
+  s_5b9b7b36b17747::t_280c4c9cb37785 1-154,168-184
+  s_5b9b7b36b17747::t_107cf7ca79433b 155-166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "93f18c2e2b98a1707ac64dd7e4a8b704c38a2f80",
+  "prompts": {},
+  "sessions": {
+    "s_5b9b7b36b17747": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55ec845f-2e4d-415e-accf-c3cc08a8c0e3",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
