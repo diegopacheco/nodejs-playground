@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 470" font-family="'Caveat','Comic Sans MS',cursive">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;display=swap');</style>
+    <filter id="wobble">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#5b5b5b"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="470" fill="#fffdf7"/>
+  <text x="40" y="48" font-size="34" font-weight="700" fill="#3a3a3a">pa11y accessibility pipeline</text>
+
+  <g filter="url(#wobble)" stroke="#5b5b5b" stroke-width="2.5" fill="none">
+    <path d="M190,225 L236,225" marker-end="url(#arrow)"/>
+    <path d="M390,225 L436,225" marker-end="url(#arrow)"/>
+    <path d="M610,205 L636,150" marker-end="url(#arrow)"/>
+    <path d="M610,245 L636,232" marker-end="url(#arrow)"/>
+    <path d="M800,142 L856,172" marker-end="url(#arrow)"/>
+    <path d="M800,232 L856,196" marker-end="url(#arrow)"/>
+    <path d="M525,275 L700,318" marker-end="url(#arrow)"/>
+  </g>
+
+  <g filter="url(#wobble)" stroke="#7a7a7a" stroke-width="2.5">
+    <rect x="30" y="180" width="160" height="90" rx="14" fill="#fde2e4"/>
+    <rect x="240" y="180" width="150" height="90" rx="14" fill="#e2f0cb"/>
+    <rect x="440" y="175" width="170" height="100" rx="14" fill="#bee1e6"/>
+    <rect x="640" y="110" width="160" height="64" rx="14" fill="#f0e6f6"/>
+    <rect x="640" y="200" width="160" height="64" rx="14" fill="#fff1cc"/>
+    <rect x="860" y="150" width="210" height="76" rx="14" fill="#ffd6a5"/>
+    <rect x="640" y="320" width="220" height="76" rx="14" fill="#d7e3fc"/>
+  </g>
+
+  <g fill="#2c2c2c" text-anchor="middle">
+    <text x="110" y="218" font-size="24" font-weight="700">public/*.html</text>
+    <text x="110" y="245" font-size="20">accessible +</text>
+    <text x="110" y="265" font-size="20">inaccessible</text>
+
+    <text x="315" y="218" font-size="24" font-weight="700">Node static</text>
+    <text x="315" y="246" font-size="22">server :8127</text>
+
+    <text x="525" y="212" font-size="25" font-weight="700">pa11y</text>
+    <text x="525" y="240" font-size="20">puppeteer to</text>
+    <text x="525" y="260" font-size="20">Chromium</text>
+
+    <text x="720" y="150" font-size="22" font-weight="700">HTML_CodeSniffer</text>
+    <text x="720" y="240" font-size="22" font-weight="700">axe-core</text>
+
+    <text x="965" y="184" font-size="23" font-weight="700">WCAG2AA report</text>
+    <text x="965" y="209" font-size="20">errors + warnings</text>
+
+    <text x="750" y="352" font-size="22" font-weight="700">printscreens/*.png</text>
+    <text x="750" y="378" font-size="19">captured by pa11y</text>
+  </g>
+</svg>
