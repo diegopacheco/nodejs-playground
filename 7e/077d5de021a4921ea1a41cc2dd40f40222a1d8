@@ -1,0 +1,50 @@
+typescript-7-go-compiler/src/usePet.ts
+  s_04c64c44a61e06::t_c2975698aa4700 1-114
+typescript-7-go-compiler/src/Pet.tsx
+  s_04c64c44a61e06::t_bcef9c4868af05 1-89
+typescript-7-go-compiler/README.md
+  s_04c64c44a61e06::t_8ad9887c26d9c8 1-54
+typescript-7-go-compiler/stop.sh
+  s_04c64c44a61e06::t_2f1c7414681a3f 1-8,10-11
+  s_04c64c44a61e06::t_b6ff0217d3af3f 9
+typescript-7-go-compiler/src/vite-env.d.ts
+  s_04c64c44a61e06::t_2a01ae52f5031c 1
+typescript-7-go-compiler/tsconfig.json
+  s_04c64c44a61e06::t_e78ad22e0e47c4 1-21
+typescript-7-go-compiler/.gitignore
+  s_04c64c44a61e06::t_bab0bdab704bc4 1-5
+typescript-7-go-compiler/package.json
+  s_04c64c44a61e06::t_21f4cae069163d 1-23
+typescript-7-go-compiler/src/main.tsx
+  s_04c64c44a61e06::t_eed41f14710c5a 1-10
+typescript-7-go-compiler/printscreens/architecture.svg
+  s_04c64c44a61e06::t_be361b97f49c73 1-61
+typescript-7-go-compiler/src/index.css
+  s_04c64c44a61e06::t_d3b58d6929f704 1-228
+typescript-7-go-compiler/start.sh
+  s_04c64c44a61e06::t_7a051ed1fa8b9e 1-4,7-10,12-14,17-22,24
+  s_04c64c44a61e06::t_6bb4f629d9cf19 5-6,11,15-16,23
+typescript-7-go-compiler/index.html
+  s_04c64c44a61e06::t_4e10d7066170d8 1-13
+typescript-7-go-compiler/vite.config.ts
+  s_04c64c44a61e06::t_482152b4923c83 7-8
+  s_04c64c44a61e06::t_efce29550d1cc9 1-6,9-11
+typescript-7-go-compiler/src/App.tsx
+  s_04c64c44a61e06::t_94f709f8df295f 1-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.9",
+  "base_commit_sha": "7e077d5de021a4921ea1a41cc2dd40f40222a1d8",
+  "prompts": {},
+  "sessions": {
+    "s_04c64c44a61e06": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9a400a21-2b4f-4498-b2aa-59255709fc1e",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
