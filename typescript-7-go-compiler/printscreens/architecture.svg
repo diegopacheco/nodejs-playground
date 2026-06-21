@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 520" font-family="'Caveat','Comic Sans MS',cursive">
+  <defs>
+    <filter id="wobble">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M1 1 L10 6 L1 11" fill="none" stroke="#5a5a6a" stroke-width="1.8"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="940" height="520" fill="#fffdf6"/>
+  <text x="470" y="46" font-size="34" text-anchor="middle" fill="#3a3a4a">TS7 Tamagotchi — how it ticks</text>
+
+  <g filter="url(#wobble)" font-size="22" fill="#3a3a4a" text-anchor="middle">
+    <g>
+      <rect x="40" y="210" width="150" height="90" rx="16" fill="#ffd9e0" stroke="#d98ca0" stroke-width="2.5"/>
+      <text x="115" y="250">You</text>
+      <text x="115" y="278" font-size="17" fill="#7a5a64">tap actions</text>
+    </g>
+
+    <g>
+      <rect x="250" y="210" width="180" height="90" rx="16" fill="#cfe6ff" stroke="#7fa9d6" stroke-width="2.5"/>
+      <text x="340" y="248">App.tsx</text>
+      <text x="340" y="276" font-size="17" fill="#4a6a8a">React UI + bars</text>
+    </g>
+
+    <g>
+      <rect x="500" y="90" width="200" height="92" rx="16" fill="#d6f3cf" stroke="#7fbf6a" stroke-width="2.5"/>
+      <text x="600" y="128">usePet hook</text>
+      <text x="600" y="156" font-size="17" fill="#4a7a3a">feed / play / clean / sleep</text>
+    </g>
+
+    <g>
+      <rect x="500" y="330" width="200" height="92" rx="16" fill="#fff0bf" stroke="#d9b94a" stroke-width="2.5"/>
+      <text x="600" y="368">game loop</text>
+      <text x="600" y="396" font-size="17" fill="#8a6a1a">tick every 2.5s, decay</text>
+    </g>
+
+    <g>
+      <rect x="760" y="210" width="150" height="90" rx="16" fill="#e6d9ff" stroke="#a98cd6" stroke-width="2.5"/>
+      <text x="835" y="248">Pet.tsx</text>
+      <text x="835" y="276" font-size="17" fill="#6a4a8a">SVG mood</text>
+    </g>
+
+    <g fill="none" stroke="#5a5a6a" stroke-width="2.2" marker-end="url(#arrow)">
+      <path d="M190 255 q30 -4 58 -4"/>
+      <path d="M430 240 q40 -90 68 -120"/>
+      <path d="M430 270 q40 90 68 118"/>
+      <path d="M700 136 q60 50 70 70" />
+      <path d="M700 376 q60 -50 70 -70" />
+      <path d="M760 255 q-200 4 -330 0" />
+    </g>
+  </g>
+
+  <g filter="url(#wobble)" font-size="19" fill="#3a3a4a" text-anchor="middle">
+    <rect x="250" y="446" width="440" height="56" rx="14" fill="#f1ece0" stroke="#b9b0a0" stroke-width="2.2"/>
+    <text x="470" y="471">TypeScript 7 · tsgo</text>
+    <text x="470" y="492" font-size="15" fill="#6a6456">type-checks src → Vite bundles → browser</text>
+  </g>
+</svg>

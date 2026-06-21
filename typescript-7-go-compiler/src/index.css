@@ -1,0 +1,228 @@
+:root {
+  --ink: #2b2b40;
+  --shell: #ffd56b;
+  --shell-edge: #f5b942;
+  --screen: #c7e8c1;
+  --screen-edge: #8fc788;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 20%, #fff3d6, #ffe0e9 55%, #e7d6ff);
+  color: var(--ink);
+  padding: 24px;
+}
+
+.app {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.topbar {
+  text-align: center;
+}
+
+.topbar h1 {
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5a4a8a;
+  background: #ffffffcc;
+  border: 1px solid #e3d7ff;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.console {
+  background: linear-gradient(160deg, var(--shell), var(--shell-edge));
+  border: 3px solid #d99e2a;
+  border-radius: 36px;
+  padding: 22px;
+  box-shadow: 0 18px 40px rgba(180, 130, 30, 0.35), inset 0 2px 6px #ffe9b0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.screen {
+  position: relative;
+  background: linear-gradient(180deg, #d7f0d0, var(--screen));
+  border: 4px solid var(--screen-edge);
+  border-radius: 22px;
+  padding: 14px;
+  box-shadow: inset 0 3px 12px rgba(60, 110, 60, 0.3);
+  overflow: hidden;
+}
+
+.screen-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: #3a6b3a;
+}
+
+.pet {
+  display: grid;
+  place-items: center;
+  height: 230px;
+}
+
+.pet-body {
+  transform-origin: 100px 178px;
+  animation: wobble 2.5s ease-in-out infinite;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-2deg) translateY(0); }
+  50% { transform: rotate(2deg) translateY(-6px); }
+}
+
+.pet-zzz {
+  animation: floatz 2s linear infinite;
+}
+
+@keyframes floatz {
+  0% { opacity: 0; transform: translateY(0); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-14px); }
+}
+
+.status {
+  text-align: center;
+  font-weight: 700;
+  color: #3a6b3a;
+  font-size: 14px;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(40, 50, 60, 0.82);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay p {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.restart {
+  background: #ffd23f;
+  color: #2b2b40;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5a4516;
+  margin-bottom: 4px;
+}
+
+.stat-value.low {
+  color: #d63838;
+}
+
+.stat-track {
+  height: 12px;
+  background: #ffffff80;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid #d99e2a55;
+}
+
+.stat-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.actions button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: #fff8e6;
+  border: 2px solid #e9c46a;
+  border-radius: 16px;
+  padding: 10px 4px;
+  font-size: 22px;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 3px 0 #d99e2a;
+}
+
+.actions button span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #5a4516;
+}
+
+.actions button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.actions button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #d99e2a;
+}
+
+.actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.actions button.active {
+  background: #ffe2a8;
+  box-shadow: inset 0 2px 6px #d99e2a;
+}
+
+.foot {
+  text-align: center;
+  font-size: 12px;
+  color: #6a5a8a;
+}
