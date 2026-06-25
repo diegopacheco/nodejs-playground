@@ -1,7 +1,6 @@
 {
   "tasks": {
-    "desktop": "deno desktop main.ts",
-    "dev": "deno desktop --hmr main.ts",
-    "build": "deno desktop --output Calculator.app main.ts"
+    "build": "deno desktop --allow-net --output Calculator.app main.ts",
+    "dev": "deno desktop --hmr --allow-net main.ts"
   }
 }

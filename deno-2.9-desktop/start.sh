@@ -24,7 +24,7 @@ fi
 
 if [ ! -d "$APP" ] || [ main.ts -nt "$APP" ]; then
   echo "Building $APP ..."
-  deno desktop --output "$APP" main.ts
+  deno desktop --allow-net --output "$APP" main.ts
 fi
 
 open "$APP"
