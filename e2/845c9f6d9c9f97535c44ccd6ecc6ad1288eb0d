@@ -1,0 +1,32 @@
+deno-2.9-desktop/start.sh
+  s_8ae4dea0d28ece::t_f5e800d8399e98 1-26
+deno-2.9-desktop/main.ts
+  s_8ae4dea0d28ece::t_69e34aa6a4cd87 1-240
+deno-2.9-desktop/deno.json
+  s_8ae4dea0d28ece::t_edcf84107bddfb 1-7
+deno-2.9-desktop/stop.sh
+  s_8ae4dea0d28ece::t_bfdb86f6209861 1-13
+deno-2.9-desktop/printscreens/architecture.svg
+  s_8ae4dea0d28ece::t_e71afbf2993087 1-48
+deno-2.9-desktop/README.md
+  s_8ae4dea0d28ece::t_e134b7cfb1a30b 1-69
+deno-2.9-desktop/.gitignore
+  s_8ae4dea0d28ece::t_e7a3ab7325e1b6 4
+  s_8ae4dea0d28ece::t_d6d74245c8ad9d 1-3,5-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "e2845c9f6d9c9f97535c44ccd6ecc6ad1288eb0d",
+  "prompts": {},
+  "sessions": {
+    "s_8ae4dea0d28ece": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8f9af0eb-381c-426e-8caa-b52ec343f9a0",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
