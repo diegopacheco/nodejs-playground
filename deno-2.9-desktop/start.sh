@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")"
-PID_FILE=".desktop.pid"
-
-if [ -f "$PID_FILE" ] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
-  echo "Calculator already running (pid $(cat "$PID_FILE"))"
-  exit 0
-fi
+APP="Calculator.app"
 
 if ! command -v deno >/dev/null 2>&1; then
   echo "deno not found. Install with: curl -fsSL https://deno.land/install.sh | sh"
@@ -21,6 +16,16 @@ if [ "$MAJOR" -lt 2 ] || { [ "$MAJOR" -eq 2 ] && [ "$MINOR" -lt 9 ]; }; then
   exit 1
 fi
 
-deno desktop main.ts &
-echo $! > "$PID_FILE"
-echo "Calculator started (pid $(cat "$PID_FILE")). Use ./stop.sh to close it."
+if pgrep -f "$APP/Contents/MacOS/laufey_webview" >/dev/null 2>&1; then
+  echo "Calculator already running, bringing it to front."
+  open "$APP"
+  exit 0
+fi
+
+if [ ! -d "$APP" ] || [ main.ts -nt "$APP" ]; then
+  echo "Building $APP ..."
+  deno desktop --output "$APP" main.ts
+fi
+
+open "$APP"
+echo "Calculator started. Use ./stop.sh to close it."
