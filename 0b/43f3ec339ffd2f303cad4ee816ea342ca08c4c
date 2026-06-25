@@ -1,0 +1,23 @@
+deno-2.9-desktop/README.md
+  s_8ae4dea0d28ece::t_e608ca41e50a90 5,7,9,11,13-19,21,38,44,46,49-73,81-83,92-94
+deno-2.9-desktop/deno.json
+  s_8ae4dea0d28ece::t_a14ead130f1fcf 3-4
+deno-2.9-desktop/start.sh
+  s_8ae4dea0d28ece::t_fe7bfb5deef144 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "0b43f3ec339ffd2f303cad4ee816ea342ca08c4c",
+  "prompts": {},
+  "sessions": {
+    "s_8ae4dea0d28ece": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8f9af0eb-381c-426e-8caa-b52ec343f9a0",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
