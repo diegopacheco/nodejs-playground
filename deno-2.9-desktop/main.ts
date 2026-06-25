@@ -238,3 +238,14 @@ Deno.serve(() =>
     headers: { "content-type": "text/html; charset=utf-8" },
   })
 );
+
+const win = new Deno.BrowserWindow({
+  title: "Calculator",
+  width: 380,
+  height: 600,
+  resizable: false,
+});
+
+win.addEventListener("close", () => {
+  Deno.exit(0);
+});
