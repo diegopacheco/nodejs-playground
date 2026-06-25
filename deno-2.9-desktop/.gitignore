@@ -1,0 +1,11 @@
+.desktop.pid
+deno-2.app/
+deno-2.dylib
+deno-2.dylib.tmp-*
+Calculator.app/
+*.dmg
+*.exe
+*.msi
+*.AppImage
+*.deb
+*.rpm
