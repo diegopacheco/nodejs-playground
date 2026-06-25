@@ -1,0 +1,21 @@
+deno-2.9-desktop/start.sh
+  s_8ae4dea0d28ece::t_7d28a64cf8fb7f 4,19-31
+deno-2.9-desktop/stop.sh
+  s_8ae4dea0d28ece::t_ba1090c009f4a9 4-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "cb6fa3a97cc7a1771134ae22c1e515417057932d",
+  "prompts": {},
+  "sessions": {
+    "s_8ae4dea0d28ece": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8f9af0eb-381c-426e-8caa-b52ec343f9a0",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
