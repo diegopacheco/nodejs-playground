@@ -1,0 +1,50 @@
+nub-fun/src/server.ts
+  s_7abcfaa2ad70fa::t_3dc8be82f5e6ec 1-52
+nub-fun/start.sh
+  s_7abcfaa2ad70fa::t_668ce87aa6c412 1-31
+nub-fun/stop.sh
+  s_7abcfaa2ad70fa::t_bcfab24f5cc1c4 1-11
+nub-fun/.gitignore
+  s_7abcfaa2ad70fa::t_7a9815c935990c 1-3
+nub-fun/test.sh
+  s_7abcfaa2ad70fa::t_a466b389d88d7d 1-23
+nub-fun/package.json
+  s_7abcfaa2ad70fa::t_be6a95cb589403 12,15
+  s_7abcfaa2ad70fa::t_f3f3241135fa2c 1-11,13-14,16-19
+nub-fun/src/public/style.css
+  s_7abcfaa2ad70fa::t_abfbabcdbfb535 1-156
+nub-fun/src/public/index.html
+  s_7abcfaa2ad70fa::t_acb48be964336d 1-43
+nub-fun/README.md
+  s_7abcfaa2ad70fa::t_6f61ad26f93fb0 1-95
+nub-fun/tsconfig.json
+  s_7abcfaa2ad70fa::t_8b4c6b30e59dd8 1-12
+nub-fun/src/public/app.js
+  s_7abcfaa2ad70fa::t_142147860938b5 1-58
+nub-fun/package-lock.json
+  s_9c14cc9934136b::t_c26aac24774f3d 1-1108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "f09c14c76c55d89713e656a23685a0a526905f25",
+  "prompts": {},
+  "sessions": {
+    "s_7abcfaa2ad70fa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "61222ba9-827d-455a-be1e-29e002e03762",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    },
+    "s_9c14cc9934136b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "913db217-d463-4454-8ab2-7d9f4f4dd09e",
+        "model": "unknown"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
