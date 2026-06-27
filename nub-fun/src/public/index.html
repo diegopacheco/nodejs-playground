@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nub-fun</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>nub-fun</h1>
+        <p class="tagline">
+          TypeScript + Express, run with no build step by
+          <a href="https://github.com/nubjs/nub" target="_blank" rel="noreferrer">nub</a>
+        </p>
+      </header>
+
+      <section class="panel runtime">
+        <h2>Runtime</h2>
+        <dl id="info">
+          <div><dt>runtime</dt><dd id="info-runtime">…</dd></div>
+          <div><dt>language</dt><dd id="info-language">…</dd></div>
+          <div><dt>node</dt><dd id="info-node">…</dd></div>
+          <div><dt>platform</dt><dd id="info-platform">…</dd></div>
+          <div><dt>uptime</dt><dd id="info-uptime">…</dd></div>
+        </dl>
+      </section>
+
+      <section class="panel">
+        <h2>Notes</h2>
+        <form id="note-form">
+          <input id="note-input" type="text" placeholder="Write a note…" autocomplete="off" />
+          <button type="submit">Add</button>
+          <button type="button" id="clear" class="ghost">Clear</button>
+        </form>
+        <ul id="notes"></ul>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

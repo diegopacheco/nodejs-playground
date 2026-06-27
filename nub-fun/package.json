@@ -1,0 +1,19 @@
+{
+  "name": "nub-fun",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A simple TypeScript + Express POC run entirely by nub - no build step",
+  "scripts": {
+    "start": "nub src/server.ts",
+    "dev": "nub watch src/server.ts"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@nubjs/nub": "^0.2.5",
+    "@types/express": "^5.0.0",
+    "@types/node": "^24.0.0"
+  }
+}
