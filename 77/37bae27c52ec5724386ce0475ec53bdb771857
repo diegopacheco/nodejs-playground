@@ -1,0 +1,19 @@
+astro-7-poc/README.md
+  s_67f642b704862c::t_6a675350579623 1-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7737bae27c52ec5724386ce0475ec53bdb771857",
+  "prompts": {},
+  "sessions": {
+    "s_67f642b704862c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a2a4ef56-dcd3-447b-b8d6-2de4cc1cfa1f",
+        "model": "claude-fable-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
