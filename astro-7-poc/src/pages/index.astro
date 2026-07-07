@@ -61,16 +61,30 @@ const title = "Deck of Cards";
         <div id="feedback-list"></div>
       </section>
 
-      <section id="panel-patience" class="panel"></section>
+      <section id="panel-patience" class="panel">
+        <div class="controls">
+          <button id="patience-new" class="action">New game</button>
+          <span id="patience-status" class="status"></span>
+        </div>
+        <div class="patience-top">
+          <div id="patience-stock"></div>
+          <div id="patience-waste"></div>
+          <div class="spacer"></div>
+          <div id="patience-foundations" class="card-row"></div>
+        </div>
+        <div id="patience-tableau"></div>
+      </section>
     </main>
 
     <script>
       import { initTabs } from "../tabs";
       import { initDeck } from "../deck-ui";
       import { initFeedback } from "../feedback-ui";
+      import { initPatience } from "../patience-ui";
       initTabs();
       initDeck();
       initFeedback();
+      initPatience();
     </script>
 
     <style is:global>
@@ -199,6 +213,31 @@ const title = "Deck of Cards";
         border-radius: 0 8px 8px 0;
       }
       .feedback-entry header { font-weight: 600; color: var(--gold); margin-bottom: 0.3rem; }
+      .patience-top {
+        display: flex;
+        gap: 0.5rem;
+        margin: 1.2rem 0 1.5rem;
+      }
+      .patience-top .spacer { width: 5rem; }
+      #patience-tableau {
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+      .stack { display: flex; flex-direction: column; }
+      .stack .card { margin-top: -5.4rem; }
+      .stack .card:first-child { margin-top: 0; }
+      .card.slot {
+        background: rgba(0, 0, 0, 0.2);
+        border: 2px dashed rgba(250, 246, 236, 0.4);
+        box-shadow: none;
+        display: grid;
+        place-items: center;
+        font-size: 1.6rem;
+        color: rgba(250, 246, 236, 0.5);
+      }
+      .card.selected { outline: 3px solid var(--gold); outline-offset: -1px; }
+      #panel-patience .card { cursor: pointer; }
       .card.back {
         background:
           repeating-linear-gradient(45deg, rgba(250, 246, 236, 0.25) 0 6px, transparent 6px 12px),
