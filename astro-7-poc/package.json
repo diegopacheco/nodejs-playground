@@ -1,0 +1,14 @@
+{
+  "name": "astro-7-poc",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^7.0.6",
+    "typescript": "^6.0.3"
+  }
+}
