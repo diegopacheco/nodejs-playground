@@ -34,7 +34,32 @@ const title = "Deck of Cards";
         <div id="deck-pile" class="card-grid"></div>
       </section>
 
-      <section id="panel-feedback" class="panel"></section>
+      <section id="panel-feedback" class="panel">
+        <h2>Tell us what you think</h2>
+        <form id="feedback-form">
+          <label>
+            Name
+            <input name="name" type="text" required maxlength="60" />
+          </label>
+          <label>
+            Rating
+            <select name="rating" required>
+              <option value="5">5 stars</option>
+              <option value="4">4 stars</option>
+              <option value="3">3 stars</option>
+              <option value="2">2 stars</option>
+              <option value="1">1 star</option>
+            </select>
+          </label>
+          <label>
+            Comment
+            <textarea name="comment" rows="4" required maxlength="500"></textarea>
+          </label>
+          <button type="submit" class="action">Send feedback</button>
+        </form>
+        <h2>Received</h2>
+        <div id="feedback-list"></div>
+      </section>
 
       <section id="panel-patience" class="panel"></section>
     </main>
@@ -42,8 +67,10 @@ const title = "Deck of Cards";
     <script>
       import { initTabs } from "../tabs";
       import { initDeck } from "../deck-ui";
+      import { initFeedback } from "../feedback-ui";
       initTabs();
       initDeck();
+      initFeedback();
     </script>
 
     <style is:global>
@@ -145,6 +172,33 @@ const title = "Deck of Cards";
       }
       .card.red { color: var(--crimson); }
       .card.black { color: var(--ink); }
+      #feedback-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        max-width: 26rem;
+      }
+      #feedback-form label { display: flex; flex-direction: column; gap: 0.3rem; }
+      #feedback-form input,
+      #feedback-form select,
+      #feedback-form textarea {
+        font: inherit;
+        padding: 0.5rem 0.7rem;
+        border: 1px solid var(--gold);
+        border-radius: 6px;
+        background: var(--ivory);
+        color: var(--ink);
+      }
+      #feedback-form button { align-self: flex-start; }
+      .feedback-entry {
+        max-width: 34rem;
+        margin-bottom: 0.8rem;
+        padding: 0.8rem 1rem;
+        border-left: 3px solid var(--gold);
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 0 8px 8px 0;
+      }
+      .feedback-entry header { font-weight: 600; color: var(--gold); margin-bottom: 0.3rem; }
       .card.back {
         background:
           repeating-linear-gradient(45deg, rgba(250, 246, 236, 0.25) 0 6px, transparent 6px 12px),
