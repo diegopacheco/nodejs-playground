@@ -1,0 +1,27 @@
+astro-7-poc/src/pages/index.astro
+  s_67f642b704862c::t_de10297a447961 1-156
+astro-7-poc/src/cards.ts
+  s_67f642b704862c::t_3012703d4f9edd 1-33
+astro-7-poc/src/deck-ui.ts
+  s_67f642b704862c::t_f7b698a546a6f2 1-32
+astro-7-poc/src/dom.ts
+  s_67f642b704862c::t_dc96aabb8f1912 1-16
+astro-7-poc/src/tabs.ts
+  s_67f642b704862c::t_477a3db3b99668 1-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "59ff9965013ec9e98a7bc3b7e4441b2b5a896a92",
+  "prompts": {},
+  "sessions": {
+    "s_67f642b704862c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a2a4ef56-dcd3-447b-b8d6-2de4cc1cfa1f",
+        "model": "claude-fable-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
