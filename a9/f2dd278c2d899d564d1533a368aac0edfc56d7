@@ -1,0 +1,25 @@
+astro-7-poc/src/patience.ts
+  s_67f642b704862c::t_54e75cffcd5c6d 1-55
+astro-7-poc/src/patience-ui.ts
+  s_67f642b704862c::t_09602dfeb76145 1-141
+astro-7-poc/src/pages/index.astro
+  s_67f642b704862c::t_6b967b82108f01 83,87
+  s_67f642b704862c::t_a8341d25e6f7b6 64-76
+  s_67f642b704862c::t_f336930fdf84cb 216-240
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "a9f2dd278c2d899d564d1533a368aac0edfc56d7",
+  "prompts": {},
+  "sessions": {
+    "s_67f642b704862c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a2a4ef56-dcd3-447b-b8d6-2de4cc1cfa1f",
+        "model": "claude-fable-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
