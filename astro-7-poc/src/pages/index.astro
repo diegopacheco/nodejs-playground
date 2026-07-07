@@ -1,0 +1,156 @@
+---
+const title = "Deck of Cards";
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <h1>{title}</h1>
+      <nav>
+        <button id="tab-deck" class="tab">Deck</button>
+        <button id="tab-feedback" class="tab">Feedback</button>
+        <button id="tab-patience" class="tab">Patience</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="panel-deck" class="panel">
+        <div class="controls">
+          <button id="deck-shuffle" class="action">Shuffle</button>
+          <button id="deck-draw" class="action">Draw</button>
+          <button id="deck-reset" class="action ghost">Reset</button>
+          <span id="deck-count" class="status"></span>
+        </div>
+        <h2>Drawn</h2>
+        <div id="deck-drawn" class="card-row"></div>
+        <h2>Deck</h2>
+        <div id="deck-pile" class="card-grid"></div>
+      </section>
+
+      <section id="panel-feedback" class="panel"></section>
+
+      <section id="panel-patience" class="panel"></section>
+    </main>
+
+    <script>
+      import { initTabs } from "../tabs";
+      import { initDeck } from "../deck-ui";
+      initTabs();
+      initDeck();
+    </script>
+
+    <style is:global>
+      :root {
+        --felt: #1d5c3a;
+        --felt-dark: #123b25;
+        --ivory: #faf6ec;
+        --gold: #d4af5a;
+        --ink: #232323;
+        --crimson: #b3323c;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        min-height: 100vh;
+        font-family: "Source Serif 4", Georgia, serif;
+        color: var(--ivory);
+        background: radial-gradient(ellipse at 50% 20%, var(--felt) 0%, var(--felt-dark) 90%);
+      }
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 1.5rem;
+        padding: 1.5rem 2rem 1rem;
+        border-bottom: 2px solid var(--gold);
+      }
+      h1 {
+        font-family: "Playfair Display", Georgia, serif;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: var(--gold);
+      }
+      h2 {
+        font-family: "Playfair Display", Georgia, serif;
+        font-weight: 600;
+        margin: 1.2rem 0 0.6rem;
+        color: var(--gold);
+      }
+      nav { display: flex; gap: 0.5rem; }
+      .tab {
+        font: inherit;
+        padding: 0.4rem 1.2rem;
+        border: 1px solid var(--gold);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--ivory);
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+      }
+      .tab:hover { background: rgba(212, 175, 90, 0.2); }
+      .tab.active { background: var(--gold); color: var(--felt-dark); font-weight: 600; }
+      main { padding: 1.5rem 2rem 3rem; }
+      .panel { display: none; }
+      .panel.active { display: block; }
+      .controls {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+      }
+      .action {
+        font: inherit;
+        font-weight: 600;
+        padding: 0.5rem 1.4rem;
+        border: none;
+        border-radius: 6px;
+        background: var(--gold);
+        color: var(--felt-dark);
+        cursor: pointer;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+      }
+      .action:hover { filter: brightness(1.08); }
+      .action:active { transform: translateY(1px); box-shadow: none; }
+      .action.ghost { background: transparent; color: var(--gold); border: 1px solid var(--gold); }
+      .status { opacity: 0.85; font-style: italic; }
+      .card-row, .card-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; min-height: 7.5rem; }
+      .card {
+        position: relative;
+        width: 5rem;
+        height: 7.2rem;
+        border-radius: 8px;
+        background: var(--ivory);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+        flex-shrink: 0;
+      }
+      .card .corner {
+        position: absolute;
+        top: 0.3rem;
+        left: 0.45rem;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+      .card .pip {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: 2.4rem;
+      }
+      .card.red { color: var(--crimson); }
+      .card.black { color: var(--ink); }
+      .card.back {
+        background:
+          repeating-linear-gradient(45deg, rgba(250, 246, 236, 0.25) 0 6px, transparent 6px 12px),
+          var(--crimson);
+        border: 4px solid var(--ivory);
+      }
+    </style>
+  </body>
+</html>
