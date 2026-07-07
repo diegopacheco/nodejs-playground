@@ -36,7 +36,7 @@ A form to rate the app from 1 to 5 stars and leave a comment. Entries are stored
 
 ### Patience
 
-Klondike patience played entirely with clicks. Click the stock to draw to the waste, click a face-up card to select it, then click a destination to move it. Tableau piles build down in alternating colors, foundations build up by suit from the ace, and empty columns take a king. Move all 52 cards to the foundations to win.
+Klondike patience. Drag a face-up card onto its destination, or click a card to select it and click the destination. Click the stock to draw to the waste. Dragging a card in the middle of a pile brings the whole run with it. Tableau piles build down in alternating colors, foundations build up by suit from the ace, and empty columns take a king. Move all 52 cards to the foundations to win.
 
 ![Patience tab](printscreens/patience.png)
 

@@ -53,6 +53,31 @@ function isSelected(source: string, col: number, index: number): boolean {
   return source === "tableau" && selected.col === col && index >= selected.index;
 }
 
+function makeDraggable(el: HTMLElement, pick: Selection): void {
+  el.draggable = true;
+  el.addEventListener("dragstart", (event) => {
+    selected = pick;
+    event.dataTransfer!.setData("text/plain", "card");
+    event.dataTransfer!.effectAllowed = "move";
+  });
+  el.addEventListener("dragend", () => {
+    if (selected) {
+      selected = null;
+      render();
+    }
+  });
+}
+
+function makeDropTarget(el: HTMLElement, drop: () => void): void {
+  el.addEventListener("dragover", (event) => {
+    if (selected) event.preventDefault();
+  });
+  el.addEventListener("drop", (event) => {
+    event.preventDefault();
+    drop();
+  });
+}
+
 function makeSlot(label: string): HTMLDivElement {
   const slot = document.createElement("div");
   slot.className = "card slot";
@@ -84,6 +109,7 @@ function render(): void {
       selected = selected?.source === "waste" ? null : { source: "waste" };
       render();
     });
+    makeDraggable(wasteCard, { source: "waste" });
     wasteEl.replaceChildren(wasteCard);
   } else {
     wasteEl.replaceChildren(makeSlot(""));
@@ -94,6 +120,7 @@ function render(): void {
       const top = pile[pile.length - 1];
       const el = top ? makeCardEl(top) : makeSlot("A");
       el.addEventListener("click", () => tryMoveToFoundation(slot));
+      makeDropTarget(el, () => tryMoveToFoundation(slot));
       return el;
     })
   );
@@ -102,6 +129,7 @@ function render(): void {
     ...game.tableau.map((pile, col) => {
       const column = document.createElement("div");
       column.className = "stack";
+      makeDropTarget(column, () => tryMoveToTableau(col));
       if (pile.length === 0) {
         const empty = makeSlot("K");
         empty.addEventListener("click", () => tryMoveToTableau(col));
@@ -120,6 +148,7 @@ function render(): void {
             render();
           }
         });
+        if (card.faceUp) makeDraggable(el, { source: "tableau", col, index });
         column.append(el);
       });
       return column;
