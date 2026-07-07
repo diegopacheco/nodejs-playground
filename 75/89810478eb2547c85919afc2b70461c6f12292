@@ -1,0 +1,27 @@
+astro-7-poc/package.json
+  s_67f642b704862c::t_81855a9fe5f980 1-14
+astro-7-poc/astro.config.mjs
+  s_67f642b704862c::t_ce6e7db487e7a3 1-5
+astro-7-poc/.gitignore
+  s_67f642b704862c::t_c577620c8156f3 1-4
+astro-7-poc/tsconfig.json
+  s_67f642b704862c::t_7142d836cafcbe 1-5
+astro-7-poc/package-lock.json
+  s_67f642b704862c::t_92498e1f7f8a16 1-4174
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7589810478eb2547c85919afc2b70461c6f12292",
+  "prompts": {},
+  "sessions": {
+    "s_67f642b704862c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a2a4ef56-dcd3-447b-b8d6-2de4cc1cfa1f",
+        "model": "claude-fable-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
