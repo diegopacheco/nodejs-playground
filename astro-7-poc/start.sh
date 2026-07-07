@@ -1,13 +1,13 @@
 #!/bin/bash
 cd "$(dirname "$0")"
-if [ -f app.pid ] && kill -0 "$(cat app.pid)" 2>/dev/null; then
-  echo "already running with pid $(cat app.pid)"
+port=4600
+if lsof -nP -iTCP:$port -sTCP:LISTEN >/dev/null 2>&1; then
+  echo "already running at http://127.0.0.1:$port"
   exit 0
 fi
-npm run dev -- --host 127.0.0.1 --port 4321 >/dev/null 2>&1 &
-echo $! > app.pid
+./node_modules/.bin/astro dev --host 127.0.0.1 --port $port >/dev/null 2>&1 &
 tries=0
-until curl -sf http://127.0.0.1:4321 >/dev/null; do
+until curl -sf "http://127.0.0.1:$port" >/dev/null; do
   tries=$((tries + 1))
   if [ "$tries" -ge 30 ]; then
     echo "failed to start"
@@ -15,4 +15,4 @@ until curl -sf http://127.0.0.1:4321 >/dev/null; do
   fi
   sleep 1
 done
-echo "running at http://127.0.0.1:4321 with pid $(cat app.pid)"
+echo "running at http://127.0.0.1:$port"
