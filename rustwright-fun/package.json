@@ -1,0 +1,11 @@
+{
+  "name": "rustwright-fun",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node rustwright.js"
+  },
+  "dependencies": {
+    "rustwright": "0.1.1"
+  }
+}
