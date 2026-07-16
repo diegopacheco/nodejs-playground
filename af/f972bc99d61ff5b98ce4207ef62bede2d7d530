@@ -1,0 +1,32 @@
+rustwright-fun/README.md
+  s_869572ed2ad957::t_d6d9f8fdd35d0d 1-101
+rustwright-fun/run.sh
+  s_869572ed2ad957::t_e37d48cc827df9 1-7
+rustwright-fun/package.json
+  s_869572ed2ad957::t_e37d48cc827df9 1-11
+rustwright-fun/ui.sh
+  s_869572ed2ad957::t_e37d48cc827df9 1-11
+rustwright-fun/.gitignore
+  s_869572ed2ad957::t_e37d48cc827df9 1-2
+rustwright-fun/rustwright.js
+  s_869572ed2ad957::t_d39f2a3584aff3 1-81,83-140,142-210
+  s_869572ed2ad957::t_c8c2754a1d5a6f 82,141
+rustwright-fun/package-lock.json
+  s_869572ed2ad957::t_a7caa5d4a175b6 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "aff972bc99d61ff5b98ce4207ef62bede2d7d530",
+  "prompts": {},
+  "sessions": {
+    "s_869572ed2ad957": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f6c54-e577-7a70-a7eb-6027d77a8c85",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
