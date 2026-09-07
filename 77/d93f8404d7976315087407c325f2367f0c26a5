@@ -1,0 +1,84 @@
+vidact-fun/index.html
+  s_0438fc927f2a41::t_0565e34fc92c69 1-5,7-13
+  s_0438fc927f2a41::t_7c910c2f068805 6
+vidact-fun/src/data/seed.js
+  s_0438fc927f2a41::t_1b5af88db9e824 1-22
+vidact-fun/scripts/start-all.sh
+  s_0438fc927f2a41::t_2e610bae7590e5 1-13
+vidact-fun/src/styles.css
+  s_0438fc927f2a41::t_97febc3591a185 1-329
+vidact-fun/README.md
+  s_0438fc927f2a41::t_a0672f766dd294 73
+  s_0438fc927f2a41::t_b505f74c89321f 79-83
+  s_0438fc927f2a41::t_e82aab7c8fec73 1-72,74-78,84-149
+  s_0438fc927f2a41::t_120cfd64f828f2 150
+vidact-fun/.gitignore
+  s_0438fc927f2a41::t_2e610bae7590e5 1-3
+vidact-fun/src/components/Rentals.jsx
+  s_0438fc927f2a41::t_df06729d8e9178 1-8,32,34-36,52-54
+  s_0438fc927f2a41::t_4a5ce602f92ab4 9-31,33,37-51
+vidact-fun/src/data/movies.js
+  s_0438fc927f2a41::t_56a51b0fcec42d 1-16
+vidact-fun/scripts/common.sh
+  s_0438fc927f2a41::t_2e610bae7590e5 1-110
+vidact-fun/src/App.jsx
+  s_0438fc927f2a41::t_23026f8a28d2a5 17-18,20,24,26,66
+  s_0438fc927f2a41::t_91959a536cf4fc 64
+  s_0438fc927f2a41::t_fc5a8e2ebfc58b 1-16,19,21-23,25,27-63,65,67-70
+vidact-fun/package.json
+  s_0438fc927f2a41::t_4a5ce602f92ab4 8
+  s_0438fc927f2a41::t_f8a80d8cc78b3d 4,9-11
+  s_0438fc927f2a41::t_587d5183563fb0 1-3,5-7,12-23
+vidact-fun/test/rentals.test.js
+  s_0438fc927f2a41::t_f8a80d8cc78b3d 1-90
+vidact-fun/src/components/Catalog.jsx
+  s_0438fc927f2a41::t_91959a536cf4fc 1,4,11-16
+  s_0438fc927f2a41::t_44459a30054d5a 2-3,5-10,17-20
+vidact-fun/vite.config.js
+  s_0438fc927f2a41::t_0565e34fc92c69 1-8
+vidact-fun/scripts/status.sh
+  s_0438fc927f2a41::t_2e610bae7590e5 1-18
+vidact-fun/src/lib/rentals.js
+  s_0438fc927f2a41::t_58667a653cad5e 1-56
+vidact-fun/scripts/ui.sh
+  s_0438fc927f2a41::t_2e610bae7590e5 1-12
+vidact-fun/src/components/MovieCard.jsx
+  s_0438fc927f2a41::t_44459a30054d5a 1-18,20-40
+  s_0438fc927f2a41::t_a5179a53e8492e 19
+vidact-fun/src/components/Header.jsx
+  s_0438fc927f2a41::t_1a56337fe24738 1-29
+vidact-fun/src/main.js
+  s_0438fc927f2a41::t_fc5a8e2ebfc58b 1-7
+vidact-fun/scripts/ports.env
+  s_0438fc927f2a41::t_2e610bae7590e5 1
+vidact-fun/scripts/setup.sh
+  s_0438fc927f2a41::t_2e610bae7590e5 1-20
+vidact-fun/src/components/Filters.jsx
+  s_0438fc927f2a41::t_1a56337fe24738 1-37
+vidact-fun/scripts/test-all.sh
+  s_0438fc927f2a41::t_2e610bae7590e5 1-12
+vidact-fun/printscreens/architecture.svg
+  s_0438fc927f2a41::t_02097cdf84aa65 1-2,4-41,43-54,56-59,61-65,68
+  s_0438fc927f2a41::t_bfaf16783db3aa 3,42
+  s_0438fc927f2a41::t_772a2560dff041 55,60,66-67
+vidact-fun/scripts/stop-all.sh
+  s_0438fc927f2a41::t_2e610bae7590e5 1-16
+vidact-fun/package-lock.json
+  s_0438fc927f2a41::t_6da8a88031c4f4 1-1043
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "77d93f8404d7976315087407c325f2367f0c26a5",
+  "prompts": {},
+  "sessions": {
+    "s_0438fc927f2a41": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aa57e640-c489-459e-9069-c047d173cf2c",
+        "model": "claude-opus-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
