@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 600" width="1060" height="600" font-family="Caveat, 'Comic Sans MS', cursive">
+  <defs>
+    <filter id="wobble" filterUnits="userSpaceOnUse" x="0" y="0" width="1060" height="600">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="3" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="head" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M1 1 L11 6 L1 11" fill="none" stroke="#3d3d3d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;display=swap');
+      .t { font-size: 21px; fill: #2b2b2b; }
+      .tb { font-size: 24px; font-weight: 700; fill: #1f1f1f; }
+      .lane { font-size: 24px; font-weight: 700; fill: #7a6a55; }
+      .note { font-size: 20px; fill: #6b6b6b; }
+      .title { font-size: 34px; font-weight: 700; fill: #1f1f1f; }
+      .box { stroke: #3d3d3d; stroke-width: 2.2; filter: url(#wobble); }
+      .arrow { stroke: #3d3d3d; stroke-width: 2.2; fill: none; stroke-linecap: round; filter: url(#wobble); }
+    </style>
+  </defs>
+
+  <rect width="1060" height="600" fill="#fdfcf8"/>
+  <text class="title" x="40" y="46">Reel Deal — React source in, DOM mutations out</text>
+
+  <text class="lane" x="40" y="100">Build time</text>
+  <rect class="box" x="40"  y="118" width="210" height="92" rx="14" fill="#ffd8a8"/>
+  <rect class="box" x="290" y="118" width="210" height="92" rx="14" fill="#ffd8a8"/>
+  <rect class="box" x="540" y="118" width="210" height="92" rx="14" fill="#ffd8a8"/>
+  <rect class="box" x="790" y="118" width="210" height="92" rx="14" fill="#b2f2bb"/>
+  <text class="tb" x="145" y="155" text-anchor="middle">src/*.jsx</text>
+  <text class="t"  x="145" y="182" text-anchor="middle">plain React, no TS</text>
+  <text class="tb" x="395" y="155" text-anchor="middle">@vidact/vite</text>
+  <text class="t"  x="395" y="182" text-anchor="middle">extensions: ['.jsx']</text>
+  <text class="tb" x="645" y="155" text-anchor="middle">vidact compiler</text>
+  <text class="t"  x="645" y="182" text-anchor="middle">reads each component</text>
+  <text class="tb" x="895" y="155" text-anchor="middle">dist bundle</text>
+  <text class="t"  x="895" y="182" text-anchor="middle">12.6 kB gz, no React</text>
+  <path class="arrow" d="M252 164 L286 164" marker-end="url(#head)"/>
+  <path class="arrow" d="M502 164 L536 164" marker-end="url(#head)"/>
+  <path class="arrow" d="M752 164 L786 164" marker-end="url(#head)"/>
+
+  <text class="lane" x="300" y="274">Runtime, in the browser</text>
+  <rect class="box" x="40"  y="290" width="210" height="92" rx="14" fill="#a5d8ff"/>
+  <rect class="box" x="290" y="290" width="210" height="92" rx="14" fill="#a5d8ff"/>
+  <rect class="box" x="540" y="290" width="210" height="92" rx="14" fill="#d0bfff"/>
+  <rect class="box" x="790" y="290" width="210" height="92" rx="14" fill="#d0bfff"/>
+  <text class="tb" x="145" y="327" text-anchor="middle">mountCompiled(App)</text>
+  <text class="t"  x="145" y="354" text-anchor="middle">body runs once</text>
+  <text class="tb" x="395" y="327" text-anchor="middle">DOM built once</text>
+  <text class="t"  x="395" y="354" text-anchor="middle">catalog + shelf</text>
+  <text class="tb" x="645" y="327" text-anchor="middle">Rent / Return click</text>
+  <text class="t"  x="645" y="354" text-anchor="middle">setRentals(next)</text>
+  <text class="tb" x="895" y="327" text-anchor="middle">updaters fire</text>
+  <text class="t"  x="895" y="354" text-anchor="middle">text nodes + attrs</text>
+  <path class="arrow" d="M895 212 L895 245 L145 245 L145 286" marker-end="url(#head)"/>
+  <path class="arrow" d="M252 336 L286 336" marker-end="url(#head)"/>
+  <path class="arrow" d="M502 336 L536 336" marker-end="url(#head)"/>
+  <path class="arrow" d="M752 336 L786 336" marker-end="url(#head)"/>
+  <path class="arrow" d="M895 384 L895 442 L395 442 L395 388" marker-end="url(#head)"/>
+  <text class="note" x="645" y="430" text-anchor="middle">no component re-run, no tree diff</text>
+
+
+  <rect class="box" x="40" y="482" width="960" height="86" rx="14" fill="#ffc9c9"/>
+  <text class="tb" x="520" y="518" text-anchor="middle">src/lib/rentals.js — pure rules shared by every component</text>
+  <text class="t"  x="520" y="546" text-anchor="middle">daily price, weekly discount, due date, late days, late fee, stock left, filters</text>
+  <path class="arrow" d="M150 478 L150 388" marker-end="url(#head)"/>
+  <path class="arrow" d="M960 478 L960 388" marker-end="url(#head)"/>
+</svg>

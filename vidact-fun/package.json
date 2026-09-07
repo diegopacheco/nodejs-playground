@@ -1,0 +1,23 @@
+{
+  "name": "vidact-fun",
+  "version": "1.0.0",
+  "description": "Movie rental app built with Vidact (React compiled to VanillaJS)",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vidact/runtime": "^0.2.0-beta.6"
+  },
+  "devDependencies": {
+    "@vidact/vite": "^0.2.0-beta.6",
+    "vite": "^8.2.2"
+  }
+}
