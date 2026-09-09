@@ -104,11 +104,33 @@ Node 20 or newer is required.
 ./scripts/setup.sh
 ```
 
-That installs dependencies and creates `.env` from `env.template`. Then, in the [WorkOS dashboard](https://dashboard.workos.com):
+That installs dependencies and creates `.env` from `env.template`, then prints the WorkOS steps below.
 
-1. Copy your API key and client id.
-2. Add `http://localhost:3000/api/auth/callback` as a redirect URI.
-3. Set `WORKOS_API_KEY` and `WORKOS_CLIENT_ID` in `.env`.
+### Configure WorkOS
+
+In the dashboard, once per environment:
+
+1. Sign in at **https://dashboard.workos.com**.
+2. Top left, pick the environment you want. Staging issues keys starting with `sk_test_`, Production `sk_live_`.
+3. Open **https://dashboard.workos.com/environment/applications** and click your application.
+4. Open that application's **Redirects** tab and set both values exactly, with no trailing slash:
+
+   | Field | Value |
+   |---|---|
+   | Redirect URI | `http://localhost:3000/api/auth/callback` |
+   | Sign-out URI | `http://localhost:3000` |
+
+   The Redirect URI is where WorkOS sends the browser back with the authorization code. The Sign-out URI is where it returns after logout — **logout fails without it**, because the app passes `return_to` and WorkOS only honours a registered value.
+5. Copy the **Client ID** from that same application page. It starts with `client_`.
+6. Open **API Keys** in the left sidebar and copy the secret key. It starts with `sk_`.
+
+Then store both values:
+
+```bash
+./scripts/configure-workos.sh
+```
+
+It asks for one value at a time, checks each against the WorkOS API before accepting it, and writes `.env` with `600` permissions. The API key is typed hidden and is never echoed, logged, or passed on a command line — the terminal only ever shows its public prefix and length. Run `./scripts/configure-workos.sh --steps` to reprint the instructions, or `--offline` to skip the live checks.
 
 ```bash
 ./scripts/start-all.sh
@@ -174,6 +196,7 @@ All scripts live in `scripts/` and run from any directory of the repository.
 | Script | What it does |
 |---|---|
 | `./scripts/setup.sh` | Installs dependencies and prepares the app |
+| `./scripts/configure-workos.sh` | Asks for the client id and api key, validates both against WorkOS, writes `.env` |
 | `./scripts/start-all.sh` | Starts every service and waits for its port |
 | `./scripts/status.sh` | Shows every service port as UP or DOWN |
 | `./scripts/test-all.sh` | Runs every test suite |
@@ -184,6 +207,7 @@ Ports are declared in `scripts/ports.env`.
 
 ```bash
 ./scripts/setup.sh
+./scripts/configure-workos.sh
 ./scripts/start-all.sh
 ./scripts/status.sh
 ./scripts/ui.sh

@@ -113,6 +113,26 @@ require_credentials() {
   fi
 }
 
+workos_steps() {
+  log "WorkOS dashboard setup"
+  log ""
+  log "1. sign in at https://dashboard.workos.com"
+  log "2. top left, pick the environment you want to use"
+  log "   Staging gives you keys starting with sk_test_, Production gives sk_live_"
+  log "3. open https://dashboard.workos.com/environment/applications"
+  log "   and click your application"
+  log "4. open the Redirects tab of that application and set both values exactly,"
+  log "   with no trailing slash:"
+  log ""
+  log "     Redirect URI    http://localhost:3000/api/auth/callback"
+  log "     Sign-out URI    http://localhost:3000"
+  log ""
+  log "   the Redirect URI is where WorkOS sends the browser back with the code"
+  log "   the Sign-out URI is where it returns after logout, logout fails without it"
+  log "5. copy the Client ID shown on that same application page, it starts with client_"
+  log "6. open API Keys in the left sidebar and copy the secret key, it starts with sk_"
+}
+
 log() {
   printf "%s\n" "$*"
 }

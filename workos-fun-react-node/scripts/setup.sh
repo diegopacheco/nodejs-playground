@@ -23,9 +23,8 @@ log "setup done"
 
 if grep -q 'replace_me' "$TARGET"; then
   log ""
-  log "next steps"
-  log "1. open https://dashboard.workos.com and copy your API key and client id"
-  log "2. add http://localhost:3000/api/auth/callback as a redirect uri"
-  log "3. set WORKOS_API_KEY and WORKOS_CLIENT_ID in $TARGET"
-  log "4. run ./scripts/start-all.sh"
+  workos_steps
+  log ""
+  log "then run ./scripts/configure-workos.sh, it asks for both values one at a time,"
+  log "checks them against WorkOS, and writes them into $TARGET"
 fi
