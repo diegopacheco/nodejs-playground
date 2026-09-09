@@ -1,0 +1,191 @@
+<img src="printscreens/logo.png" alt="Gym Log" width="360" />
+
+A gym tracker that runs entirely on your machine. You sign in with your real WorkOS AuthKit account, log workouts set by set, and see volume and personal records build up over time. Nothing listens on a public interface, no tunnel is opened, and your WorkOS API key never leaves the Node process.
+
+## How it Works
+
+Vite serves the React UI on `127.0.0.1:3000` and proxies `/api` to a Node HTTP server on `127.0.0.1:3001`. Both bind the loopback interface only, and the API additionally rejects any request whose `Host` header is not loopback.
+
+Signing in sends your browser to WorkOS AuthKit with a one-time `state` value. WorkOS sends the browser back to `/api/auth/callback` with a code. The Node process, and only the Node process, exchanges that code for a profile using the API key. It then mints an opaque 32-byte session id, keeps the profile in memory, and hands the browser an `HttpOnly` `SameSite=Lax` cookie. The browser never sees a token, a key, or a JWT.
+
+Every request after that walks the same pipeline: loopback host check, session cookie lookup, schema parse of the body, then the service. Workouts land in `backend/data/gym.json`, written atomically and always filtered by the session's user id.
+
+The only traffic that leaves the machine is the outbound TLS call to `api.workos.com`.
+
+## Architecture
+
+![Architecture](printscreens/architecture.png)
+
+## Features
+
+- **WorkOS AuthKit sign-in** — real hosted authentication without shipping a password form or storing a credential.
+- **Loopback lockdown** — server binds `127.0.0.1` and rejects non-loopback `Host` headers, so a stray `--host` flag cannot expose it.
+- **Server-held secret** — the API key is used only for the token exchange inside Node, so the browser bundle has nothing worth stealing.
+- **Opaque session cookie** — the cookie is a random id with no meaning outside the server's memory, so forging one is not possible and logging out kills it instantly.
+- **Runtime-validated types** — every request body is parsed by a schema before any service sees it, so malformed data cannot reach the store.
+- **Per-user data isolation** — reads and deletes are filtered by user id in the store itself, not in a caller that might forget.
+- **Set-by-set logging** — a workout is a list of sets, each with an exercise, reps and weight, which is what makes volume meaningful.
+- **Volume and personal records** — volume per muscle group shows training balance, and records track the heaviest set ever hit per exercise.
+
+## Stack
+
+- **Node 20+ (`node:http`)** — the standard library covers routing, cookies and JSON, so the backend has zero runtime dependencies.
+- **`fetch` against the WorkOS REST API** — two endpoints are all AuthKit needs, so the SDK would add weight without adding capability.
+- **React 19** — component state is the whole UI model here; no router or state library was needed.
+- **Vite 7** — dev server, JSX transform and the `/api` proxy that makes the app single-origin.
+- **`node:test`** — the built-in runner, so tests need no dependency either.
+- **JSON file storage** — a single-user local tracker does not justify a database process.
+
+## API
+
+All routes are served from the Node process and reachable only over loopback. Everything under `/api/exercises`, `/api/workouts` and `/api/stats` requires the session cookie and answers `401` without it.
+
+| Method | Path | Body | Answers |
+|---|---|---|---|
+| `GET` | `/api/health` | — | `{ status }`, the only unauthenticated route |
+| `GET` | `/api/auth/login` | — | `302` to WorkOS AuthKit with a one-time `state` |
+| `GET` | `/api/auth/callback` | — | `302` back to the UI, sets the session cookie |
+| `GET` | `/api/auth/me` | — | `{ user }` or `{ user: null }` |
+| `POST` | `/api/auth/logout` | — | `{ logoutUrl }`, clears the cookie |
+| `GET` | `/api/exercises` | — | `{ exercises }`, the catalog |
+| `GET` | `/api/workouts` | — | `{ workouts }`, newest first |
+| `POST` | `/api/workouts` | `{ date?, notes?, sets[] }` | `201 { workout }` |
+| `DELETE` | `/api/workouts/:id` | — | `{ deleted }` or `404` |
+| `GET` | `/api/stats` | — | `{ stats }` |
+
+Logging a workout:
+
+```bash
+curl -X POST http://localhost:3000/api/workouts \
+  -H 'content-type: application/json' \
+  -b "gym_session=$YOUR_COOKIE" \
+  -d '{"notes":"push day","sets":[{"exerciseId":"bench-press","reps":5,"weightKg":90}]}'
+```
+
+A rejected body answers `422` and names every field that failed at once:
+
+```json
+{
+  "error": "Workout is invalid",
+  "issues": [
+    { "path": "Workout.sets[0].reps", "message": "must be at least 1" },
+    { "path": "Workout.sets[0].weightKg", "message": "must be at least 0" }
+  ]
+}
+```
+
+## Key Data Structures and Design Decisions
+
+**Types are runtime schemas, not comments.** `backend/src/types/schema.js` is a small combinator library: `defineType` composes field validators like `str`, `int`, `num`, `enumOf`, `list` and `optional` into a type with a `parse` that throws or returns a clean object. A JSDoc type would describe the shape; this one enforces it at the HTTP boundary, which is the only place untrusted data enters.
+
+```js
+export const SetEntry = defineType('SetEntry', {
+  exerciseId: str({ max: 60 }),
+  reps: int({ min: 1, max: 500 }),
+  weightKg: num({ min: 0, max: 1000 })
+})
+```
+
+**A validator returns `{ value }` or `{ issues }` rather than throwing.** That is what lets a nested `list` collect every failure across every set and report them together, instead of stopping at the first one.
+
+**Sessions are a `Map` of opaque id to profile.** The alternative, a signed JWT in the cookie, would mean verifying WorkOS JWKS on every request for a single-user local app. Server-side sessions make logout instant and keep zero cryptographic material in the browser. They reset when the API restarts, which for a local tracker means signing in again.
+
+**The store filters by user id, not the caller.** `readWorkouts(userId)` and `removeWorkout(userId, id)` take ownership as an argument, so a route that forgot to check cannot read another account's data. `present()` then strips `userId` before anything is serialized back.
+
+**Writes are atomic and serialized.** The store writes a temp file and renames it, and chains writes on a promise, so a crash mid-write cannot leave a truncated `gym.json`.
+
+**Ports come from `scripts/ports.env`.** The scripts, the Vite proxy and the Node server all read the same source, so a port change is one edit.
+
+## How to Run
+
+Node 20 or newer is required.
+
+```bash
+./scripts/setup.sh
+```
+
+That installs dependencies and creates `.env` from `env.template`. Then, in the [WorkOS dashboard](https://dashboard.workos.com):
+
+1. Copy your API key and client id.
+2. Add `http://localhost:3000/api/auth/callback` as a redirect URI.
+3. Set `WORKOS_API_KEY` and `WORKOS_CLIENT_ID` in `.env`.
+
+```bash
+./scripts/start-all.sh
+./scripts/ui.sh
+```
+
+`start-all.sh` refuses to start while `.env` still holds placeholders, so a misconfigured run fails immediately instead of at the first sign-in.
+
+### Tests
+
+```bash
+./scripts/test-all.sh
+```
+
+Runs the backend suite and the frontend production build. The suite covers schema rejection, router matching, volume and personal-record math, per-user isolation in the store, and that a forged or logged-out session id is refused.
+
+```
+ℹ tests 31
+ℹ pass 31
+ℹ fail 0
+```
+
+## Staying Off the Network
+
+- Both servers bind `127.0.0.1`, never `0.0.0.0`.
+- The API rejects any request whose `Host` header is not loopback with `403`.
+- `.env` is git-ignored and created with `600` permissions; only `env.template` with placeholders is committed.
+- `backend/data/` is git-ignored, so your workout log is never committed.
+- The API key is read in Node and used only for the token exchange; it is never sent to the browser and never appears in a URL.
+- The session cookie is `HttpOnly` and `SameSite=Lax`. It is not `Secure`, because the local app is served over plain HTTP on loopback. Adding TLS is the one change needed before this could be exposed anywhere.
+- Nothing needs an inbound connection. A WorkOS webhook would be the only reason to open a tunnel, and this app subscribes to none.
+
+## Printscreens
+
+### Sign in
+
+![Sign in](printscreens/01-login.png)
+
+The only screen available without a session. The button navigates to `/api/auth/login`, which redirects to WorkOS AuthKit with a one-time `state`. If a sign-in is cancelled or the `state` does not come back intact, the app returns here with the reason instead of a stack trace.
+
+### Dashboard
+
+![Dashboard](printscreens/02-dashboard.png)
+
+The signed-in view. The header shows the profile WorkOS returned and a sign-out that destroys the server session and clears the cookie. On the left, the log form and the full history, each workout showing its set count, total volume, notes and every set. On the right, the progress panel: three tiles for workouts, sets and lifetime volume, then volume per muscle group as bars, then the heaviest set recorded for each exercise.
+
+### Logging a workout
+
+![Logging a workout](printscreens/03-log-workout.png)
+
+A workout in progress. Sets are added one at a time, each picking an exercise from the catalog with reps and weight. The date defaults to now when left blank. On save the payload is posted to `/api/workouts`, parsed against the `Workout` schema on the server, and the history and stats both refresh.
+
+### Validation
+
+![Validation](printscreens/04-validation.png)
+
+The form checks the draft before sending and lists every problem at once rather than stopping at the first. The same rules are enforced again on the server, so a request that skips the UI is rejected the same way, with a `422` naming each field.
+
+## Scripts
+
+All scripts live in `scripts/` and run from any directory of the repository.
+
+| Script | What it does |
+|---|---|
+| `./scripts/setup.sh` | Installs dependencies and prepares the app |
+| `./scripts/start-all.sh` | Starts every service and waits for its port |
+| `./scripts/status.sh` | Shows every service port as UP or DOWN |
+| `./scripts/test-all.sh` | Runs every test suite |
+| `./scripts/ui.sh` | Opens the UI in the browser |
+| `./scripts/stop-all.sh` | Stops every service |
+
+Ports are declared in `scripts/ports.env`.
+
+```bash
+./scripts/setup.sh
+./scripts/start-all.sh
+./scripts/status.sh
+./scripts/ui.sh
+./scripts/stop-all.sh
+```

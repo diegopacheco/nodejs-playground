@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="700" viewBox="0 0 1240 700" font-family="Caveat, 'Bradley Hand', 'Comic Sans MS', cursive">
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&amp;display=swap');</style>
+    <filter id="wobble" x="-5%" y="-15%" width="110%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="3" seed="11" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M1 1 L11 6 L1 11 z" fill="#454b54"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M1 1 L11 6 L1 11 z" fill="#c04a67"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="700" fill="#fbfbfa"/>
+
+  <text x="42" y="52" font-size="34" font-weight="700" fill="#24282e">Gym Log — everything stays on your machine</text>
+
+  <g filter="url(#wobble)">
+    <rect x="40" y="120" width="800" height="440" rx="20" fill="#ffffff" stroke="#9aa1ab" stroke-width="2.5" stroke-dasharray="12 9"/>
+    <rect x="75" y="230" width="220" height="110" rx="14" fill="#e7f0ff" stroke="#3b6ea5" stroke-width="2.6"/>
+    <rect x="330" y="230" width="220" height="110" rx="14" fill="#fdf0e3" stroke="#b8763e" stroke-width="2.6"/>
+    <rect x="585" y="230" width="220" height="110" rx="14" fill="#e6f7ee" stroke="#2f8f5b" stroke-width="2.6"/>
+    <rect x="75" y="400" width="730" height="120" rx="14" fill="#f3eaff" stroke="#7a5bb0" stroke-width="2.6"/>
+    <rect x="940" y="230" width="250" height="110" rx="14" fill="#ffe9ee" stroke="#c04a67" stroke-width="2.6"/>
+  </g>
+
+  <text x="440" y="551" font-size="25" font-weight="700" fill="#6b7280" text-anchor="middle">your machine · bound to 127.0.0.1 · no inbound port</text>
+
+  <text x="185" y="272" font-size="27" font-weight="700" fill="#1f3a5f" text-anchor="middle">Browser</text>
+  <text x="185" y="300" font-size="21" fill="#3b6ea5" text-anchor="middle">React 19 UI</text>
+  <text x="185" y="325" font-size="21" fill="#3b6ea5" text-anchor="middle">cookie, never a token</text>
+
+  <text x="440" y="272" font-size="27" font-weight="700" fill="#7a4a1c" text-anchor="middle">Vite :3000</text>
+  <text x="440" y="300" font-size="21" fill="#b8763e" text-anchor="middle">serves the UI</text>
+  <text x="440" y="325" font-size="21" fill="#b8763e" text-anchor="middle">proxies /api</text>
+
+  <text x="695" y="272" font-size="27" font-weight="700" fill="#1c6440" text-anchor="middle">Node API :3001</text>
+  <text x="695" y="300" font-size="21" fill="#2f8f5b" text-anchor="middle">node:http only</text>
+  <text x="695" y="325" font-size="21" fill="#2f8f5b" text-anchor="middle">holds the secret</text>
+
+  <text x="440" y="440" font-size="25" font-weight="700" fill="#4a3273" text-anchor="middle">every request walks the same pipeline</text>
+  <text x="440" y="473" font-size="22" fill="#7a5bb0" text-anchor="middle">loopback host check → session cookie → schema parse → service</text>
+  <text x="440" y="502" font-size="22" fill="#7a5bb0" text-anchor="middle">then gym.json, written atomically, scoped to your user id</text>
+
+  <text x="1065" y="272" font-size="27" font-weight="700" fill="#8d2d45" text-anchor="middle">WorkOS AuthKit</text>
+  <text x="1065" y="300" font-size="21" fill="#c04a67" text-anchor="middle">api.workos.com</text>
+  <text x="1065" y="325" font-size="21" fill="#c04a67" text-anchor="middle">the only thing off-box</text>
+
+  <path d="M298 285 L327 285" stroke="#454b54" stroke-width="2.6" fill="none" marker-end="url(#arrow)"/>
+  <path d="M553 285 L582 285" stroke="#454b54" stroke-width="2.6" fill="none" marker-end="url(#arrow)"/>
+  <path d="M695 343 L695 397" stroke="#454b54" stroke-width="2.6" fill="none" marker-end="url(#arrow)"/>
+  <path d="M808 285 L937 285" stroke="#c04a67" stroke-width="2.6" fill="none" marker-end="url(#arrow-red)"/>
+  <text x="872" y="264" font-size="20" fill="#c04a67" text-anchor="middle">outbound</text>
+  <text x="872" y="313" font-size="20" fill="#c04a67" text-anchor="middle">TLS 443</text>
+
+  <path d="M185 227 C 300 96, 900 96, 1062 227" stroke="#c04a67" stroke-width="2.6" fill="none" stroke-dasharray="9 7" marker-end="url(#arrow-red)"/>
+  <text x="623" y="112" font-size="23" font-weight="700" fill="#c04a67" text-anchor="middle">sign-in redirect, the browser goes to WorkOS and comes back with a code</text>
+
+  <text x="42" y="608" font-size="23" fill="#6b7280">nothing listens on a public interface · the API key never leaves the Node process · the browser only ever holds an opaque session id</text>
+  <text x="42" y="645" font-size="23" fill="#6b7280">a webhook would be the only reason to open a tunnel, and this app has none</text>
+</svg>

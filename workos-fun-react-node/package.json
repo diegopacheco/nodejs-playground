@@ -1,0 +1,17 @@
+{
+  "name": "workos-fun-react-node",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-only gym tracker with a React frontend and a Node backend authenticated by WorkOS AuthKit",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace backend",
+    "dev:ui": "npm run dev --workspace frontend",
+    "test": "npm run test --workspace backend"
+  },
+  "license": "MIT"
+}
