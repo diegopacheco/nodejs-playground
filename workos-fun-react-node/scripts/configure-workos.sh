@@ -145,4 +145,7 @@ else
 fi
 
 log ""
-log "next: ./scripts/start-all.sh"
+log "next: ./scripts/start-all.sh then ./scripts/ui.sh"
+log ""
+log "there is no default user or password, this app stores no credentials"
+log "on the first sign in choose Sign up on the WorkOS page to create your account"

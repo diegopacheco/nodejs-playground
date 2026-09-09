@@ -139,6 +139,16 @@ It asks for one value at a time, checks each against the WorkOS API before accep
 
 `start-all.sh` refuses to start while `.env` still holds placeholders, so a misconfigured run fails immediately instead of at the first sign-in.
 
+### First sign-in
+
+**There is no default user or password.** This app never sees, stores, or checks a credential — WorkOS AuthKit owns all of that, which is the whole point of using it. Nothing is seeded, so a fresh environment has no accounts at all.
+
+To create the first one: open the app, click **Sign in with WorkOS**, and on the hosted AuthKit page choose **Sign up** rather than signing in. Create the account with whatever email and password you want, and you land back in the dashboard signed in. The new user then shows up under **Users** in the left sidebar of the WorkOS dashboard.
+
+If sign-up is turned off for your environment, create the user from that **Users** page in the dashboard instead, then sign in with it.
+
+Workouts are keyed by the WorkOS user id, so signing in with a second account gives you a separate, empty log rather than a shared one.
+
 ### Tests
 
 ```bash
