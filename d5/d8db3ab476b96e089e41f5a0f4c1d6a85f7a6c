@@ -1,0 +1,29 @@
+workos-fun-react-node/README.md
+  s_05574bd04d9a98::t_7d9611851fc843 142,144,146,148-169,173-179
+  s_05574bd04d9a98::t_acf8ccd75c12d1 239
+  s_05574bd04d9a98::t_513300ab40a1da 180
+workos-fun-react-node/scripts/configure-workos.sh
+  s_05574bd04d9a98::t_567024664aff48 61-62
+  s_05574bd04d9a98::t_2ccc81db49d80c 59-60,63-93
+  s_05574bd04d9a98::t_29a3c0bc174ae4 162-167
+workos-fun-react-node/scripts/create-user.sh
+  s_05574bd04d9a98::t_815bac01c7692b 63
+  s_05574bd04d9a98::t_c0356b4a308c77 10
+  s_05574bd04d9a98::t_d0a4a3d0fe3337 1-9,11-62,64-96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "d5d8db3ab476b96e089e41f5a0f4c1d6a85f7a6c",
+  "prompts": {},
+  "sessions": {
+    "s_05574bd04d9a98": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "352ef330-d810-4161-bf86-193b937d5365",
+        "model": "claude-opus-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
