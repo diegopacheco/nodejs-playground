@@ -197,8 +197,8 @@ To find out which application your key actually belongs to:
 ```
 
 ```
-  your api key belongs to   client_01M1YBKC1ZMZANDE8FG0VNE812
-  your .env client id is    client_01M22500BR1VCBD2RXKV8NDCD8
+  your api key belongs to   client_<the application that issued the key>
+  your .env client id is    client_<the application you configured>
 ```
 
 It asks WorkOS for a password reset link and reads the `client_id` WorkOS embeds in it, which is the application that issued the key. Then pick a side: keep your Client ID and copy that application's own API key, or keep the key and use the Client ID it reports. Both values must come from one application.
