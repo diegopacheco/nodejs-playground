@@ -1,0 +1,33 @@
+workos-fun-react-node/scripts/common.sh
+  s_05574bd04d9a98::t_e86f975159611e 116-135
+workos-fun-react-node/scripts/setup.sh
+  s_05574bd04d9a98::t_fa018448538a2e 27-29
+  s_05574bd04d9a98::t_6f8b749d1e3934 26
+workos-fun-react-node/scripts/configure-workos.sh
+  s_05574bd04d9a98::t_97990bfb853733 105
+  s_05574bd04d9a98::t_094e1a6e6d1e48 8-13
+  s_05574bd04d9a98::t_76d4a4bc63a5ca 114,116-120
+  s_05574bd04d9a98::t_36ad847f8fe3aa 102
+  s_05574bd04d9a98::t_bc2df778f7b30e 1-7,14-17,19-101,103-104,106-113,115,121-148
+  s_05574bd04d9a98::t_d269aaff7308b6 18
+workos-fun-react-node/README.md
+  s_05574bd04d9a98::t_c91449a4ccd87d 199
+  s_05574bd04d9a98::t_89f8f6e3b6173f 107,109-133
+  s_05574bd04d9a98::t_10de41cef7c87d 210
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "785165b79b2aaf4d7c22f95b80a75aa1856a2079",
+  "prompts": {},
+  "sessions": {
+    "s_05574bd04d9a98": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "352ef330-d810-4161-bf86-193b937d5365",
+        "model": "claude-opus-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
