@@ -139,15 +139,44 @@ It asks for one value at a time, checks each against the WorkOS API before accep
 
 `start-all.sh` refuses to start while `.env` still holds placeholders, so a misconfigured run fails immediately instead of at the first sign-in.
 
-### First sign-in
+### Where the password lives
 
-**There is no default user or password.** This app never sees, stores, or checks a credential — WorkOS AuthKit owns all of that, which is the whole point of using it. Nothing is seeded, so a fresh environment has no accounts at all.
+**WorkOS stores and manages every password on their side. This app never sees one.**
 
-To create the first one: open the app, click **Sign in with WorkOS**, and on the hosted AuthKit page choose **Sign up** rather than signing in. Create the account with whatever email and password you want, and you land back in the dashboard signed in. The new user then shows up under **Users** in the left sidebar of the WorkOS dashboard.
+There is no user table, no password column, no hashing code, and no login form in this repository. Grep it and you will find zero credential handling. The sign-in form you type into is served by WorkOS at `*.authkit.app`, not by this app. The password goes from your browser straight to WorkOS and never touches the Node process or `gym.json`.
 
-If sign-up is turned off for your environment, create the user from that **Users** page in the dashboard instead, then sign in with it.
+What this app gets back, after WorkOS has already checked the password, is a one-time authorization code. It trades that code for a profile — id, email, name — and stores only that in memory. So the strongest thing an attacker could take from this machine is a workout log.
+
+That also means password rules are WorkOS's to set, not this app's. Their policy currently requires **10 or more characters** and rejects **commonly used passwords**, which is why `admin` cannot be used as one.
+
+### Default account
+
+Create it with:
+
+```bash
+./scripts/create-user.sh
+```
+
+| Field | Value |
+|---|---|
+| Email | `admin@gymlog.local` |
+| Password | `GymLogAdmin2026` |
+
+The script calls the WorkOS API with your key and creates the account in your environment, pre-verified so no inbox is needed. Running it twice is safe — an existing user is reported and left alone. Pass your own values to override: `./scripts/create-user.sh you@example.com 'your-password'`.
+
+This account lives in your WorkOS environment, not in this repo, and you can delete it from **Users** in the dashboard at any time. Since it is written above in plain text, treat it as a local convenience only — change it before pointing this app at a Production environment.
+
+To create an account by hand instead, click **Sign in with WorkOS** and choose **Sign up** on the hosted page.
 
 Workouts are keyed by the WorkOS user id, so signing in with a second account gives you a separate, empty log rather than a shared one.
+
+### If sign-in fails with "WorkOS rejected the sign in"
+
+Check `.run/logs/api.log`. If it says `invalid_client`, your **Client ID and API key are from different WorkOS applications**. Both credentials are valid on their own, so neither the format check nor a single-credential check catches it — only using them together does.
+
+Fix it in the dashboard: open **https://dashboard.workos.com/environment/applications**, pick one application, and take the Client ID and the API key from *that same one*. Then rerun `./scripts/configure-workos.sh`, which now probes the pair together and refuses to write a mismatched set.
+
+The API reads `.env` once at boot, so **restart after changing it** — `./scripts/stop-all.sh && ./scripts/start-all.sh`.
 
 ### Tests
 
@@ -207,6 +236,7 @@ All scripts live in `scripts/` and run from any directory of the repository.
 |---|---|
 | `./scripts/setup.sh` | Installs dependencies and prepares the app |
 | `./scripts/configure-workos.sh` | Asks for the client id and api key, validates both against WorkOS, writes `.env` |
+| `./scripts/create-user.sh` | Creates the default `admin@gymlog.local` account in your WorkOS environment |
 | `./scripts/start-all.sh` | Starts every service and waits for its port |
 | `./scripts/status.sh` | Shows every service port as UP or DOWN |
 | `./scripts/test-all.sh` | Runs every test suite |

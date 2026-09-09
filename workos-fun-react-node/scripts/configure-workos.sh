@@ -56,6 +56,41 @@ check_api_key() {
   esac
 }
 
+check_pair() {
+  local result
+  [ -n "$1" ] || fail "check_pair got an empty client id"
+  [ -n "$2" ] || fail "check_pair got an empty api key"
+  result="$(PAIR_ID="$1" PAIR_KEY="$2" node --input-type=module -e '
+    const res = await fetch("https://api.workos.com/user_management/authenticate", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        grant_type: "authorization_code",
+        client_id: process.env.PAIR_ID,
+        client_secret: process.env.PAIR_KEY,
+        code: "probe_not_a_real_code"
+      })
+    })
+    const body = await res.json().catch(() => ({}))
+    console.log(body.code ?? "unknown")
+  ' 2>/dev/null || echo skip)"
+
+  case "$result" in
+    invalid_client)
+      log "  these two do NOT belong to the same WorkOS application"
+      log "  sign in would fail with invalid_client"
+      log "  open https://dashboard.workos.com/environment/applications, pick one application,"
+      log "  and take the Client ID and the API Key from that same application"
+      return 1 ;;
+    skip)
+      log "  could not run the pairing check, keeping both values"
+      return 0 ;;
+    *)
+      log "  client id and api key belong to the same application"
+      return 0 ;;
+  esac
+}
+
 ask_client_id() {
   local value tries
   tries=3
@@ -123,6 +158,12 @@ CLIENT_ID="$(ask_client_id)"
 log ""
 API_KEY="$(ask_api_key)"
 log ""
+
+if [ "$OFFLINE" = "no" ]; then
+  log "checking that both belong to the same application"
+  check_pair "$CLIENT_ID" "$API_KEY" || fail "credentials do not pair, nothing was written"
+  log ""
+fi
 
 umask 077
 {
