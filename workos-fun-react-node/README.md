@@ -188,9 +188,27 @@ checks
                         You may be using a client secret from a different application.
 ```
 
-That means the Client ID and API key come from **different applications or different environments**. Open the dashboard, use the top-left picker to select the environment whose AuthKit domain matches the one the doctor printed, and take *both* values from it — Client ID from **Applications → your app**, key from **API Keys** in the sidebar. Every non-production environment issues `sk_test_` keys, so that prefix does not prove the key came from the right one.
+That means the Client ID and API key belong to **two different applications**. One WorkOS environment can hold several, and a key issued for one application will not authenticate another — even though both values are real and both pass every check taken alone.
 
-The API reads `.env` once at boot, so **restart after changing it** — `./scripts/stop-all.sh && ./scripts/start-all.sh`.
+To find out which application your key actually belongs to:
+
+```bash
+./scripts/doctor.sh --find-client-id
+```
+
+```
+  your api key belongs to   client_01M1YBKC1ZMZANDE8FG0VNE812
+  your .env client id is    client_01M22500BR1VCBD2RXKV8NDCD8
+```
+
+It asks WorkOS for a password reset link and reads the `client_id` WorkOS embeds in it, which is the application that issued the key. Then pick a side: keep your Client ID and copy that application's own API key, or keep the key and use the Client ID it reports. Both values must come from one application.
+
+Two traps worth knowing:
+
+- **The API reads `.env` once at boot.** Restart after changing it — `./scripts/stop-all.sh && ./scripts/start-all.sh`.
+- **An exported shell variable silently wins.** `process.loadEnvFile` keeps a variable that is already set, so a stray `export WORKOS_CLIENT_ID=…` overrides the file and the app uses a value you cannot see in `.env`. The doctor warns when it finds one; `unset WORKOS_CLIENT_ID WORKOS_API_KEY` clears it.
+
+Nothing is cached or hardcoded anywhere in the repo — `grep -rE 'client_0|sk_(test|live)_' backend/src frontend/src scripts` returns nothing, and `config.js` reads both values only from `process.env`.
 
 ### Tests
 
