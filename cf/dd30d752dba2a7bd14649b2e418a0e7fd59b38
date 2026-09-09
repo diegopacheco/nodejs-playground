@@ -1,0 +1,21 @@
+workos-fun-react-node/README.md
+  s_05574bd04d9a98::t_2ca409e6eb4422 142-151
+workos-fun-react-node/scripts/configure-workos.sh
+  s_05574bd04d9a98::t_2ef138405350e3 148-151
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "cfdd30d752dba2a7bd14649b2e418a0e7fd59b38",
+  "prompts": {},
+  "sessions": {
+    "s_05574bd04d9a98": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "352ef330-d810-4161-bf86-193b937d5365",
+        "model": "claude-opus-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
