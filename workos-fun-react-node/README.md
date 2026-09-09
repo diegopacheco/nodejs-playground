@@ -149,22 +149,17 @@ What this app gets back, after WorkOS has already checked the password, is a one
 
 That also means password rules are WorkOS's to set, not this app's. Their policy currently requires **10 or more characters** and rejects **commonly used passwords**, which is why `admin` cannot be used as one.
 
-### Default account
-
-Create it with:
+### Creating an account
 
 ```bash
 ./scripts/create-user.sh
 ```
 
-| Field | Value |
-|---|---|
-| Email | `admin@gymlog.local` |
-| Password | `GymLogAdmin2026` |
+Creates `admin@gymlog.local` in your WorkOS environment, pre-verified so no inbox is needed, with a **freshly generated random password that the script prints once** when it runs. No password is stored in this repository — read it from the script's output and keep it wherever you keep passwords.
 
-The script calls the WorkOS API with your key and creates the account in your environment, pre-verified so no inbox is needed. Running it twice is safe — an existing user is reported and left alone. Pass your own values to override: `./scripts/create-user.sh you@example.com 'your-password'`.
+Pass your own values to override: `./scripts/create-user.sh you@example.com 'your-password'`. Running it twice is safe; an existing user is reported and left alone.
 
-This account lives in your WorkOS environment, not in this repo, and you can delete it from **Users** in the dashboard at any time. Since it is written above in plain text, treat it as a local convenience only — change it before pointing this app at a Production environment.
+WorkOS sets the rules, not this app: **10 or more characters**, and no commonly used passwords. The account lives in your WorkOS environment and can be deleted from **Users** in the dashboard at any time.
 
 To create an account by hand instead, click **Sign in with WorkOS** and choose **Sign up** on the hosted page.
 

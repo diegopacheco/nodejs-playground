@@ -7,7 +7,7 @@ require node
 require_credentials
 
 EMAIL="${1:-admin@gymlog.local}"
-PASSWORD="${2:-GymLogAdmin2026}"
+PASSWORD="${2:-$(node -e 'process.stdout.write(require("node:crypto").randomBytes(12).toString("base64url"))')}"
 TARGET="$(env_file)"
 
 WORK="$(mktemp -d)"
@@ -55,7 +55,7 @@ const detail = () => {
 }
 if (code === "201" || code === "200") {
   console.log("OK|" + (payload.id ?? "unknown id"))
-} else if (code === "422" && /already|exists|unique/i.test(detail())) {
+} else if ((code === "422" || code === "400") && /already|exists|unique|not available/i.test(detail())) {
   console.log("EXISTS|" + detail())
 } else if (code === "000") {
   console.log("NET|could not reach WorkOS")
@@ -74,6 +74,7 @@ case "$STATUS" in
     log "  email    $EMAIL"
     log "  password $PASSWORD"
     log ""
+    log "this password is shown once and is stored nowhere, save it now"
     log "sign in with it at http://localhost:3000"
     ;;
   EXISTS)
