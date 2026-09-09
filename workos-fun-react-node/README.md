@@ -172,9 +172,23 @@ Workouts are keyed by the WorkOS user id, so signing in with a second account gi
 
 ### If sign-in fails with "WorkOS rejected the sign in"
 
-Check `.run/logs/api.log`. If it says `invalid_client`, your **Client ID and API key are from different WorkOS applications**. Both credentials are valid on their own, so neither the format check nor a single-credential check catches it — only using them together does.
+Run the doctor:
 
-Fix it in the dashboard: open **https://dashboard.workos.com/environment/applications**, pick one application, and take the Client ID and the API key from *that same one*. Then rerun `./scripts/configure-workos.sh`, which now probes the pair together and refuses to write a mismatched set.
+```bash
+./scripts/doctor.sh
+```
+
+It checks the Client ID alone, the API key alone, and then the two together, and prints a verdict. The third check is the one that matters: each credential can be perfectly valid on its own while the pair is still refused.
+
+```
+checks
+  client id alone       ok, AuthKit domain stable-hill-69-staging.authkit.app
+  api key alone         ok, 2 users in its environment
+  the two together      FAILED, invalid_client
+                        You may be using a client secret from a different application.
+```
+
+That means the Client ID and API key come from **different applications or different environments**. Open the dashboard, use the top-left picker to select the environment whose AuthKit domain matches the one the doctor printed, and take *both* values from it — Client ID from **Applications → your app**, key from **API Keys** in the sidebar. Every non-production environment issues `sk_test_` keys, so that prefix does not prove the key came from the right one.
 
 The API reads `.env` once at boot, so **restart after changing it** — `./scripts/stop-all.sh && ./scripts/start-all.sh`.
 
@@ -237,6 +251,7 @@ All scripts live in `scripts/` and run from any directory of the repository.
 | `./scripts/setup.sh` | Installs dependencies and prepares the app |
 | `./scripts/configure-workos.sh` | Asks for the client id and api key, validates both against WorkOS, writes `.env` |
 | `./scripts/create-user.sh` | Creates the default `admin@gymlog.local` account in your WorkOS environment |
+| `./scripts/doctor.sh` | Checks the WorkOS credentials alone and as a pair, and explains any failure |
 | `./scripts/start-all.sh` | Starts every service and waits for its port |
 | `./scripts/status.sh` | Shows every service port as UP or DOWN |
 | `./scripts/test-all.sh` | Runs every test suite |

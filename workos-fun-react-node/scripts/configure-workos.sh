@@ -72,7 +72,7 @@ check_pair() {
       })
     })
     const body = await res.json().catch(() => ({}))
-    console.log(body.code ?? "unknown")
+    console.log(body.error ?? body.code ?? "unknown")
   ' 2>/dev/null || echo skip)"
 
   case "$result" in
