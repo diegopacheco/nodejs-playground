@@ -1,0 +1,26 @@
+workos-fun-react-node/README.md
+  s_05574bd04d9a98::t_a623697354d0ef 175,177-191
+  s_05574bd04d9a98::t_1edee6809e3882 254
+workos-fun-react-node/scripts/doctor.sh
+  s_05574bd04d9a98::t_24c5f02946eff6 64-65,67
+  s_05574bd04d9a98::t_a63b6b63dd65d9 1-63,66,68-77,80,82-83,87,91-104
+  s_05574bd04d9a98::t_ca919b2a755f2b 78-79,81,84-86,88-90
+workos-fun-react-node/scripts/configure-workos.sh
+  s_05574bd04d9a98::t_ae1b3adc6e727a 75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "14dc87b703c78831f0e330473d740f003098c939",
+  "prompts": {},
+  "sessions": {
+    "s_05574bd04d9a98": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "352ef330-d810-4161-bf86-193b937d5365",
+        "model": "claude-opus-5"
+      },
+      "human_author": "diegopacheco <diego.pacheco.it@gmail.com>"
+    }
+  }
+}
