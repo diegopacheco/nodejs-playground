@@ -1,0 +1,88 @@
+{
+  "id": "feedback",
+  "title": "Feedback",
+  "data": {
+    "feedback": {
+      "score": "",
+      "comment": ""
+    }
+  },
+  "schema": {
+    "ROOT": {
+      "feedback": { "type": "FeedbackType" }
+    },
+    "FeedbackType": {
+      "score": {
+        "type": "StringType",
+        "validation": [{ "type": "required", "message": "Pick a score" }]
+      },
+      "comment": {
+        "type": "StringType"
+      }
+    }
+  },
+  "views": [
+    {
+      "id": "feedback-view",
+      "type": "info",
+      "title": { "asset": { "id": "feedback-title", "type": "text", "value": "How was Player UI?" } },
+      "primaryInfo": {
+        "asset": {
+          "id": "feedback-fields",
+          "type": "collection",
+          "values": [
+            {
+              "asset": {
+                "id": "score-choice",
+                "type": "choice",
+                "binding": "feedback.score",
+                "title": { "asset": { "id": "score-title", "type": "text", "value": "Score" } },
+                "items": [
+                  { "id": "score-good", "value": "good", "label": { "asset": { "id": "score-good-label", "type": "text", "value": "Good" } } },
+                  { "id": "score-ok", "value": "ok", "label": { "asset": { "id": "score-ok-label", "type": "text", "value": "Ok" } } },
+                  { "id": "score-bad", "value": "bad", "label": { "asset": { "id": "score-bad-label", "type": "text", "value": "Bad" } } }
+                ]
+              }
+            },
+            {
+              "asset": {
+                "id": "comment-input",
+                "type": "input",
+                "binding": "feedback.comment",
+                "label": { "asset": { "id": "comment-label", "type": "text", "value": "Comment" } }
+              }
+            }
+          ]
+        }
+      },
+      "actions": [
+        { "asset": { "id": "feedback-send", "type": "action", "value": "send", "label": { "asset": { "id": "feedback-send-label", "type": "text", "value": "Send" } } } }
+      ]
+    },
+    {
+      "id": "thanks-view",
+      "type": "info",
+      "title": { "asset": { "id": "thanks-title", "type": "text", "value": "Thanks, your score was {{feedback.score}}" } },
+      "actions": [
+        { "asset": { "id": "thanks-finish", "type": "action", "value": "finish", "label": { "asset": { "id": "thanks-finish-label", "type": "text", "value": "Finish" } } } }
+      ]
+    }
+  ],
+  "navigation": {
+    "BEGIN": "FLOW_1",
+    "FLOW_1": {
+      "startState": "VIEW_FEEDBACK",
+      "VIEW_FEEDBACK": {
+        "state_type": "VIEW",
+        "ref": "feedback-view",
+        "transitions": { "send": "VIEW_THANKS" }
+      },
+      "VIEW_THANKS": {
+        "state_type": "VIEW",
+        "ref": "thanks-view",
+        "transitions": { "finish": "END_DONE" }
+      },
+      "END_DONE": { "state_type": "END", "outcome": "DONE" }
+    }
+  }
+}

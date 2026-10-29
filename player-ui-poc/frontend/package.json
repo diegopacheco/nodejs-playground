@@ -1,0 +1,25 @@
+{
+  "name": "player-ui-poc-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@player-ui/react": "^1.3.0",
+    "@player-ui/reference-assets-plugin-react": "^1.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "jsdom": "^29.1.1",
+    "vite": "^6.4.5",
+    "vitest": "^3.2.7"
+  }
+}

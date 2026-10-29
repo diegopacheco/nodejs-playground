@@ -1,0 +1,146 @@
+{
+  "id": "signup",
+  "title": "Sign up",
+  "data": {
+    "user": {
+      "name": "",
+      "email": "",
+      "plan": "basic"
+    }
+  },
+  "schema": {
+    "ROOT": {
+      "user": { "type": "UserType" }
+    },
+    "UserType": {
+      "name": {
+        "type": "StringType",
+        "validation": [{ "type": "required", "message": "Name is required" }]
+      },
+      "email": {
+        "type": "StringType",
+        "validation": [
+          { "type": "required", "message": "Email is required" },
+          { "type": "email", "message": "Email is not valid" }
+        ]
+      },
+      "plan": {
+        "type": "StringType",
+        "validation": [{ "type": "required", "message": "Pick a plan" }]
+      }
+    }
+  },
+  "views": [
+    {
+      "id": "profile-view",
+      "type": "info",
+      "title": { "asset": { "id": "profile-title", "type": "text", "value": "Who are you?" } },
+      "subTitle": { "asset": { "id": "profile-subtitle", "type": "text", "value": "Step 1 of 3" } },
+      "primaryInfo": {
+        "asset": {
+          "id": "profile-fields",
+          "type": "collection",
+          "values": [
+            {
+              "asset": {
+                "id": "name-input",
+                "type": "input",
+                "binding": "user.name",
+                "label": { "asset": { "id": "name-label", "type": "text", "value": "Name" } }
+              }
+            },
+            {
+              "asset": {
+                "id": "email-input",
+                "type": "input",
+                "binding": "user.email",
+                "label": { "asset": { "id": "email-label", "type": "text", "value": "Email" } }
+              }
+            }
+          ]
+        }
+      },
+      "actions": [
+        { "asset": { "id": "profile-cancel", "type": "action", "value": "cancel", "label": { "asset": { "id": "profile-cancel-label", "type": "text", "value": "Cancel" } }, "metaData": { "skipValidation": true } } },
+        { "asset": { "id": "profile-next", "type": "action", "value": "next", "label": { "asset": { "id": "profile-next-label", "type": "text", "value": "Next" } } } }
+      ]
+    },
+    {
+      "id": "plan-view",
+      "type": "info",
+      "title": { "asset": { "id": "plan-title", "type": "text", "value": "Hi {{user.name}}, pick a plan" } },
+      "subTitle": { "asset": { "id": "plan-subtitle", "type": "text", "value": "Step 2 of 3" } },
+      "primaryInfo": {
+        "asset": {
+          "id": "plan-choice",
+          "type": "choice",
+          "binding": "user.plan",
+          "title": { "asset": { "id": "plan-choice-title", "type": "text", "value": "Plan" } },
+          "items": [
+            { "id": "plan-basic", "value": "basic", "label": { "asset": { "id": "plan-basic-label", "type": "text", "value": "Basic - free" } } },
+            { "id": "plan-pro", "value": "pro", "label": { "asset": { "id": "plan-pro-label", "type": "text", "value": "Pro - 10 USD per month" } } }
+          ]
+        }
+      },
+      "actions": [
+        { "asset": { "id": "plan-back", "type": "action", "value": "Prev", "label": { "asset": { "id": "plan-back-label", "type": "text", "value": "Back" } }, "metaData": { "skipValidation": true } } },
+        { "asset": { "id": "plan-next", "type": "action", "value": "next", "label": { "asset": { "id": "plan-next-label", "type": "text", "value": "Next" } } } }
+      ]
+    },
+    {
+      "id": "pro-view",
+      "type": "info",
+      "title": { "asset": { "id": "pro-title", "type": "text", "value": "Pro plan selected" } },
+      "subTitle": { "asset": { "id": "pro-subtitle", "type": "text", "value": "Step 3 of 3" } },
+      "primaryInfo": { "asset": { "id": "pro-info", "type": "text", "value": "{{user.name}} ({{user.email}}) will be billed 10 USD per month." } },
+      "actions": [
+        { "asset": { "id": "pro-back", "type": "action", "value": "Prev", "label": { "asset": { "id": "pro-back-label", "type": "text", "value": "Back" } } } },
+        { "asset": { "id": "pro-confirm", "type": "action", "value": "confirm", "label": { "asset": { "id": "pro-confirm-label", "type": "text", "value": "Confirm" } } } }
+      ]
+    },
+    {
+      "id": "basic-view",
+      "type": "info",
+      "title": { "asset": { "id": "basic-title", "type": "text", "value": "Basic plan selected" } },
+      "subTitle": { "asset": { "id": "basic-subtitle", "type": "text", "value": "Step 3 of 3" } },
+      "primaryInfo": { "asset": { "id": "basic-info", "type": "text", "value": "{{user.name}} ({{user.email}}) is on the free plan." } },
+      "actions": [
+        { "asset": { "id": "basic-back", "type": "action", "value": "Prev", "label": { "asset": { "id": "basic-back-label", "type": "text", "value": "Back" } } } },
+        { "asset": { "id": "basic-confirm", "type": "action", "value": "confirm", "label": { "asset": { "id": "basic-confirm-label", "type": "text", "value": "Confirm" } } } }
+      ]
+    }
+  ],
+  "navigation": {
+    "BEGIN": "FLOW_1",
+    "FLOW_1": {
+      "startState": "VIEW_PROFILE",
+      "VIEW_PROFILE": {
+        "state_type": "VIEW",
+        "ref": "profile-view",
+        "transitions": { "next": "VIEW_PLAN", "cancel": "END_CANCELLED" }
+      },
+      "VIEW_PLAN": {
+        "state_type": "VIEW",
+        "ref": "plan-view",
+        "transitions": { "next": "ACTION_ROUTE_PLAN", "Prev": "VIEW_PROFILE" }
+      },
+      "ACTION_ROUTE_PLAN": {
+        "state_type": "ACTION",
+        "exp": "{{user.plan}}",
+        "transitions": { "pro": "VIEW_PRO", "*": "VIEW_BASIC" }
+      },
+      "VIEW_PRO": {
+        "state_type": "VIEW",
+        "ref": "pro-view",
+        "transitions": { "confirm": "END_DONE", "Prev": "VIEW_PLAN" }
+      },
+      "VIEW_BASIC": {
+        "state_type": "VIEW",
+        "ref": "basic-view",
+        "transitions": { "confirm": "END_DONE", "Prev": "VIEW_PLAN" }
+      },
+      "END_DONE": { "state_type": "END", "outcome": "DONE" },
+      "END_CANCELLED": { "state_type": "END", "outcome": "CANCELLED" }
+    }
+  }
+}

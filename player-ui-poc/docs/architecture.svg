@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="470" viewBox="0 0 980 470">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&amp;display=swap');
+      text { font-family: 'Caveat', 'Comic Sans MS', cursive; fill: #1e1e1e; }
+      .t { font-size: 24px; font-weight: 700; }
+      .s { font-size: 18px; }
+      .l { font-size: 18px; fill: #444; }
+      .box { stroke: #1e1e1e; stroke-width: 2; filter: url(#wobble); }
+      .line { stroke: #1e1e1e; stroke-width: 2; fill: none; filter: url(#wobble); marker-end: url(#arrow); }
+    </style>
+    <filter id="wobble" filterUnits="userSpaceOnUse" x="0" y="0" width="980" height="470">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1e1e1e"/>
+    </marker>
+  </defs>
+  <rect width="980" height="470" fill="#ffffff"/>
+
+  <rect class="box" x="30" y="40" width="200" height="110" rx="14" fill="#fff3bf"/>
+  <text class="t" x="130" y="82" text-anchor="middle">Flow JSON</text>
+  <text class="s" x="130" y="108" text-anchor="middle">backend/flows/*.json</text>
+  <text class="s" x="130" y="130" text-anchor="middle">views, schema, navigation</text>
+
+  <rect class="box" x="370" y="40" width="240" height="110" rx="14" fill="#d0ebff"/>
+  <text class="t" x="490" y="82" text-anchor="middle">Backend (node:http)</text>
+  <text class="s" x="490" y="108" text-anchor="middle">GET /api/flows/:id</text>
+  <text class="s" x="490" y="130" text-anchor="middle">POST /api/submissions</text>
+
+  <rect class="box" x="750" y="40" width="200" height="110" rx="14" fill="#e5dbff"/>
+  <text class="t" x="850" y="82" text-anchor="middle">Submissions</text>
+  <text class="s" x="850" y="108" text-anchor="middle">in memory array</text>
+  <text class="s" x="850" y="130" text-anchor="middle">outcome + data</text>
+
+  <rect class="box" x="370" y="300" width="240" height="120" rx="14" fill="#d3f9d8"/>
+  <text class="t" x="490" y="342" text-anchor="middle">React App (Vite)</text>
+  <text class="s" x="490" y="368" text-anchor="middle">ReactPlayer +</text>
+  <text class="s" x="490" y="390" text-anchor="middle">ReferenceAssetsPlugin</text>
+
+  <rect class="box" x="750" y="300" width="200" height="120" rx="14" fill="#ffe3e3"/>
+  <text class="t" x="850" y="342" text-anchor="middle">User</text>
+  <text class="s" x="850" y="368" text-anchor="middle">types, picks,</text>
+  <text class="s" x="850" y="390" text-anchor="middle">clicks actions</text>
+
+  <path class="line" d="M232,95 L366,95"/>
+  <text class="l" x="299" y="84" text-anchor="middle">loaded at boot</text>
+
+  <path class="line" d="M440,152 L440,296"/>
+  <text class="l" x="432" y="232" text-anchor="end">1. flow JSON</text>
+
+  <path class="line" d="M612,360 L746,360"/>
+  <text class="l" x="679" y="349" text-anchor="middle">2. renders views</text>
+
+  <path class="line" d="M748,392 L614,392"/>
+  <text class="l" x="681" y="414" text-anchor="middle">3. input + actions</text>
+
+  <path class="line" d="M540,298 L540,154"/>
+  <text class="l" x="548" y="232" text-anchor="start">4. outcome + data</text>
+
+  <path class="line" d="M612,95 L746,95"/>
+  <text class="l" x="679" y="84" text-anchor="middle">stores</text>
+</svg>
