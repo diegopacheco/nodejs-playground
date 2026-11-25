@@ -1,16 +1,49 @@
-<!-- filepath: /src/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>PONG Game</title>
     <style>
-        canvas { background: #000; display: block; margin: 0 auto; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            font-family: "SF Mono", Menlo, Consolas, monospace;
+            background: radial-gradient(circle at center, #111a3a, #05070f 70%);
+            color: #e2e8f0;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.4rem;
+            letter-spacing: 12px;
+            color: #f8fafc;
+            text-shadow: 0 0 10px #22d3ee, 0 0 24px #f472b6;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 14px;
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            box-shadow: 0 0 50px rgba(34, 211, 238, 0.15), 0 20px 60px rgba(0, 0, 0, 0.6);
+            max-height: calc(100vh - 120px);
+            width: auto;
+        }
+        p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
+    <h1>PONG</h1>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <p>↑ ↓ to move your paddle</p>
     <script src="/socket.io/socket.io.js"></script>
     <script src="client.js"></script>
 </body>
-</html> 
+</html>

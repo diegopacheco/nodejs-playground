@@ -3,497 +3,610 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Flight Simulator</title>
+    <title>Vibe Plane</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+            background: #cde2f0;
+            user-select: none;
         }
         canvas {
             display: block;
         }
-        .controls {
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 12px;
+            color: #f8fafc;
+        }
+        .stat {
+            min-width: 110px;
+            padding: 10px 16px;
+            border-radius: 14px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+        }
+        .label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #bae6fd;
+        }
+        .value {
+            font-size: 28px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        .value small {
+            font-size: 13px;
+            font-weight: 400;
+            margin-left: 4px;
+            color: #cbd5e1;
+        }
+        .brand {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #ffffff;
+            text-shadow: 0 2px 12px rgba(15, 23, 42, 0.4);
+        }
+        .warning {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 22px;
+            border-radius: 10px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            color: #ffffff;
+            background: rgba(220, 38, 38, 0.85);
+            display: none;
+            animation: blink 0.8s steps(2) infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.35; }
+        }
+        .help {
             position: absolute;
             bottom: 20px;
-            left: 20px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            border-radius: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 18px;
+            border-radius: 999px;
+            color: #f8fafc;
+            font-size: 13px;
+            white-space: nowrap;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(8px);
+        }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(3px);
+        }
+        .overlay.show {
+            display: flex;
+        }
+        .overlay h2 {
+            margin: 0;
+            font-size: 48px;
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <div class="controls">
-        <p>Controls: Arrow keys to fly, W/S to control speed</p>
-        <p>Current Altitude: <span id="altitude">0</span> ft</p>
-        <p>Current Speed: <span id="speed">0</span> mph</p>
+    <canvas id="game"></canvas>
+    <div class="hud">
+        <div class="stat"><span class="label">Altitude</span><span class="value"><span id="altitude">0</span><small>ft</small></span></div>
+        <div class="stat"><span class="label">Speed</span><span class="value"><span id="speed">0</span><small>mph</small></span></div>
+        <div class="stat"><span class="label">Heading</span><span class="value"><span id="heading">0</span><small>°</small></span></div>
+    </div>
+    <div class="brand">VIBE PLANE</div>
+    <div id="warning" class="warning"></div>
+    <div class="help">↑ ↓ climb / dive · ← → bank and turn · W / S throttle · R restart</div>
+    <div id="overlay" class="overlay">
+        <h2>You crashed</h2>
+        <p>Press R to fly again</p>
     </div>
 
     <script>
-        // Set up the canvas to fill the screen
-        const canvas = document.getElementById('gameCanvas');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const ctx = canvas.getContext('2d');
-
-        // Game state
-        let altitudeDisplay = document.getElementById('altitude');
-        let speedDisplay = document.getElementById('speed');
-        
-        // Horizon line position (perspective)
-        let horizonY = canvas.height * 0.5;
-        // Global variable for adjustedHorizonY available to all functions
-        let adjustedHorizonY = horizonY;
-        
-        // Airplane properties
-        let plane = {
-            // Position in 3D space
-            x: 0,  // lateral position
-            y: 100,  // altitude - starting higher for better visibility
-            z: 0,  // forward position
-            
-            // Speed and movement
-            speed: 50, // starting with some speed to make takeoff easier
-            maxSpeed: 300,
-            acceleration: 0.5,
-            deceleration: 0.2,
-            turnSpeed: 0.03,
-            
-            // Orientation
-            angle: 0,      // rotation around y-axis (yaw)
-            pitch: 0,      // rotation around x-axis (pitch)
-            roll: 0,       // rotation around z-axis (roll)
-        };
-        
-        // Third person camera properties
-        const camera = {
-            distance: 200,   // Distance behind the plane
-            height: 50,      // Height above the plane
-            followSpeed: 0.1 // How quickly the camera follows the plane
+        const canvas = document.getElementById("game");
+        const ctx = canvas.getContext("2d");
+        const ui = {
+            altitude: document.getElementById("altitude"),
+            speed: document.getElementById("speed"),
+            heading: document.getElementById("heading"),
+            warning: document.getElementById("warning"),
+            overlay: document.getElementById("overlay")
         };
 
-        // View settings
-        const viewDistance = 800;
-        
-        // Ground grid pattern
-        const gridSize = 2000;
-        const gridDivisions = 40;
-        
-        // Clouds
-        let clouds = [];
-        for (let i = 0; i < 50; i++) {
-            clouds.push({
-                x: (Math.random() - 0.5) * 5000,
-                y: Math.random() * 200 + 200,
-                z: (Math.random() - 0.5) * 5000,
-                size: Math.random() * 50 + 50
-            });
-        }
+        const TILE = 400;
+        const RANGE = 12;
+        const VIEW = TILE * RANGE;
+        const NEAR = 1;
+        const GROUND = 3;
+        const CLOUD_AREA = 14000;
 
-        // Control state
+        const SKY_TOP = [37, 99, 235];
+        const FOG = [206, 227, 241];
+        const FIELDS = [[92, 140, 58], [106, 154, 64], [127, 169, 74], [155, 179, 90], [190, 182, 98], [79, 125, 51], [140, 160, 80]];
+        const LAKE = [64, 138, 199];
+        const RUNWAY = [74, 78, 86];
+        const MARK = [238, 238, 238];
+        const TRUNK = [100, 68, 42];
+        const LEAF = [40, 98, 44];
+        const LEAF_LIGHT = [62, 128, 58];
+        const CLOUD = [255, 255, 255];
+        const CLOUD_SHADE = [212, 222, 234];
+        const WHITE = [238, 242, 247];
+        const RED = [214, 40, 57];
+        const GLASS = [91, 192, 235];
+        const DARK = [43, 45, 66];
+
+        const SUN = normalize([Math.cos(0.35) * Math.sin(0.6), Math.sin(0.35), Math.cos(0.35) * Math.cos(0.6)]);
+
+        const V = {
+            n: [0, 0, 17], a: [-2.5, 2.5, 8], b: [2.5, 2.5, 8], c: [2.5, -2, 8], d: [-2.5, -2, 8],
+            e: [-2, 2.2, -6], f: [2, 2.2, -6], g: [2, -1.5, -6], h: [-2, -1.5, -6], t: [0, 1.2, -15]
+        };
+        const BODY = [
+            ["nba", RED], ["ncb", RED], ["ndc", RED], ["nad", RED],
+            ["abfe", WHITE], ["bcgf", WHITE], ["cdhg", WHITE], ["daeh", WHITE],
+            ["eft", WHITE], ["fgt", WHITE], ["ght", WHITE], ["het", WHITE]
+        ].map(([keys, color]) => ({ pts: [...keys].map(k => V[k]), color }));
+        const PARTS = [
+            { pts: [[-2.5, 0, 5], [-18, 1, 2], [-18, 1, -1.5], [-2.5, 0, -3]], color: RED },
+            { pts: [[2.5, 0, 5], [18, 1, 2], [18, 1, -1.5], [2.5, 0, -3]], color: RED },
+            { pts: [[-1.5, 1, -10], [-7, 1.3, -12.5], [-7, 1.3, -14.5], [-1.5, 1, -14.5]], color: WHITE },
+            { pts: [[1.5, 1, -10], [7, 1.3, -12.5], [7, 1.3, -14.5], [1.5, 1, -14.5]], color: WHITE },
+            { pts: [[0, 2, -8], [0, 8.5, -13], [0, 8.5, -15.5], [0, 1.5, -15]], color: RED },
+            { pts: [[-1.6, 2.5, 7], [1.6, 2.5, 7], [1, 4.2, 3], [-1, 4.2, 3]], color: GLASS },
+            { pts: [[-1, 4.2, 3], [1, 4.2, 3], [1.6, 2.5, -1], [-1.6, 2.5, -1]], color: GLASS }
+        ];
+        const MESH = BODY.concat(PARTS);
+        const SHADOW = [MESH[4], MESH[0], MESH[8]].concat(PARTS.slice(0, 4));
+
         const keys = {};
-        
-        // Handle key presses
-        function handleKeyDown(event) {
-            keys[event.key] = true;
-        }
-        
-        function handleKeyUp(event) {
-            keys[event.key] = false;
-        }
-        
-        document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('keyup', handleKeyUp);
-        
-        // Window resize handler
-        window.addEventListener('resize', function() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            horizonY = canvas.height * 0.5;
-            adjustedHorizonY = horizonY;
-        });
+        const plane = {};
+        const cam = {};
+        let crashed = false;
+        let W = 0;
+        let H = 0;
+        let F = 0;
+        let dpr = 1;
+        let last = performance.now();
 
-        // Update game state
-        function update() {
-            // Handle controls
-            if (keys['ArrowUp']) {
-                plane.pitch = -0.05;
-                plane.y += 2;
-            } else if (keys['ArrowDown']) {
-                plane.pitch = 0.05;
-                plane.y -= 2;
-            } else {
-                plane.pitch = 0;
-            }
-            
-            if (keys['ArrowLeft']) {
-                plane.roll = 0.2;
-                plane.angle -= plane.turnSpeed;
-            } else if (keys['ArrowRight']) {
-                plane.roll = -0.2;
-                plane.angle += plane.turnSpeed;
-            } else {
-                plane.roll = 0;
-            }
-            
-            if (keys['w']) {
-                plane.speed = Math.min(plane.speed + plane.acceleration, plane.maxSpeed);
-            } else if (keys['s']) {
-                plane.speed = Math.max(plane.speed - plane.deceleration, 0);
-            }
-            
-            // Update plane position
-            plane.z += Math.cos(plane.angle) * plane.speed / 10;
-            plane.x += Math.sin(plane.angle) * plane.speed / 10;
-            
-            // Keep altitude above ground
-            plane.y = Math.max(plane.y, 10);
-            
-            // Update UI
-            altitudeDisplay.textContent = Math.floor(plane.y * 10);
-            speedDisplay.textContent = Math.floor(plane.speed);
+        const clouds = Array.from({ length: 45 }, () => ({
+            x: Math.random() * CLOUD_AREA,
+            z: Math.random() * CLOUD_AREA,
+            y: 700 + Math.random() * 900,
+            puffs: Array.from({ length: 6 }, () => [
+                (Math.random() - 0.5) * 300,
+                (Math.random() - 0.5) * 60,
+                (Math.random() - 0.5) * 180,
+                70 + Math.random() * 70
+            ])
+        }));
+
+        function reset() {
+            Object.assign(plane, { x: 0, y: 350, z: -1800, yaw: 0, pitch: 0, roll: 0, speed: 190, vy: 0, prop: 0 });
+            Object.assign(cam, { x: 0, y: 0, z: 0, yaw: 0, pitch: -0.1, roll: 0 });
+            crashed = false;
+            ui.overlay.classList.remove("show");
         }
 
-        // Draw the scene
-        function draw() {
-            // Clear canvas
-            ctx.fillStyle = "#87CEEB"; // Sky blue
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Calculate camera position (behind and slightly above the plane)
-            const camX = plane.x - Math.sin(plane.angle) * camera.distance;
-            const camY = plane.y + camera.height;
-            const camZ = plane.z - Math.cos(plane.angle) * camera.distance;
-            
-            // Horizon line position adjusted by pitch
-            adjustedHorizonY = horizonY + plane.pitch * 500;
-            
-            // Draw ground
-            ctx.fillStyle = "#228B22"; // Forest green
-            ctx.fillRect(0, adjustedHorizonY, canvas.width, canvas.height - adjustedHorizonY);
-            
-            // Draw perspective grid on ground
-            drawGrid(camX, camY, camZ);
-            
-            // Draw clouds in 3D space
-            drawClouds(camX, camY, camZ);
-            
-            // Draw the airplane in 3D
-            drawAirplane3D(camX, camY, camZ);
+        function resize() {
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            W = window.innerWidth;
+            H = window.innerHeight;
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            canvas.style.width = W + "px";
+            canvas.style.height = H + "px";
+            F = H * 0.9;
         }
 
-        // Draw a perspective grid on the ground
-        function drawGrid(camX, camY, camZ) {
-            const gridStepX = gridSize / gridDivisions;
-            const gridStepZ = gridSize / gridDivisions;
-            
-            ctx.strokeStyle = "#1a631a";
-            ctx.lineWidth = 1;
-            
-            // Calculate grid lines
-            for (let i = -gridDivisions; i <= gridDivisions; i++) {
-                // Lines parallel to X axis
-                let x1 = -gridSize;
-                let z1 = i * gridStepZ;
-                let x2 = gridSize;
-                let z2 = i * gridStepZ;
-                
-                drawPerspectiveLine(x1, 0, z1, x2, 0, z2, camX, camY, camZ);
-                
-                // Lines parallel to Z axis
-                x1 = i * gridStepX;
-                z1 = -gridSize;
-                x2 = i * gridStepX;
-                z2 = gridSize;
-                
-                drawPerspectiveLine(x1, 0, z1, x2, 0, z2, camX, camY, camZ);
-            }
+        function clamp(v, min, max) {
+            return Math.max(min, Math.min(max, v));
         }
 
-        // Draw a line in 3D space with perspective
-        function drawPerspectiveLine(x1, y1, z1, x2, y2, z2, camX, camY, camZ) {
-            // Translate coordinates relative to camera position
-            x1 = x1 - camX;
-            z1 = z1 - camZ;
-            y1 = y1 - camY;
-            x2 = x2 - camX;
-            z2 = z2 - camZ;
-            y2 = y2 - camY;
-            
-            // Rotate points around the y-axis (yaw) based on plane angle
-            let rotX1 = x1 * Math.cos(-plane.angle) - z1 * Math.sin(-plane.angle);
-            let rotZ1 = x1 * Math.sin(-plane.angle) + z1 * Math.cos(-plane.angle);
-            let rotX2 = x2 * Math.cos(-plane.angle) - z2 * Math.sin(-plane.angle);
-            let rotZ2 = x2 * Math.sin(-plane.angle) + z2 * Math.cos(-plane.angle);
-            
-            // Don't draw if behind the camera
-            if (rotZ1 < 1 && rotZ2 < 1) return;
-            
-            // Handle one point behind camera case
-            if (rotZ1 < 1) {
-                // Calculate intersection with near plane
-                let t = (1 - rotZ1) / (rotZ2 - rotZ1);
-                rotX1 = rotX1 + t * (rotX2 - rotX1);
-                y1 = y1 + t * (y2 - y1);
-                rotZ1 = 1;
+        function normalize(v) {
+            const len = Math.hypot(v[0], v[1], v[2]) || 1;
+            return [v[0] / len, v[1] / len, v[2] / len];
+        }
+
+        function mix(a, b, t) {
+            return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+        }
+
+        function rgb(c, alpha = 1) {
+            return "rgba(" + Math.round(c[0]) + "," + Math.round(c[1]) + "," + Math.round(c[2]) + "," + alpha + ")";
+        }
+
+        function angleDiff(a, b) {
+            return Math.atan2(Math.sin(a - b), Math.cos(a - b));
+        }
+
+        function hash(a, b, s) {
+            let h = Math.imul(a, 374761393) + Math.imul(b, 668265263) + Math.imul(s, 1442695041);
+            h = Math.imul(h ^ (h >>> 13), 1274126177);
+            h ^= h >>> 16;
+            return (h >>> 0) / 4294967296;
+        }
+
+        function fogAmount(dist) {
+            return Math.pow(clamp((dist - 600) / (VIEW - 600), 0, 1), 0.8);
+        }
+
+        function rotateToCamera(dx, dy, dz) {
+            const cy = Math.cos(cam.yaw);
+            const sy = Math.sin(cam.yaw);
+            const x = dx * cy - dz * sy;
+            const z1 = dx * sy + dz * cy;
+            const cp = Math.cos(cam.pitch);
+            const sp = Math.sin(cam.pitch);
+            return [x, dy * cp - z1 * sp, dy * sp + z1 * cp];
+        }
+
+        function toCamera(p) {
+            return rotateToCamera(p[0] - cam.x, p[1] - cam.y, p[2] - cam.z);
+        }
+
+        function screen(p) {
+            return [W / 2 + (p[0] * F) / p[2], H / 2 - (p[1] * F) / p[2]];
+        }
+
+        function clipNear(pts) {
+            const out = [];
+            for (let i = 0; i < pts.length; i++) {
+                const a = pts[i];
+                const b = pts[(i + 1) % pts.length];
+                const aIn = a[2] >= NEAR;
+                const bIn = b[2] >= NEAR;
+                if (aIn) out.push(a);
+                if (aIn !== bIn) {
+                    const t = (NEAR - a[2]) / (b[2] - a[2]);
+                    out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, NEAR]);
+                }
             }
-            if (rotZ2 < 1) {
-                let t = (1 - rotZ2) / (rotZ1 - rotZ2);
-                rotX2 = rotX2 + t * (rotX1 - rotX2);
-                y2 = y2 + t * (y1 - y2);
-                rotZ2 = 1;
-            }
-            
-            // Calculate perspective
-            let scale1 = viewDistance / rotZ1;
-            let scale2 = viewDistance / rotZ2;
-            
-            // Project to 2D screen coordinates
-            let screenX1 = canvas.width/2 + rotX1 * scale1;
-            let screenY1 = adjustedHorizonY - y1 * scale1;
-            
-            let screenX2 = canvas.width/2 + rotX2 * scale2;
-            let screenY2 = adjustedHorizonY - y2 * scale2;
-            
-            // Draw the line
+            return out;
+        }
+
+        function fillPoly(camPts, color, seam) {
+            const pts = clipNear(camPts);
+            if (pts.length < 3) return;
             ctx.beginPath();
-            ctx.moveTo(screenX1, screenY1);
-            ctx.lineTo(screenX2, screenY2);
-            ctx.stroke();
-        }
-
-        // Draw clouds in 3D space
-        function drawClouds(camX, camY, camZ) {
-            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-            
-            for (let cloud of clouds) {
-                // Calculate relative position to camera
-                let relX = cloud.x - camX;
-                let relY = cloud.y - camY;
-                let relZ = cloud.z - camZ;
-                
-                // Rotate around y-axis (yaw)
-                let rotX = relX * Math.cos(-plane.angle) - relZ * Math.sin(-plane.angle);
-                let rotZ = relX * Math.sin(-plane.angle) + relZ * Math.cos(-plane.angle);
-                
-                // If behind camera, don't render
-                if (rotZ < 1) continue;
-                
-                // Calculate perspective scale
-                let scale = viewDistance / rotZ;
-                
-                // Calculate screen position
-                let screenX = canvas.width/2 + rotX * scale;
-                let screenY = adjustedHorizonY - relY * scale;
-                let screenSize = cloud.size * scale;
-                
-                // Don't draw if too small or off-screen
-                if (screenSize < 1 || 
-                    screenX < -screenSize || 
-                    screenX > canvas.width + screenSize || 
-                    screenY < -screenSize || 
-                    screenY > canvas.height + screenSize) {
-                    continue;
-                }
-                
-                // Draw cloud (simple circle)
-                ctx.beginPath();
-                ctx.arc(screenX, screenY, screenSize, 0, Math.PI * 2);
-                ctx.fill();
+            pts.forEach((p, i) => {
+                const [sx, sy] = screen(p);
+                if (i === 0) ctx.moveTo(sx, sy);
+                else ctx.lineTo(sx, sy);
+            });
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+            if (seam) {
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1;
+                ctx.stroke();
             }
         }
 
-        // Draw a 3D point with perspective
-        function draw3DPoint(x, y, z, camX, camY, camZ) {
-            // Calculate relative position to camera
-            let relX = x - camX;
-            let relY = y - camY;
-            let relZ = z - camZ;
-            
-            // Rotate around y-axis (yaw) based on plane angle
-            let rotX = relX * Math.cos(-plane.angle) - relZ * Math.sin(-plane.angle);
-            let rotZ = relX * Math.sin(-plane.angle) + relZ * Math.cos(-plane.angle);
-            
-            // If behind camera, return null
-            if (rotZ < 1) return null;
-            
-            // Calculate perspective scale
-            let scale = viewDistance / rotZ;
-            
-            // Project to 2D screen coordinates
-            let screenX = canvas.width/2 + rotX * scale;
-            let screenY = adjustedHorizonY - relY * scale;
-            
-            return {
-                x: screenX,
-                y: screenY,
-                scale: scale
-            };
+        function onRunway(x, z) {
+            return Math.abs(x) < 120 && z > -500 && z < 1700;
         }
 
-        // Draw the airplane in 3rd person view
-        function drawAirplane3D(camX, camY, camZ) {
-            // Define the vertices of a simple plane model
-            // Main body (fuselage)
-            const fuselageLength = 60;
-            const fuselageWidth = 15;
-            const fuselageHeight = 15;
-            
-            // Wings
-            const wingSpan = 80;
-            const wingWidth = 30;
-            const wingHeight = 5;
-            const wingOffset = 0; // Position along fuselage
-            
-            // Tail
-            const tailHeight = 20;
-            const tailWidth = 25;
-            const tailThickness = 5;
-            
-            // Create vertices for the airplane body
-            const vertices = [
-                // Fuselage - Nose
-                { x: plane.x + fuselageLength/2, y: plane.y, z: plane.z },
-                // Fuselage - Tail
-                { x: plane.x - fuselageLength/2, y: plane.y, z: plane.z },
-                // Fuselage - Top middle
-                { x: plane.x, y: plane.y + fuselageHeight/2, z: plane.z },
-                // Fuselage - Bottom middle
-                { x: plane.x, y: plane.y - fuselageHeight/2, z: plane.z },
-                // Fuselage - Left middle
-                { x: plane.x, y: plane.y, z: plane.z - fuselageWidth/2 },
-                // Fuselage - Right middle
-                { x: plane.x, y: plane.y, z: plane.z + fuselageWidth/2 },
-                
-                // Left wing tip
-                { x: plane.x + wingOffset, y: plane.y, z: plane.z - wingSpan/2 },
-                // Right wing tip
-                { x: plane.x + wingOffset, y: plane.y, z: plane.z + wingSpan/2 },
-                
-                // Tail top
-                { x: plane.x - fuselageLength/2, y: plane.y + tailHeight, z: plane.z },
-                // Tail left
-                { x: plane.x - fuselageLength/2, y: plane.y, z: plane.z - tailWidth/2 },
-                // Tail right
-                { x: plane.x - fuselageLength/2, y: plane.y, z: plane.z + tailWidth/2 },
-            ];
-            
-            // Rotate the vertices based on the plane's orientation
-            rotateVertices(vertices, plane.pitch, plane.roll, plane.angle);
-            
-            // Project the vertices to 2D screen coordinates
-            const projectedVertices = [];
-            for (const vertex of vertices) {
-                const projected = draw3DPoint(vertex.x, vertex.y, vertex.z, camX, camY, camZ);
-                if (projected) {
-                    projectedVertices.push(projected);
+        function tileColor(ix, iz) {
+            if (onRunway(ix * TILE + TILE / 2, iz * TILE + TILE / 2)) return FIELDS[1];
+            if (hash(ix, iz, 3) < 0.05) return LAKE;
+            return FIELDS[Math.floor(hash(ix, iz, 7) * FIELDS.length)];
+        }
+
+        function localToWorld(v, spin) {
+            let [x, y, z] = v;
+            if (spin) {
+                const cs = Math.cos(spin);
+                const ss = Math.sin(spin);
+                [x, y] = [x * cs - y * ss, x * ss + y * cs];
+            }
+            const cr = Math.cos(plane.roll);
+            const sr = Math.sin(plane.roll);
+            [x, y] = [x * cr + y * sr, -x * sr + y * cr];
+            const cp = Math.cos(plane.pitch);
+            const sp = Math.sin(plane.pitch);
+            [y, z] = [y * cp + z * sp, -y * sp + z * cp];
+            const cy = Math.cos(plane.yaw);
+            const sy = Math.sin(plane.yaw);
+            [x, z] = [x * cy + z * sy, -x * sy + z * cy];
+            return [x + plane.x, y + plane.y, z + plane.z];
+        }
+
+        function update(dt) {
+            if (crashed) return;
+            const airborne = plane.y > GROUND + 0.5;
+            const rollTarget = keys.ArrowLeft ? -1 : keys.ArrowRight ? 1 : 0;
+            plane.roll += (rollTarget - plane.roll) * Math.min(1, dt * 2.5);
+            const stall = Math.max(0, 110 - plane.speed);
+            const pitchTarget = (keys.ArrowUp ? 0.45 : keys.ArrowDown ? -0.5 : 0) - stall * 0.006;
+            plane.pitch += (pitchTarget - plane.pitch) * Math.min(1, dt * 1.8);
+            plane.yaw += Math.sin(plane.roll) * dt * 0.9;
+            if (keys.w) plane.speed += 70 * dt;
+            if (keys.s) plane.speed -= 70 * dt;
+            plane.speed = clamp(plane.speed - Math.sin(plane.pitch) * 45 * dt, 40, 420);
+            const v = plane.speed * 0.9;
+            plane.vy = Math.sin(plane.pitch) * v - stall * 0.9;
+            plane.x += Math.sin(plane.yaw) * Math.cos(plane.pitch) * v * dt;
+            plane.z += Math.cos(plane.yaw) * Math.cos(plane.pitch) * v * dt;
+            plane.y += plane.vy * dt;
+            plane.prop += dt * (12 + plane.speed * 0.1);
+            if (plane.y <= GROUND) {
+                if (airborne && (plane.vy < -35 || Math.abs(plane.roll) > 0.45)) {
+                    crashed = true;
+                    ui.overlay.classList.add("show");
+                }
+                plane.y = GROUND;
+                plane.pitch = Math.max(plane.pitch, 0);
+            }
+        }
+
+        function updateCamera(dt) {
+            const k = Math.min(1, dt * 3);
+            cam.yaw += angleDiff(plane.yaw, cam.yaw) * k;
+            cam.pitch += (plane.pitch * 0.5 - 0.1 - cam.pitch) * k;
+            cam.roll += (plane.roll * 0.3 - cam.roll) * k;
+            cam.x = plane.x - Math.sin(cam.yaw) * 75;
+            cam.z = plane.z - Math.cos(cam.yaw) * 75;
+            cam.y = Math.max(plane.y + 18, 4);
+        }
+
+        function drawSky(horizonY) {
+            const D = Math.hypot(W, H);
+            const sky = ctx.createLinearGradient(0, horizonY - H, 0, horizonY);
+            sky.addColorStop(0, rgb(SKY_TOP));
+            sky.addColorStop(1, rgb(FOG));
+            ctx.fillStyle = sky;
+            ctx.fillRect(-D, horizonY - 3 * D, W + 2 * D, 3 * D);
+            ctx.fillStyle = rgb(FOG);
+            ctx.fillRect(-D, horizonY - 1, W + 2 * D, 3 * D);
+        }
+
+        function drawSun() {
+            const p = rotateToCamera(SUN[0], SUN[1], SUN[2]);
+            if (p[2] <= 0) return;
+            const [x, y] = screen(p);
+            const glow = ctx.createRadialGradient(x, y, 0, x, y, 220);
+            glow.addColorStop(0, "rgba(255, 253, 240, 1)");
+            glow.addColorStop(0.12, "rgba(255, 248, 210, 0.95)");
+            glow.addColorStop(0.35, "rgba(255, 240, 180, 0.35)");
+            glow.addColorStop(1, "rgba(255, 240, 180, 0)");
+            ctx.fillStyle = glow;
+            ctx.fillRect(x - 220, y - 220, 440, 440);
+        }
+
+        function visibleTiles() {
+            const cx = Math.floor(cam.x / TILE);
+            const cz = Math.floor(cam.z / TILE);
+            const tiles = [];
+            for (let i = -RANGE; i <= RANGE; i++) {
+                for (let j = -RANGE; j <= RANGE; j++) {
+                    const ix = cx + i;
+                    const iz = cz + j;
+                    const mx = ix * TILE + TILE / 2;
+                    const mz = iz * TILE + TILE / 2;
+                    const dist = Math.hypot(mx - cam.x, mz - cam.z);
+                    if (dist > VIEW) continue;
+                    const c = toCamera([mx, 0, mz]);
+                    if (c[2] < -TILE) continue;
+                    if (c[2] > 0 && Math.abs(c[0]) > (c[2] * W) / F + TILE) continue;
+                    tiles.push({ ix, iz, dist });
                 }
             }
-            
-            // If not enough vertices are visible, don't draw the plane
-            if (projectedVertices.length < 4) return;
-            
-            // Draw the plane body (white)
-            ctx.fillStyle = "#FFFFFF";
-            ctx.strokeStyle = "#000000";
-            ctx.lineWidth = 1;
-            
-            // Draw fuselage (simplified as a polygon)
-            if (projectedVertices.length >= 3) {
-                ctx.beginPath();
-                ctx.moveTo(projectedVertices[0].x, projectedVertices[0].y); // Nose
-                ctx.lineTo(projectedVertices[2].x, projectedVertices[2].y); // Top
-                ctx.lineTo(projectedVertices[1].x, projectedVertices[1].y); // Tail
-                ctx.lineTo(projectedVertices[3].x, projectedVertices[3].y); // Bottom
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-            }
-            
-            // Draw wings
-            if (projectedVertices.length >= 8) {
-                // Left wing
-                ctx.beginPath();
-                ctx.moveTo(projectedVertices[0].x, projectedVertices[0].y); // Nose reference
-                ctx.lineTo(projectedVertices[4].x, projectedVertices[4].y); // Fuselage left
-                ctx.lineTo(projectedVertices[6].x, projectedVertices[6].y); // Left wing tip
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                
-                // Right wing
-                ctx.beginPath();
-                ctx.moveTo(projectedVertices[0].x, projectedVertices[0].y); // Nose reference
-                ctx.lineTo(projectedVertices[5].x, projectedVertices[5].y); // Fuselage right
-                ctx.lineTo(projectedVertices[7].x, projectedVertices[7].y); // Right wing tip
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-            }
-            
-            // Draw tail
-            if (projectedVertices.length >= 11) {
-                // Vertical stabilizer
-                ctx.beginPath();
-                ctx.moveTo(projectedVertices[1].x, projectedVertices[1].y); // Tail base
-                ctx.lineTo(projectedVertices[8].x, projectedVertices[8].y); // Tail top
-                ctx.lineTo(projectedVertices[0].x, projectedVertices[0].y); // Reference point to close
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
-                
-                // Horizontal stabilizers
-                ctx.beginPath();
-                ctx.moveTo(projectedVertices[1].x, projectedVertices[1].y); // Tail base
-                ctx.lineTo(projectedVertices[9].x, projectedVertices[9].y); // Tail left
-                ctx.lineTo(projectedVertices[10].x, projectedVertices[10].y); // Tail right
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
+            return tiles;
+        }
+
+        function drawGround(tiles) {
+            for (const t of tiles) {
+                const x0 = t.ix * TILE;
+                const z0 = t.iz * TILE;
+                const corners = [[x0, 0, z0], [x0 + TILE, 0, z0], [x0 + TILE, 0, z0 + TILE], [x0, 0, z0 + TILE]];
+                fillPoly(corners.map(toCamera), rgb(mix(tileColor(t.ix, t.iz), FOG, fogAmount(t.dist))), true);
             }
         }
 
-        // Rotate vertices based on plane orientation
-        function rotateVertices(vertices, pitchAngle, rollAngle, yawAngle) {
-            for (let i = 0; i < vertices.length; i++) {
-                const vertex = vertices[i];
-                
-                // Translate vertex relative to plane position
-                let x = vertex.x - plane.x;
-                let y = vertex.y - plane.y;
-                let z = vertex.z - plane.z;
-                
-                // Apply pitch (rotation around X-axis)
-                let pitchY = y * Math.cos(pitchAngle) - z * Math.sin(pitchAngle);
-                let pitchZ = y * Math.sin(pitchAngle) + z * Math.cos(pitchAngle);
-                
-                // Apply roll (rotation around Z-axis)
-                let rollX = x * Math.cos(rollAngle) - pitchY * Math.sin(rollAngle);
-                let rollY = x * Math.sin(rollAngle) + pitchY * Math.cos(rollAngle);
-                
-                // Apply yaw (rotation around Y-axis)
-                let yawX = rollX * Math.cos(yawAngle) - pitchZ * Math.sin(yawAngle);
-                let yawZ = rollX * Math.sin(yawAngle) + pitchZ * Math.cos(yawAngle);
-                
-                // Update the vertex position
-                vertex.x = yawX + plane.x;
-                vertex.y = rollY + plane.y;
-                vertex.z = yawZ + plane.z;
+        function drawRunway() {
+            const dist = Math.hypot(cam.x, cam.z - 600);
+            const fog = fogAmount(dist);
+            fillPoly([[-30, 0.1, -300], [30, 0.1, -300], [30, 0.1, 1500], [-30, 0.1, 1500]].map(toCamera), rgb(mix(RUNWAY, FOG, fog)));
+            for (let z = -260; z < 1460; z += 120) {
+                fillPoly([[-1.5, 0.2, z], [1.5, 0.2, z], [1.5, 0.2, z + 50], [-1.5, 0.2, z + 50]].map(toCamera), rgb(mix(MARK, FOG, fog)));
+            }
+            for (const x of [-24, -16, -8, 4, 12, 20]) {
+                fillPoly([[x, 0.2, -280], [x + 4, 0.2, -280], [x + 4, 0.2, -230], [x, 0.2, -230]].map(toCamera), rgb(mix(MARK, FOG, fog)));
             }
         }
 
-        // Main game loop
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
+        function drawShadow() {
+            const alpha = 0.35 * clamp(1 - plane.y / 1500, 0, 1);
+            if (alpha <= 0 || crashed) return;
+            const color = "rgba(15, 30, 15, " + alpha + ")";
+            for (const face of SHADOW) {
+                const pts = face.pts.map(v => {
+                    const w = localToWorld(v);
+                    return toCamera([w[0], 0.3, w[2]]);
+                });
+                fillPoly(pts, color);
+            }
         }
 
-        // Start the game
-        gameLoop();
+        function treeItems(tiles) {
+            const items = [];
+            for (const t of tiles) {
+                if (t.dist > 2800 || tileColor(t.ix, t.iz) === LAKE) continue;
+                const count = Math.floor(hash(t.ix, t.iz, 11) * 6) - 2;
+                for (let k = 0; k < count; k++) {
+                    const x = t.ix * TILE + hash(t.ix, t.iz, 20 + k) * TILE;
+                    const z = t.iz * TILE + hash(t.ix, t.iz, 40 + k) * TILE;
+                    if (onRunway(x, z)) continue;
+                    const base = toCamera([x, 0, z]);
+                    if (base[2] < 5) continue;
+                    const height = 24 + hash(t.ix, t.iz, 60 + k) * 22;
+                    const fog = fogAmount(Math.hypot(x - cam.x, z - cam.z));
+                    items.push({ depth: base[2], draw: () => drawTree(base, height, fog) });
+                }
+            }
+            return items;
+        }
+
+        function drawTree(base, height, fog) {
+            const [sx, sy] = screen(base);
+            const s = F / base[2];
+            const h = height * s;
+            const w = height * 0.5 * s;
+            ctx.fillStyle = rgb(mix(TRUNK, FOG, fog));
+            ctx.fillRect(sx - w * 0.07, sy - h * 0.3, w * 0.14, h * 0.3);
+            ctx.fillStyle = rgb(mix(LEAF, FOG, fog));
+            ctx.beginPath();
+            ctx.moveTo(sx, sy - h);
+            ctx.lineTo(sx - w / 2, sy - h * 0.22);
+            ctx.lineTo(sx + w / 2, sy - h * 0.22);
+            ctx.fill();
+            ctx.fillStyle = rgb(mix(LEAF_LIGHT, FOG, fog));
+            ctx.beginPath();
+            ctx.moveTo(sx, sy - h);
+            ctx.lineTo(sx - w * 0.32, sy - h * 0.5);
+            ctx.lineTo(sx + w * 0.05, sy - h * 0.5);
+            ctx.fill();
+        }
+
+        function wrap(v) {
+            return ((v % CLOUD_AREA) + CLOUD_AREA * 1.5) % CLOUD_AREA - CLOUD_AREA / 2;
+        }
+
+        function cloudItems() {
+            const items = [];
+            for (const cloud of clouds) {
+                const x = cam.x + wrap(cloud.x - cam.x);
+                const z = cam.z + wrap(cloud.z - cam.z);
+                const center = toCamera([x, cloud.y, z]);
+                if (center[2] < -200) continue;
+                const fog = fogAmount(Math.hypot(x - cam.x, z - cam.z) * 0.8);
+                items.push({ depth: center[2], draw: () => drawCloud(cloud, x, z, fog) });
+            }
+            return items;
+        }
+
+        function drawCloud(cloud, x, z, fog) {
+            const puffs = cloud.puffs
+                .map(p => ({ c: toCamera([x + p[0], cloud.y + p[1], z + p[2]]), r: p[3], low: p[1] < 0 }))
+                .filter(p => p.c[2] > 10)
+                .sort((a, b) => b.c[2] - a.c[2]);
+            for (const p of puffs) {
+                const [sx, sy] = screen(p.c);
+                ctx.fillStyle = rgb(mix(p.low ? CLOUD_SHADE : CLOUD, FOG, fog * 0.7), 0.92);
+                ctx.beginPath();
+                ctx.arc(sx, sy, (p.r * F) / p.c[2], 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function planeItem() {
+            const center = toCamera([plane.x, plane.y, plane.z]);
+            return { depth: center[2], draw: drawPlane };
+        }
+
+        function drawPlane() {
+            if (crashed) return;
+            const blade = { pts: [[-0.5, -6, 17.4], [0.5, -6, 17.4], [0.5, 6, 17.4], [-0.5, 6, 17.4]], color: DARK, spin: plane.prop };
+            const faces = MESH.concat([blade]).map(face => {
+                const world = face.pts.map(v => localToWorld(v, face.spin));
+                const camPts = world.map(toCamera);
+                const n = normalize(cross(sub(world[1], world[0]), sub(world[2], world[0])));
+                const light = 0.72 + 0.28 * Math.abs(n[0] * SUN[0] + n[1] * SUN[1] + n[2] * SUN[2]);
+                const depth = camPts.reduce((s, p) => s + p[2], 0) / camPts.length;
+                return { camPts, depth, color: rgb(face.color.map(c => c * light), face.spin === undefined ? 1 : 0.55) };
+            });
+            faces.sort((a, b) => b.depth - a.depth);
+            for (const face of faces) {
+                if (face.camPts.some(p => p[2] < NEAR)) continue;
+                fillPoly(face.camPts, face.color, face.spin === undefined);
+            }
+        }
+
+        function sub(a, b) {
+            return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+        }
+
+        function cross(a, b) {
+            return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+        }
+
+        function render() {
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.translate(W / 2, H / 2);
+            ctx.rotate(-cam.roll);
+            ctx.translate(-W / 2, -H / 2);
+            const horizonY = H / 2 + F * Math.tan(cam.pitch);
+            drawSky(horizonY);
+            drawSun();
+            const tiles = visibleTiles();
+            drawGround(tiles);
+            drawRunway();
+            drawShadow();
+            const items = treeItems(tiles).concat(cloudItems(), [planeItem()]);
+            items.sort((a, b) => b.depth - a.depth);
+            items.forEach(item => item.draw());
+        }
+
+        function updateHud() {
+            ui.altitude.textContent = Math.round((plane.y - GROUND) * 3.28);
+            ui.speed.textContent = Math.round(plane.speed);
+            ui.heading.textContent = String(Math.round(((plane.yaw * 180) / Math.PI % 360 + 360) % 360)).padStart(3, "0");
+            const airborne = plane.y > GROUND + 0.5;
+            let warning = "";
+            if (airborne && plane.y < 200 && plane.vy < -40) warning = "PULL UP";
+            else if (airborne && plane.speed < 110) warning = "STALL";
+            ui.warning.textContent = warning;
+            ui.warning.style.display = warning && !crashed ? "block" : "none";
+        }
+
+        function loop(now) {
+            const dt = Math.max(0, Math.min(0.05, (now - last) / 1000));
+            last = now;
+            update(dt);
+            updateCamera(dt);
+            render();
+            updateHud();
+            requestAnimationFrame(loop);
+        }
+
+        document.addEventListener("keydown", e => {
+            const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+            if (key.startsWith("Arrow")) e.preventDefault();
+            if (key === "r") reset();
+            keys[key] = true;
+        });
+        document.addEventListener("keyup", e => {
+            keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = false;
+        });
+        window.addEventListener("resize", resize);
+
+        resize();
+        reset();
+        requestAnimationFrame(loop);
     </script>
 </body>
 </html>

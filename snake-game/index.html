@@ -6,9 +6,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🐍 Snake Game</h1>
-  <canvas id="game" width="400" height="200"></canvas>
-  <p id="score">Score: 0</p>
+  <main class="phone">
+    <div class="brand">SNAKE</div>
+    <div class="screen">
+      <div class="lcd-top">
+        <span id="score">0000</span>
+        <span>▮▮▮▯</span>
+      </div>
+      <canvas id="game" width="800" height="400"></canvas>
+      <div id="overlay" class="overlay">
+        <h2>GAME OVER</h2>
+        <p>SCORE <span id="final-score">0</span></p>
+        <button onclick="location.reload()">PLAY AGAIN</button>
+      </div>
+    </div>
+    <p class="hint">ARROW KEYS TO MOVE</p>
+  </main>
   <script src="game.js"></script>
 </body>
 </html>

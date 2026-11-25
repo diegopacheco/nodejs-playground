@@ -1,15 +1,48 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    background: radial-gradient(ellipse at top, #1e1b4b, #020617 70%);
+    color: #e0f2fe;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: 6px;
+    color: #38bdf8;
+    text-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+}
+
 canvas {
-    background: black;
     display: block;
-    margin: auto;
+    width: min(960px, 94vw, calc((100vh - 150px) * 1.5));
+    height: auto;
+    border-radius: 14px;
+    border: 2px solid rgba(56, 189, 248, 0.45);
+    box-shadow: 0 0 40px rgba(56, 189, 248, 0.25), 0 20px 60px rgba(0, 0, 0, 0.6);
 }
 
 #status {
-    color: white;
+    color: #a5f3fc;
     text-align: center;
-    font-family: monospace;
     font-size: 18px;
-    margin-top: 10px;
+    letter-spacing: 2px;
+}
+
+.hint {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
 }
 
 #game-over {

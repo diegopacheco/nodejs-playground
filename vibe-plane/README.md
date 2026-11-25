@@ -1,19 +1,24 @@
-# Flight Simulator Game
+# Vibe Plane
 
 <img src="result.png" />
 
 ## Description
 
-This is a simple flight simulator game built using HTML and JavaScript. Players can control a plane using keyboard inputs to navigate through a basic environment. The game is designed to be straightforward and fun, providing a basic introduction to game development concepts.
+A third person flight game built with plain HTML and JavaScript, no libraries. The world is drawn with a small canvas 3D renderer: patchwork fields, lakes, trees, a runway, clouds, fog and a flat shaded plane with a spinning propeller.
 
-## Features
+## Controls
 
-- Control a plane using the keyboard (Arrow keys).
-- Simple graphics and user interface.
-- Basic collision detection with the environment.
+* Arrow Up and Arrow Down: climb and dive.
+* Arrow Left and Arrow Right: bank and turn.
+* W and S: throttle up and down.
+* R: restart.
+
+Fly too slow and the plane stalls. Hit the ground too fast or banked and you crash. A gentle touch down on the ground is a landing.
 
 ## How to Run the Game
 
-1. Clone the repository or download the project files.
-2. Open the `index.html` file in a web browser.
-3. Use the Arrow keys to control the plane and navigate through the environment.
+```bash
+npm start
+```
+
+Or open `index.html` in a web browser.
