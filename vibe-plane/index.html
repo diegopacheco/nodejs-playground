@@ -20,12 +20,12 @@
             top: 20px;
             left: 20px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             color: #f8fafc;
         }
         .stat {
-            min-width: 110px;
-            padding: 10px 16px;
+            min-width: 96px;
+            padding: 10px 14px;
             border-radius: 14px;
             background: rgba(15, 23, 42, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -39,7 +39,7 @@
             color: #bae6fd;
         }
         .value {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             font-variant-numeric: tabular-nums;
         }
@@ -49,9 +49,40 @@
             margin-left: 4px;
             color: #cbd5e1;
         }
+        .toggles {
+            position: absolute;
+            top: 66px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            padding: 6px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+        }
+        .toggles button {
+            font: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            color: #cbd5e1;
+            background: transparent;
+            transition: background 0.2s, color 0.2s;
+        }
+        .toggles button:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .toggles button.on {
+            color: #0f172a;
+            background: #fde68a;
+        }
         .brand {
             position: absolute;
-            top: 24px;
+            top: 26px;
             right: 28px;
             font-size: 22px;
             font-weight: 800;
@@ -89,6 +120,27 @@
             background: rgba(15, 23, 42, 0.5);
             backdrop-filter: blur(8px);
         }
+        .crosshair {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            margin: -13px 0 0 -13px;
+            border: 2px solid rgba(255, 255, 255, 0.75);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+        }
+        .crosshair::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 4px;
+            height: 4px;
+            margin: -2px 0 0 -2px;
+            border-radius: 50%;
+            background: #ffffff;
+        }
         .overlay {
             position: absolute;
             inset: 0;
@@ -111,15 +163,22 @@
 </head>
 <body>
     <canvas id="game"></canvas>
+    <div id="crosshair" class="crosshair"></div>
     <div class="hud">
         <div class="stat"><span class="label">Altitude</span><span class="value"><span id="altitude">0</span><small>ft</small></span></div>
         <div class="stat"><span class="label">Speed</span><span class="value"><span id="speed">0</span><small>mph</small></span></div>
         <div class="stat"><span class="label">Heading</span><span class="value"><span id="heading">0</span><small>°</small></span></div>
-        <div class="stat"><span class="label">Weather</span><span class="value"><span id="weather">Clear</span></span></div>
+        <div class="stat"><span class="label">Score</span><span class="value"><span id="score">0</span></span></div>
+    </div>
+    <div class="toggles">
+        <button tabindex="-1" data-toggle="rain">🌧 Rain</button>
+        <button tabindex="-1" data-toggle="snow">❄️ Snow</button>
+        <button tabindex="-1" data-toggle="night">🌙 Night</button>
+        <button tabindex="-1" data-toggle="sound" class="on">🔊 Sound</button>
     </div>
     <div class="brand">VIBE PLANE</div>
     <div id="warning" class="warning"></div>
-    <div class="help">↑ ↓ climb / dive · ← → bank and turn · W / S throttle · 1 clear · 2 rain · 3 snow · R restart</div>
+    <div class="help">↑ ↓ climb / dive · ← → bank · W / S throttle · Space shoot · 1 rain · 2 snow · 3 night · M sound · R restart</div>
     <div id="overlay" class="overlay">
         <h2>You crashed</h2>
         <p>Press R to fly again</p>
@@ -132,9 +191,10 @@
             altitude: document.getElementById("altitude"),
             speed: document.getElementById("speed"),
             heading: document.getElementById("heading"),
-            weather: document.getElementById("weather"),
+            score: document.getElementById("score"),
             warning: document.getElementById("warning"),
-            overlay: document.getElementById("overlay")
+            overlay: document.getElementById("overlay"),
+            crosshair: document.getElementById("crosshair")
         };
 
         const TILE = 400;
@@ -143,6 +203,7 @@
         const NEAR = 1;
         const GROUND = 5.5;
         const AREA = 14000;
+        const BULLET_SPEED = 1500;
 
         const SKY_TOP = [37, 99, 235];
         const FOG = [206, 227, 241];
@@ -150,6 +211,9 @@
         const RAIN_FOG = [150, 160, 172];
         const SNOW_SKY = [148, 163, 184];
         const SNOW_FOG = [226, 232, 240];
+        const NIGHT_SKY = [6, 10, 28];
+        const NIGHT_FOG = [22, 28, 48];
+        const NIGHT_TINT = [8, 12, 30];
         const SNOW_GROUND = [240, 244, 250];
         const ICE = [200, 220, 236];
         const STORM = [118, 124, 136];
@@ -162,29 +226,38 @@
         const LEAF_LIGHT = [62, 128, 58];
         const CLOUD = [255, 255, 255];
         const CLOUD_SHADE = [212, 222, 234];
-        const WHITE = [240, 243, 248];
-        const RED = [204, 36, 52];
-        const NAVY = [30, 58, 110];
-        const GLASS = [40, 90, 140];
-        const DARK = [45, 48, 60];
+        const PAINT = [242, 244, 248];
+        const BELLY = [28, 52, 110];
+        const STRIPE = [210, 30, 45];
+        const COWL = [24, 30, 48];
+        const CANOPY = [30, 60, 95];
+        const METAL = [70, 75, 88];
         const TIRE = [25, 25, 30];
         const HOUSE_WALL = [236, 224, 200];
         const HOUSE_ROOF = [150, 60, 50];
         const BARN_WALL = [168, 48, 40];
         const BARN_ROOF = [84, 86, 92];
-        const BALLOON_COLORS = [[[239, 68, 68], [250, 204, 21]], [[59, 130, 246], [255, 255, 255]], [[168, 85, 247], [251, 146, 60]], [[16, 185, 129], [250, 250, 250]], [[236, 72, 153], [56, 189, 248]]];
-        const WEATHER_CYCLE = ["clear", "rain", "clear", "snow"];
+        const BALLOON_COLORS = [[239, 68, 68], [250, 204, 21], [59, 130, 246], [168, 85, 247], [16, 185, 129], [236, 72, 153], [251, 146, 60]];
 
         const SUN = normalize([Math.cos(0.35) * Math.sin(0.6), Math.sin(0.35), Math.cos(0.35) * Math.cos(0.6)]);
+        const MOON = normalize([-0.4, 0.5, 0.75]);
+        const GUNS = [[-7, -0.1, 5.8], [7, -0.1, 5.8]];
         const MESH = buildPlane();
         const SHADOW = buildShadow();
 
         const keys = {};
         const plane = {};
         const cam = {};
-        const env = { sky: SKY_TOP, fog: FOG, rain: 0, snow: 0, view: VIEW, flash: 0, bolt: [] };
-        const weather = { kind: "clear", index: 0, timer: 0 };
+        const settings = { rain: false, snow: false, night: false, sound: true };
+        const env = { sky: SKY_TOP, fog: FOG, rain: 0, snow: 0, night: 0, view: VIEW, flash: 0, bolt: [] };
         let crashed = false;
+        let score = 0;
+        let bullets = [];
+        let particles = [];
+        let fireTimer = 0;
+        let flashTimer = 0;
+        let gunSide = 0;
+        let beepTimer = 0;
         let W = 0;
         let H = 0;
         let F = 0;
@@ -214,79 +287,172 @@
                 rand() * Math.PI * 2
             ])
         }));
-        const balloons = Array.from({ length: 8 }, (_, i) => ({
-            x: rand() * AREA,
-            z: rand() * AREA,
-            y: 220 + rand() * 650,
-            colors: BALLOON_COLORS[i % BALLOON_COLORS.length],
-            seed: rand() * 10
-        }));
+        const balloons = Array.from({ length: 22 }, () => newBalloon({}));
+        const stars = Array.from({ length: 260 }, () => {
+            const a = rand() * Math.PI * 2;
+            const e = 0.05 + rand() * 1.4;
+            return { d: [Math.cos(e) * Math.sin(a), Math.sin(e), Math.cos(e) * Math.cos(a)], s: 0.6 + rand() * 1.4, t: rand() * 10 };
+        });
         const drops = Array.from({ length: 600 }, () => ({ x: rand(), y: rand(), s: 0.6 + rand() * 0.8 }));
         const flakes = Array.from({ length: 450 }, () => ({ x: rand(), y: rand(), s: 0.5 + rand() * 1 }));
 
-        function buildPlane() {
-            const faces = [];
-            const N = 10;
-            const stations = [[16.6, 1.3, 1.3, 0.2], [15.7, 2.4, 2.4, 0.2], [11, 2.7, 2.8, 0.3], [5, 2.65, 2.9, 0.4], [-2, 2.2, 2.5, 0.55], [-9, 1.3, 1.7, 0.95], [-15, 0.45, 0.7, 1.4]];
-            const rings = stations.map(([z, hw, hh, yc]) => Array.from({ length: N }, (_, k) => {
-                const a = (k / N) * Math.PI * 2;
+        function newBalloon(b) {
+            return Object.assign(b, {
+                x: rand() * AREA,
+                z: rand() * AREA,
+                y: 150 + rand() * 700,
+                color: BALLOON_COLORS[Math.floor(rand() * BALLOON_COLORS.length)],
+                seed: rand() * 10,
+                popped: false,
+                respawn: 0
+            });
+        }
+
+        function lofted(faces, stations, sides, fromA, toA, colorOf, closedRing) {
+            const rings = stations.map(([z, hw, hh, yc]) => Array.from({ length: sides + (closedRing ? 0 : 1) }, (_, k) => {
+                const a = fromA + ((toA - fromA) * k) / sides;
                 return [Math.cos(a) * hw, yc + Math.sin(a) * hh, z];
             }));
-            const tip = [0, 0.2, 18.2];
-            rings[0].forEach((p, k) => faces.push({ pts: [tip, rings[0][(k + 1) % N], p], color: RED }));
             for (let i = 0; i < rings.length - 1; i++) {
-                for (let k = 0; k < N; k++) {
-                    let color = WHITE;
-                    if (i === 0) color = RED;
-                    else if (i === 1) color = DARK;
-                    else if (k === 0 || k === 4) color = RED;
-                    else if (k > 5 && k < 9 && i > 1) color = NAVY;
-                    faces.push({ pts: [rings[i][k], rings[i][(k + 1) % N], rings[i + 1][(k + 1) % N], rings[i + 1][k]], color });
+                for (let k = 0; k < sides; k++) {
+                    const k2 = closedRing ? (k + 1) % sides : k + 1;
+                    const mid = fromA + ((toA - fromA) * (k + 0.5)) / sides;
+                    const yc = (stations[i][3] + stations[i + 1][3]) / 2;
+                    const z = (stations[i][0] + stations[i + 1][0]) / 2;
+                    faces.push(face([rings[i][k], rings[i][k2], rings[i + 1][k2], rings[i + 1][k]], colorOf(i, mid), [0, yc, z]));
                 }
             }
-            faces.push({ pts: rings[rings.length - 1].slice().reverse(), color: WHITE });
+            return rings;
+        }
+
+        function face(pts, color, inside, extra = {}) {
+            const c = centroid(pts);
+            let n = normalize(cross(sub(pts[1], pts[0]), sub(pts[2], pts[0])));
+            if (inside && dot(n, sub(c, inside)) < 0) n = [-n[0], -n[1], -n[2]];
+            return Object.assign({ pts, color, n, c, cull: Boolean(inside), alpha: 1, gloss: 0.5 }, extra);
+        }
+
+        function buildPlane() {
+            const faces = [];
+            const N = 16;
+            const stations = [[18.7, 0.9, 0.9, 0.35], [17.9, 1.5, 1.5, 0.35], [17.4, 2.25, 2.35, 0.4], [14, 2.65, 2.85, 0.45], [9, 2.75, 3.05, 0.55], [4, 2.65, 3.05, 0.65], [-1, 2.3, 2.65, 0.75], [-6, 1.8, 2.15, 0.95], [-11, 1.1, 1.55, 1.25], [-15.8, 0.35, 0.75, 1.55]];
+            const rings = lofted(faces, stations, N, 0, Math.PI * 2, (i, a) => {
+                if (i < 2) return STRIPE;
+                if (i < 4) return COWL;
+                const s = Math.sin(a);
+                if (s > 0.2) return PAINT;
+                if (s < -0.25) return BELLY;
+                return STRIPE;
+            }, true);
+            const tip = [0, 0.35, 19.6];
+            rings[0].forEach((p, k) => faces.push(face([tip, rings[0][(k + 1) % N], p], STRIPE, [0, 0.35, 18.5])));
+            faces.push(face(rings[rings.length - 1].slice().reverse(), PAINT, [0, 1.55, -14]));
+            const canopyStations = [-3.2, -1.5, 0.5, 2.5, 4.5, 6.2, 7.6].map(z => {
+                const t = (z - 2.2) / 5.6;
+                const r = Math.sqrt(Math.max(0.02, 1 - t * t));
+                return [z, 1.45 * r, 1.75 * r, 3.25];
+            });
+            lofted(faces, canopyStations, 8, 0, Math.PI, () => CANOPY, false).forEach(() => {});
+            faces.filter(f => f.color === CANOPY).forEach(f => (f.gloss = 1.6));
             for (const side of [1, -1]) {
                 wing(faces, side);
-                faces.push({ pts: [[1 * side, 1.4, -10], [7.5 * side, 1.7, -12.4], [7.5 * side, 1.7, -14.4], [1 * side, 1.4, -14.8]], color: WHITE });
-                faces.push({ pts: [[6.3 * side, 1.65, -12.1], [7.5 * side, 1.7, -12.4], [7.5 * side, 1.7, -14.4], [6.3 * side, 1.65, -14.5]], color: RED });
-                faces.push({ pts: [[2.9 * side, -1.8, 5.2], [3.3 * side, -1.8, 5.2], [3.5 * side, -4.6, 4.2], [3.1 * side, -4.6, 4.2]], color: DARK });
-                faces.push({ pts: Array.from({ length: 8 }, (_, k) => [3.5 * side, -5 + Math.sin((k / 8) * Math.PI * 2) * 1.1, 4.2 + Math.cos((k / 8) * Math.PI * 2) * 1.1]), color: TIRE });
+                tailplane(faces, side);
+                exhaust(faces, side);
             }
-            faces.push({ pts: [[0, 2.1, -8], [0, 9, -12.8], [0, 9, -14.9], [0, 1.6, -15]], color: WHITE });
-            faces.push({ pts: [[0, 6.5, -11.6], [0, 9, -12.8], [0, 9, -14.9], [0, 6.5, -14.9]], color: RED });
-            const canopy = [[-1.6, 2.9, 7.5], [1.6, 2.9, 7.5], [1.1, 4.6, 4.5], [-1.1, 4.6, 4.5], [1.1, 4.6, 1], [-1.1, 4.6, 1], [1.7, 3.1, -1.5], [-1.7, 3.1, -1.5]];
-            const [c0, c1, c2, c3, c4, c5, c6, c7] = canopy;
-            faces.push({ pts: [c0, c1, c2, c3], color: GLASS }, { pts: [c3, c2, c4, c5], color: GLASS }, { pts: [c5, c4, c6, c7], color: GLASS });
-            faces.push({ pts: [c0, c3, c5, c7], color: GLASS }, { pts: [c1, c2, c4, c6], color: GLASS });
-            faces.push({ pts: Array.from({ length: 12 }, (_, k) => [Math.cos((k / 12) * Math.PI * 2) * 6.8, 0.2 + Math.sin((k / 12) * Math.PI * 2) * 6.8, 18]), color: [220, 225, 235], alpha: 0.16 });
-            for (const dir of [1, -1]) {
-                faces.push({ pts: [[-0.5, 0.2 + 0.9 * dir, 18.1], [0.5, 0.2 + 0.9 * dir, 18.1], [0.3, 0.2 + 6.6 * dir, 18.1], [-0.3, 0.2 + 6.6 * dir, 18.1]], color: DARK, alpha: 0.85, spin: true });
+            fin(faces);
+            gear(faces);
+            faces.push(face(Array.from({ length: 16 }, (_, k) => [Math.cos((k / 16) * Math.PI * 2) * 7, 0.35 + Math.sin((k / 16) * Math.PI * 2) * 7, 19]), [225, 230, 240], null, { alpha: 0.07, disc: true }));
+            for (let b = 0; b < 3; b++) {
+                const a = (b / 3) * Math.PI * 2;
+                const blade = [[-0.55, 1, 19.1], [0.55, 1, 19.1], [0.35, 7, 19.1], [-0.35, 7, 19.1]].map(([x, y, z]) => [x * Math.cos(a) - (y - 0.35) * Math.sin(a), x * Math.sin(a) + (y - 0.35) * Math.cos(a) + 0.35, z]);
+                faces.push(face(blade, [30, 30, 36], null, { alpha: 0.9, spin: true }));
             }
             return faces;
         }
 
         function wing(faces, side) {
-            const span = 19 - 2.4;
-            const lead = x => 6 - ((x - 2.4) / span) * 2.5;
-            const trail = x => -2.5 + ((x - 2.4) / span) * 2;
-            const y = x => ((x - 2.4) / span) * 1.4;
-            const th = x => 0.5 - ((x - 2.4) / span) * 0.3;
-            const P = (x, z, top) => [x * side, y(x) + (top ? th(x) : -th(x)), z];
-            for (const [x0, x1, color] of [[2.4, 15.5, WHITE], [15.5, 19, RED]]) {
-                faces.push({ pts: [P(x0, lead(x0), true), P(x1, lead(x1), true), P(x1, trail(x1), true), P(x0, trail(x0), true)], color });
-                faces.push({ pts: [P(x0, lead(x0), false), P(x1, lead(x1), false), P(x1, trail(x1), false), P(x0, trail(x0), false)], color: [200, 205, 214] });
-                faces.push({ pts: [P(x0, lead(x0), true), P(x1, lead(x1), true), P(x1, lead(x1), false), P(x0, lead(x0), false)], color });
-                faces.push({ pts: [P(x0, trail(x0), true), P(x1, trail(x1), true), P(x1, trail(x1), false), P(x0, trail(x0), false)], color });
+            const rootX = 2.4;
+            const tipX = 17.5;
+            const lead = x => 7.6 - ((x - rootX) / (tipX - rootX)) * 3.2;
+            const trail = x => -1.6 + ((x - rootX) / (tipX - rootX)) * 2.6;
+            const dihedral = x => -1.2 + (x - rootX) * 0.09;
+            const thick = x => 0.75 - ((x - rootX) / (tipX - rootX)) * 0.45;
+            const point = (x, t, top) => {
+                const z = lead(x) + (trail(x) - lead(x)) * t;
+                const shape = t === 0 ? 0 : t < 0.5 ? thick(x) : thick(x) * 0.25;
+                return [x * side, dihedral(x) + (top ? shape : -shape * 0.45), z];
+            };
+            const chord = [0, 0.3, 1];
+            const spans = [rootX, 8, 13, 15.8, tipX];
+            for (let s = 0; s < spans.length - 1; s++) {
+                const x0 = spans[s];
+                const x1 = spans[s + 1];
+                const color = x0 >= 15.8 ? STRIPE : PAINT;
+                for (let c = 0; c < chord.length - 1; c++) {
+                    for (const top of [true, false]) {
+                        const pts = [point(x0, chord[c], top), point(x1, chord[c], top), point(x1, chord[c + 1], top), point(x0, chord[c + 1], top)];
+                        const ref = [((x0 + x1) / 2) * side, dihedral((x0 + x1) / 2), (lead(x0) + trail(x0)) / 2];
+                        faces.push(face(pts, top ? color : [190, 196, 208], ref));
+                    }
+                }
             }
-            faces.push({ pts: [P(19, lead(19), true), P(19, trail(19), true), P(19, trail(19), false), P(19, lead(19), false)], color: RED });
+            const tipRef = [(tipX - 1) * side, dihedral(tipX), (lead(tipX) + trail(tipX)) / 2];
+            faces.push(face([point(tipX, 0, true), point(tipX, 0.3, true), point(tipX, 1, true), point(tipX, 0.3, false)], STRIPE, tipRef));
+            const cx = 11 * side;
+            const cz = (lead(11) + trail(11)) / 2;
+            const cy = dihedral(11) + thick(11) * 0.75 + 0.06;
+            for (const [r, color] of [[2.2, BELLY], [1.5, PAINT], [0.9, STRIPE]]) {
+                faces.push(face(Array.from({ length: 12 }, (_, k) => [cx + Math.cos((k / 12) * Math.PI * 2) * r, cy + 0.01 * (2.2 - r), cz + Math.sin((k / 12) * Math.PI * 2) * r]), color, null, { decal: r }));
+            }
+        }
+
+        function tailplane(faces, side) {
+            const root = [[0.9, 1.5, -10.8], [0.9, 1.5, -15.2]];
+            const tip = [[7.2, 1.8, -13.3], [7.2, 1.8, -15.3]];
+            const th = 0.22;
+            const P = (p, top) => [p[0] * side, p[1] + (top ? th : -th), p[2]];
+            const ref = [4 * side, 1.6, -13.6];
+            faces.push(face([P(root[0], true), P(tip[0], true), P(tip[1], true), P(root[1], true)], PAINT, ref));
+            faces.push(face([P(root[0], false), P(tip[0], false), P(tip[1], false), P(root[1], false)], [190, 196, 208], ref));
+            faces.push(face([P(root[0], true), P(tip[0], true), P(tip[0], false), P(root[0], false)], STRIPE, ref));
+            faces.push(face([P(tip[0], true), P(tip[1], true), P(tip[1], false), P(tip[0], false)], STRIPE, ref));
+        }
+
+        function fin(faces) {
+            const base = [[0, 2.1, -8.6], [0, 2, -15.8]];
+            const mid = [[0, 6.3, -12], [0, 6.3, -15.6]];
+            const top = [[0, 8.8, -13.6], [0, 8.8, -15.5]];
+            for (const s of [1, -1]) {
+                const X = p => [0.18 * s, p[1], p[2]];
+                const ref = [0, 5, -13.5];
+                faces.push(face([X(base[0]), X(mid[0]), X(mid[1]), X(base[1])], PAINT, ref));
+                faces.push(face([X(mid[0]), X(top[0]), X(top[1]), X(mid[1])], STRIPE, ref));
+            }
+            const ref = [0, 5, -13.5];
+            faces.push(face([[0.18, 2.1, -8.6], [0.18, 8.8, -13.6], [-0.18, 8.8, -13.6], [-0.18, 2.1, -8.6]], STRIPE, ref));
+            faces.push(face([[0.18, 8.8, -13.6], [0.18, 8.8, -15.5], [-0.18, 8.8, -15.5], [-0.18, 8.8, -13.6]], STRIPE, ref));
+        }
+
+        function exhaust(faces, side) {
+            for (let i = 0; i < 3; i++) {
+                const z = 14.8 - i * 1.3;
+                faces.push(face([[2.62 * side, 1.3, z], [2.62 * side, 1.3, z - 0.8], [2.62 * side, 0.7, z - 0.8], [2.62 * side, 0.7, z]], METAL, null, { gloss: 1 }));
+            }
+        }
+
+        function gear(faces) {
+            for (const side of [1, -1]) {
+                faces.push(face([[4.2 * side, -1.4, 5.4], [4.6 * side, -1.4, 5.4], [4.8 * side, -5.2, 4.8], [4.4 * side, -5.2, 4.8]], METAL, null, { gear: true }));
+                faces.push(face(Array.from({ length: 10 }, (_, k) => [4.9 * side, -5.6 + Math.sin((k / 10) * Math.PI * 2) * 1.25, 4.8 + Math.cos((k / 10) * Math.PI * 2) * 1.25]), TIRE, null, { gear: true }));
+            }
         }
 
         function buildShadow() {
-            const body = [[0, 0, 18], [2.7, 0, 11], [2.6, 0, -2], [0.5, 0, -15], [-0.5, 0, -15], [-2.6, 0, -2], [-2.7, 0, 11]];
+            const body = [[0, 0, 19.5], [2.7, 0, 12], [2.7, 0, 0], [0.6, 0, -15.8], [-0.6, 0, -15.8], [-2.7, 0, 0], [-2.7, 0, 12]];
             const shapes = [body];
             for (const s of [1, -1]) {
-                shapes.push([[2.4 * s, 0, 6], [19 * s, 0, 3.5], [19 * s, 0, -0.5], [2.4 * s, 0, -2.5]]);
-                shapes.push([[1 * s, 0, -10], [7.5 * s, 0, -12.4], [7.5 * s, 0, -14.4], [1 * s, 0, -14.8]]);
+                shapes.push([[2.4 * s, 0, 7.6], [17.5 * s, 0, 4.4], [17.5 * s, 0, 1], [2.4 * s, 0, -1.6]]);
+                shapes.push([[0.9 * s, 0, -10.8], [7.2 * s, 0, -13.3], [7.2 * s, 0, -15.3], [0.9 * s, 0, -15.2]]);
             }
             return shapes;
         }
@@ -295,6 +461,7 @@
             Object.assign(plane, { x: 0, y: 350, z: -1800, yaw: 0, pitch: 0, roll: 0, speed: 190, vy: 0, prop: 0 });
             Object.assign(cam, { x: 0, y: 0, z: 0, yaw: 0, pitch: -0.1, roll: 0 });
             crashed = false;
+            bullets = [];
             ui.overlay.classList.remove("show");
         }
 
@@ -322,6 +489,14 @@
             return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
         }
 
+        function add(a, b) {
+            return [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+        }
+
+        function scale(a, k) {
+            return [a[0] * k, a[1] * k, a[2] * k];
+        }
+
         function cross(a, b) {
             return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
         }
@@ -330,16 +505,24 @@
             return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
         }
 
+        function centroid(pts) {
+            return scale(pts.reduce(add, [0, 0, 0]), 1 / pts.length);
+        }
+
         function mix(a, b, t) {
             return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
         }
 
         function rgb(c, alpha = 1) {
-            return "rgba(" + Math.round(c[0]) + "," + Math.round(c[1]) + "," + Math.round(c[2]) + "," + alpha + ")";
+            return "rgba(" + Math.round(clamp(c[0], 0, 255)) + "," + Math.round(clamp(c[1], 0, 255)) + "," + Math.round(clamp(c[2], 0, 255)) + "," + alpha + ")";
+        }
+
+        function nightShade(c, amount = 0.72) {
+            return mix(c, NIGHT_TINT, env.night * amount);
         }
 
         function fogged(c, dist, snowAmount = 0) {
-            return rgb(mix(mix(c, SNOW_GROUND, env.snow * snowAmount), env.fog, fogAmount(dist)));
+            return rgb(mix(nightShade(mix(c, SNOW_GROUND, env.snow * snowAmount)), env.fog, fogAmount(dist)));
         }
 
         function angleDiff(a, b) {
@@ -425,6 +608,14 @@
             ctx.fill();
         }
 
+        function glow(x, y, r, color, alpha) {
+            const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+            g.addColorStop(0, "rgba(" + color + "," + alpha + ")");
+            g.addColorStop(1, "rgba(" + color + ",0)");
+            ctx.fillStyle = g;
+            ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+
         function onRunway(x, z) {
             return Math.abs(x) < 120 && z > -500 && z < 1700;
         }
@@ -439,12 +630,12 @@
             return mix(FIELDS[Math.floor(hash(ix, iz, 7) * FIELDS.length)], SNOW_GROUND, env.snow * 0.85);
         }
 
-        function localToWorld(v, spin) {
+        function rotateLocal(v, spin) {
             let [x, y, z] = v;
             if (spin) {
                 const cs = Math.cos(spin);
                 const ss = Math.sin(spin);
-                [x, y] = [x * cs - (y - 0.2) * ss, x * ss + (y - 0.2) * cs + 0.2];
+                [x, y] = [x * cs - (y - 0.35) * ss, x * ss + (y - 0.35) * cs + 0.35];
             }
             const cr = Math.cos(plane.roll);
             const sr = Math.sin(plane.roll);
@@ -455,13 +646,141 @@
             const cy = Math.cos(plane.yaw);
             const sy = Math.sin(plane.yaw);
             [x, z] = [x * cy + z * sy, -x * sy + z * cy];
-            return [x + plane.x, y + plane.y, z + plane.z];
+            return [x, y, z];
         }
 
-        function setWeather(kind) {
-            weather.kind = kind;
-            weather.index = WEATHER_CYCLE.indexOf(kind);
-            weather.timer = 0;
+        function localToWorld(v, spin) {
+            return add(rotateLocal(v, spin), [plane.x, plane.y, plane.z]);
+        }
+
+        function forward() {
+            return [Math.sin(plane.yaw) * Math.cos(plane.pitch), Math.sin(plane.pitch), Math.cos(plane.yaw) * Math.cos(plane.pitch)];
+        }
+
+        const sfx = { ctx: null };
+
+        function noiseBuffer(ac, seconds) {
+            const buffer = ac.createBuffer(1, Math.floor(ac.sampleRate * seconds), ac.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < data.length; i++) data[i] = rand() * 2 - 1;
+            return buffer;
+        }
+
+        function loopNoise(type, freq) {
+            const ac = sfx.ctx;
+            const src = ac.createBufferSource();
+            src.buffer = sfx.noise;
+            src.loop = true;
+            const filter = ac.createBiquadFilter();
+            filter.type = type;
+            filter.frequency.value = freq;
+            const gain = ac.createGain();
+            gain.gain.value = 0;
+            src.connect(filter).connect(gain).connect(sfx.master);
+            src.start();
+            return gain;
+        }
+
+        function initAudio() {
+            if (sfx.ctx) {
+                if (sfx.ctx.state === "suspended") sfx.ctx.resume();
+                return;
+            }
+            const ac = new (window.AudioContext || window.webkitAudioContext)();
+            sfx.ctx = ac;
+            sfx.noise = noiseBuffer(ac, 2);
+            sfx.master = ac.createGain();
+            sfx.master.gain.value = settings.sound ? 0.8 : 0;
+            sfx.master.connect(ac.destination);
+            const filter = ac.createBiquadFilter();
+            filter.type = "lowpass";
+            filter.frequency.value = 520;
+            sfx.engineGain = ac.createGain();
+            sfx.engineGain.gain.value = 0;
+            sfx.engineA = ac.createOscillator();
+            sfx.engineA.type = "sawtooth";
+            sfx.engineB = ac.createOscillator();
+            sfx.engineB.type = "square";
+            sfx.engineA.connect(filter);
+            sfx.engineB.connect(filter);
+            filter.connect(sfx.engineGain).connect(sfx.master);
+            sfx.engineA.start();
+            sfx.engineB.start();
+            sfx.rainGain = loopNoise("highpass", 1800);
+            sfx.windGain = loopNoise("lowpass", 380);
+        }
+
+        function burst(duration, type, from, to, volume, delay = 0) {
+            if (!sfx.ctx) return;
+            const ac = sfx.ctx;
+            const t = ac.currentTime + delay;
+            const src = ac.createBufferSource();
+            src.buffer = sfx.noise;
+            const filter = ac.createBiquadFilter();
+            filter.type = type;
+            filter.frequency.setValueAtTime(from, t);
+            filter.frequency.exponentialRampToValueAtTime(to, t + duration);
+            const gain = ac.createGain();
+            gain.gain.setValueAtTime(volume, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+            src.connect(filter).connect(gain).connect(sfx.master);
+            src.start(t, rand());
+            src.stop(t + duration);
+        }
+
+        function tone(from, to, duration, wave, volume, delay = 0) {
+            if (!sfx.ctx) return;
+            const ac = sfx.ctx;
+            const t = ac.currentTime + delay;
+            const osc = ac.createOscillator();
+            const gain = ac.createGain();
+            osc.type = wave;
+            osc.frequency.setValueAtTime(from, t);
+            osc.frequency.exponentialRampToValueAtTime(to, t + duration);
+            gain.gain.setValueAtTime(volume, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+            osc.connect(gain).connect(sfx.master);
+            osc.start(t);
+            osc.stop(t + duration);
+        }
+
+        const sounds = {
+            shot: () => {
+                burst(0.07, "bandpass", 2200, 500, 0.5);
+                tone(220, 70, 0.06, "square", 0.08);
+            },
+            pop: () => {
+                burst(0.18, "highpass", 3000, 800, 0.7);
+                tone(900, 180, 0.15, "triangle", 0.2);
+            },
+            thunder: () => burst(2.2, "lowpass", 300, 40, 1.2, 0.35),
+            crash: () => {
+                burst(1.4, "lowpass", 900, 50, 1.4);
+                tone(140, 30, 1.2, "sawtooth", 0.25);
+            },
+            beep: () => tone(880, 880, 0.12, "square", 0.08),
+            click: () => tone(1200, 900, 0.05, "triangle", 0.1)
+        };
+
+        function updateAudio(dt) {
+            if (!sfx.ctx) return;
+            const t = sfx.ctx.currentTime;
+            const throttle = keys.w ? 25 : keys.s ? -15 : 0;
+            const freq = 45 + plane.speed * 0.32 + throttle;
+            sfx.engineA.frequency.setTargetAtTime(freq, t, 0.1);
+            sfx.engineB.frequency.setTargetAtTime(freq * 0.5, t, 0.1);
+            sfx.engineGain.gain.setTargetAtTime(crashed ? 0 : 0.07, t, 0.2);
+            sfx.rainGain.gain.setTargetAtTime(env.rain * 0.22, t, 0.3);
+            sfx.windGain.gain.setTargetAtTime(crashed ? 0 : 0.05 + (plane.speed / 420) * 0.18 + env.snow * 0.08, t, 0.3);
+            sfx.master.gain.setTargetAtTime(settings.sound ? 0.8 : 0, t, 0.05);
+            beepTimer -= dt;
+        }
+
+        function setToggle(name, value) {
+            settings[name] = value;
+            document.querySelector('[data-toggle="' + name + '"]').classList.toggle("on", value);
+            initAudio();
+            sounds.click();
         }
 
         function makeBolt() {
@@ -477,18 +796,20 @@
             return points;
         }
 
-        function updateWeather(dt) {
-            weather.timer += dt;
-            if (weather.timer > 40) setWeather(WEATHER_CYCLE[(weather.index + 1) % WEATHER_CYCLE.length]);
-            const k = Math.min(1, dt * 0.5);
-            env.rain += ((weather.kind === "rain" ? 1 : 0) - env.rain) * k;
-            env.snow += ((weather.kind === "snow" ? 1 : 0) - env.snow) * k;
-            env.sky = mix(mix(SKY_TOP, RAIN_SKY, env.rain * 0.9), SNOW_SKY, env.snow * 0.8);
-            env.fog = mix(mix(FOG, RAIN_FOG, env.rain * 0.9), SNOW_FOG, env.snow * 0.9);
-            env.view = VIEW * (1 - 0.35 * (env.rain + env.snow));
+        function updateEnvironment(dt) {
+            const k = Math.min(1, dt * 0.8);
+            env.rain += ((settings.rain ? 1 : 0) - env.rain) * k;
+            env.snow += ((settings.snow ? 1 : 0) - env.snow) * k;
+            env.night += ((settings.night ? 1 : 0) - env.night) * k;
+            const daySky = mix(mix(SKY_TOP, RAIN_SKY, env.rain * 0.9), SNOW_SKY, env.snow * 0.8);
+            const dayFog = mix(mix(FOG, RAIN_FOG, env.rain * 0.9), SNOW_FOG, env.snow * 0.9);
+            env.sky = mix(daySky, NIGHT_SKY, env.night * 0.95);
+            env.fog = mix(dayFog, NIGHT_FOG, env.night * 0.9);
+            env.view = VIEW * (1 - 0.3 * Math.min(1, env.rain + env.snow));
             if (env.rain > 0.6 && rand() < dt * 0.15) {
                 env.flash = 1;
                 env.bolt = makeBolt();
+                sounds.thunder();
             }
             env.flash = Math.max(0, env.flash - dt * 2.5);
         }
@@ -512,13 +833,101 @@
             plane.y += plane.vy * dt;
             plane.prop += dt * (14 + plane.speed * 0.12);
             if (plane.y <= GROUND) {
-                if (airborne && (plane.vy < -35 || Math.abs(plane.roll) > 0.45)) {
-                    crashed = true;
-                    ui.overlay.classList.add("show");
-                }
+                if (airborne && (plane.vy < -35 || Math.abs(plane.roll) > 0.45)) crash();
                 plane.y = GROUND;
                 plane.pitch = Math.max(plane.pitch, 0);
             }
+            fireTimer -= dt;
+            flashTimer -= dt;
+            if (keys[" "] && fireTimer <= 0) fire();
+        }
+
+        function crash() {
+            crashed = true;
+            ui.overlay.classList.add("show");
+            explode([plane.x, plane.y + 3, plane.z], [[255, 160, 40], [255, 90, 30], [60, 60, 60], [250, 240, 200]], 80, 90);
+            sounds.crash();
+        }
+
+        function fire() {
+            fireTimer = 0.085;
+            flashTimer = 0.05;
+            const gun = GUNS[gunSide];
+            gunSide = 1 - gunSide;
+            const dir = forward();
+            const velocity = scale(dir, plane.speed * 0.9 + BULLET_SPEED);
+            const start = localToWorld(gun);
+            bullets.push({ p: start, prev: start, v: velocity, life: 1.6 });
+            sounds.shot();
+        }
+
+        function explode(at, colors, count, power) {
+            for (let i = 0; i < count; i++) {
+                const d = normalize([rand() - 0.5, rand() - 0.3, rand() - 0.5]);
+                particles.push({
+                    p: at.slice(),
+                    v: scale(d, power * (0.4 + rand())),
+                    life: 0.8 + rand() * 0.8,
+                    color: colors[Math.floor(rand() * colors.length)],
+                    size: 0.8 + rand() * 1.6
+                });
+            }
+        }
+
+        function balloonPosition(b) {
+            return [
+                cam.x + wrap(b.x + clock * 8 - cam.x),
+                b.y + Math.sin(clock * 0.5 + b.seed) * 8,
+                cam.z + wrap(b.z + clock * 3 - cam.z)
+            ];
+        }
+
+        function segmentDistance(a, b, p) {
+            const ab = sub(b, a);
+            const t = clamp(dot(sub(p, a), ab) / (dot(ab, ab) || 1), 0, 1);
+            const q = add(a, scale(ab, t));
+            return Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
+        }
+
+        function updateShots(dt) {
+            for (const b of balloons) {
+                if (b.popped) {
+                    b.respawn -= dt;
+                    if (b.respawn <= 0) newBalloon(b);
+                }
+            }
+            for (const s of bullets) {
+                s.prev = s.p;
+                s.p = add(s.p, scale(s.v, dt));
+                s.v[1] -= 25 * dt;
+                s.life -= dt;
+                if (s.p[1] <= 0) {
+                    s.life = 0;
+                    explode([s.p[0], 1, s.p[2]], [[160, 140, 110], [120, 100, 80], [200, 190, 170]], 6, 25);
+                    continue;
+                }
+                for (const b of balloons) {
+                    if (b.popped) continue;
+                    const pos = balloonPosition(b);
+                    if (segmentDistance(s.prev, s.p, pos) < 22) {
+                        b.popped = true;
+                        b.respawn = 8;
+                        s.life = 0;
+                        score += 100;
+                        explode(pos, [b.color, [255, 255, 255], [250, 204, 21]], 45, 70);
+                        sounds.pop();
+                        break;
+                    }
+                }
+            }
+            bullets = bullets.filter(s => s.life > 0);
+            for (const p of particles) {
+                p.p = add(p.p, scale(p.v, dt));
+                p.v[1] -= 60 * dt;
+                p.v = scale(p.v, 1 - dt * 0.8);
+                p.life -= dt;
+            }
+            particles = particles.filter(p => p.life > 0);
         }
 
         function updateCamera(dt) {
@@ -528,9 +937,9 @@
             yawShift = ((cam.yaw - before) * F) / Math.hypot(W, H);
             cam.pitch += (plane.pitch * 0.5 - 0.1 - cam.pitch) * k;
             cam.roll += (plane.roll * 0.3 - cam.roll) * k;
-            cam.x = plane.x - Math.sin(cam.yaw) * 75;
-            cam.z = plane.z - Math.cos(cam.yaw) * 75;
-            cam.y = Math.max(plane.y + 18, 4);
+            cam.x = plane.x - Math.sin(cam.yaw) * 58;
+            cam.z = plane.z - Math.cos(cam.yaw) * 58;
+            cam.y = Math.max(plane.y + 13, 4);
         }
 
         function drawSky(horizonY) {
@@ -544,19 +953,34 @@
             ctx.fillRect(-D, horizonY - 1, W + 2 * D, 3 * D);
         }
 
-        function drawSun() {
-            const strength = 1 - env.rain - env.snow * 0.7;
-            if (strength <= 0.05) return;
-            const p = rotateToCamera(SUN[0], SUN[1], SUN[2]);
-            if (p[2] <= 0) return;
-            const [x, y] = screen(p);
-            const glow = ctx.createRadialGradient(x, y, 0, x, y, 220);
-            glow.addColorStop(0, "rgba(255, 253, 240, " + strength + ")");
-            glow.addColorStop(0.12, "rgba(255, 248, 210, " + 0.95 * strength + ")");
-            glow.addColorStop(0.35, "rgba(255, 240, 180, " + 0.35 * strength + ")");
-            glow.addColorStop(1, "rgba(255, 240, 180, 0)");
-            ctx.fillStyle = glow;
-            ctx.fillRect(x - 220, y - 220, 440, 440);
+        function drawCelestial() {
+            const day = (1 - env.night) * (1 - env.rain - env.snow * 0.7);
+            if (day > 0.05) {
+                const p = rotateToCamera(SUN[0], SUN[1], SUN[2]);
+                if (p[2] > 0) {
+                    const [x, y] = screen(p);
+                    glow(x, y, 220, "255, 245, 200", 0.9 * day);
+                    circle(x, y, 22, "rgba(255, 253, 240, " + day + ")");
+                }
+            }
+            if (env.night < 0.05) return;
+            const clear = 1 - Math.min(1, env.rain + env.snow * 0.6);
+            for (const s of stars) {
+                const p = rotateToCamera(s.d[0], s.d[1], s.d[2]);
+                if (p[2] <= 0) continue;
+                const [x, y] = screen(p);
+                const twinkle = 0.6 + 0.4 * Math.sin(clock * 3 + s.t);
+                ctx.fillStyle = "rgba(255, 255, 255, " + env.night * clear * twinkle + ")";
+                ctx.fillRect(x, y, s.s, s.s);
+            }
+            const m = rotateToCamera(MOON[0], MOON[1], MOON[2]);
+            if (m[2] > 0) {
+                const [x, y] = screen(m);
+                glow(x, y, 120, "200, 215, 255", 0.35 * env.night * clear);
+                circle(x, y, 18, "rgba(236, 240, 250, " + env.night * clear + ")");
+                circle(x + 6, y - 4, 4, "rgba(190, 196, 210, " + env.night * clear + ")");
+                circle(x - 5, y + 6, 3, "rgba(190, 196, 210, " + env.night * clear + ")");
+            }
         }
 
         function visibleTiles() {
@@ -585,15 +1009,14 @@
                 const x0 = t.ix * TILE;
                 const z0 = t.iz * TILE;
                 const corners = [[x0, 0, z0], [x0 + TILE, 0, z0], [x0 + TILE, 0, z0 + TILE], [x0, 0, z0 + TILE]];
-                fillPoly(corners.map(toCamera), rgb(mix(tileColor(t.ix, t.iz), env.fog, fogAmount(t.dist))), true);
+                fillPoly(corners.map(toCamera), rgb(mix(nightShade(tileColor(t.ix, t.iz)), env.fog, fogAmount(t.dist))), true);
             }
         }
 
         function drawRunway() {
             const dist = distTo(0, 600);
-            const runway = fogged(RUNWAY, dist, 0.3);
             const mark = fogged(MARK, dist);
-            fillPoly([[-30, 0.1, -300], [30, 0.1, -300], [30, 0.1, 1500], [-30, 0.1, 1500]].map(toCamera), runway);
+            fillPoly([[-30, 0.1, -300], [30, 0.1, -300], [30, 0.1, 1500], [-30, 0.1, 1500]].map(toCamera), fogged(RUNWAY, dist, 0.3));
             for (let z = -260; z < 1460; z += 120) {
                 fillPoly([[-1.5, 0.2, z], [1.5, 0.2, z], [1.5, 0.2, z + 50], [-1.5, 0.2, z + 50]].map(toCamera), mark);
             }
@@ -602,8 +1025,21 @@
             }
         }
 
+        function drawRunwayLights() {
+            if (env.night < 0.1) return;
+            for (let z = -300; z <= 1500; z += 75) {
+                for (const x of [-33, 33]) {
+                    const p = toCamera([x, 1, z]);
+                    if (p[2] < 5) continue;
+                    const [sx, sy] = screen(p);
+                    const r = Math.max(2, (6 * F) / p[2]);
+                    glow(sx, sy, r * 3, z === -300 || z === 1500 ? "120, 255, 140" : "255, 220, 150", env.night);
+                }
+            }
+        }
+
         function drawShadow() {
-            const alpha = 0.35 * clamp(1 - plane.y / 1500, 0, 1) * (1 - env.rain * 0.7);
+            const alpha = 0.35 * clamp(1 - plane.y / 1500, 0, 1) * (1 - env.rain * 0.7) * (1 - env.night * 0.8);
             if (alpha <= 0 || crashed) return;
             const color = "rgba(15, 30, 15, " + alpha + ")";
             for (const shape of SHADOW) {
@@ -626,8 +1062,8 @@
                     const x = x0 + 100 + hash(t.ix, t.iz, 31) * 120;
                     const z = z0 + 100 + hash(t.ix, t.iz, 32) * 120;
                     const rot = hash(t.ix, t.iz, 33) * Math.PI;
-                    items.push(buildingItem(x, z, rot, 10, 8, 9, 7, HOUSE_WALL, HOUSE_ROOF));
-                    items.push(buildingItem(x + Math.cos(rot) * 60, z - Math.sin(rot) * 60, rot, 14, 22, 13, 10, BARN_WALL, BARN_ROOF));
+                    items.push(buildingItem(x, z, rot, 10, 8, 9, 7, HOUSE_WALL, HOUSE_ROOF, true));
+                    items.push(buildingItem(x + Math.cos(rot) * 60, z - Math.sin(rot) * 60, rot, 14, 22, 13, 10, BARN_WALL, BARN_ROOF, false));
                 } else if (kind < 0.1) {
                     items.push(windmillItem(x0 + TILE / 2, z0 + TILE / 2, hash(t.ix, t.iz, 34) * 10));
                 }
@@ -671,13 +1107,13 @@
             ctx.fill();
         }
 
-        function buildingItem(x, z, rot, w, d, h, rh, wall, roof) {
+        function buildingItem(x, z, rot, w, d, h, rh, wall, roof, house) {
             const center = toCamera([x, h / 2, z]);
             if (center[2] < 10) return null;
-            return { depth: center[2], draw: () => drawBuilding(x, z, rot, w, d, h, rh, wall, roof) };
+            return { depth: center[2], draw: () => drawBuilding(x, z, rot, w, d, h, rh, wall, roof, house) };
         }
 
-        function drawBuilding(x, z, rot, w, d, h, rh, wall, roof) {
+        function drawBuilding(x, z, rot, w, d, h, rh, wall, roof, house) {
             const c = Math.cos(rot);
             const s = Math.sin(rot);
             const P = (lx, ly, lz) => [x + lx * c + lz * s, ly, z - lx * s + lz * c];
@@ -685,33 +1121,41 @@
             const t = [P(-w, h, -d), P(w, h, -d), P(w, h, d), P(-w, h, d)];
             const r = [P(0, h + rh, -d - 1), P(0, h + rh, d + 1)];
             const e = [P(-w - 1.5, h - 1, -d - 1), P(w + 1.5, h - 1, -d - 1), P(w + 1.5, h - 1, d + 1), P(-w - 1.5, h - 1, d + 1)];
+            const win = (side, offset) => {
+                const wy0 = h * 0.4;
+                const wy1 = h * 0.7;
+                return [P(side * (w + 0.1), wy0, offset - 1.6), P(side * (w + 0.1), wy0, offset + 1.6), P(side * (w + 0.1), wy1, offset + 1.6), P(side * (w + 0.1), wy1, offset - 1.6)];
+            };
             const faces = [
-                [[b[0], b[1], t[1], r[0], t[0]], wall],
-                [[b[2], b[3], t[3], r[1], t[2]], wall],
-                [[b[1], b[2], t[2], t[1]], wall],
-                [[b[3], b[0], t[0], t[3]], wall],
-                [[e[1], e[2], r[1], r[0]], roof],
-                [[e[3], e[0], r[0], r[1]], roof]
+                { pts: [b[0], b[1], t[1], r[0], t[0]], color: wall, door: true },
+                { pts: [b[2], b[3], t[3], r[1], t[2]], color: wall },
+                { pts: [b[1], b[2], t[2], t[1]], color: wall, windows: [win(1, -d / 2), win(1, d / 2)] },
+                { pts: [b[3], b[0], t[0], t[3]], color: wall, windows: [win(-1, -d / 2), win(-1, d / 2)] },
+                { pts: [e[1], e[2], r[1], r[0]], color: roof, roof: true },
+                { pts: [e[3], e[0], r[0], r[1]], color: roof, roof: true }
             ];
             const middle = [x, h / 2, z];
             const eye = [cam.x, cam.y, cam.z];
             const dist = distTo(x, z);
-            const visible = faces.map(([pts, color]) => {
-                const centroid = pts.reduce((a, p) => [a[0] + p[0] / pts.length, a[1] + p[1] / pts.length, a[2] + p[2] / pts.length], [0, 0, 0]);
-                let n = normalize(cross(sub(pts[1], pts[0]), sub(pts[2], pts[0])));
-                if (dot(n, sub(centroid, middle)) < 0) n = [-n[0], -n[1], -n[2]];
-                return { pts, color, n, centroid, facing: dot(n, sub(eye, centroid)) };
+            const visible = faces.map(f => {
+                const cen = centroid(f.pts);
+                let n = normalize(cross(sub(f.pts[1], f.pts[0]), sub(f.pts[2], f.pts[0])));
+                if (dot(n, sub(cen, middle)) < 0) n = scale(n, -1);
+                return Object.assign(f, { n, cen, facing: dot(n, sub(eye, cen)) });
             }).filter(f => f.facing > 0);
-            visible.sort((a, b2) => distTo(b2.centroid[0], b2.centroid[2]) - distTo(a.centroid[0], a.centroid[2]));
+            visible.sort((a, b2) => distTo(b2.cen[0], b2.cen[2]) - distTo(a.cen[0], a.cen[2]));
+            const lit = house ? env.night : env.night * 0.5;
             for (const f of visible) {
                 const light = 0.6 + 0.4 * Math.max(0, dot(f.n, SUN));
-                const snowy = f.color === roof ? 0.9 : 0;
-                fillPoly(f.pts.map(toCamera), fogged(f.color.map(v => v * light), dist, snowy), true);
-            }
-            if (dist < 1500) {
-                const door = [P(-2.5, 0, -d - 0.1), P(2.5, 0, -d - 0.1), P(2.5, 6, -d - 0.1), P(-2.5, 6, -d - 0.1)];
-                const nFront = [-s, 0, -c];
-                if (dot(nFront, sub(eye, door[0])) > 0) fillPoly(door.map(toCamera), fogged([70, 45, 30], dist));
+                fillPoly(f.pts.map(toCamera), fogged(f.color.map(v => v * light), dist, f.roof ? 0.9 : 0), true);
+                if (dist > 2500) continue;
+                if (f.windows) {
+                    const color = lit > 0.1 ? rgb(mix([60, 70, 90], [255, 214, 120], lit)) : fogged([70, 90, 120], dist);
+                    f.windows.forEach(wq => fillPoly(wq.map(toCamera), color));
+                }
+                if (f.door && dist < 1500) {
+                    fillPoly([P(-2.5, 0, -d - 0.1), P(2.5, 0, -d - 0.1), P(2.5, 6, -d - 0.1), P(-2.5, 6, -d - 0.1)].map(toCamera), fogged([70, 45, 30], dist));
+                }
             }
         }
 
@@ -749,13 +1193,14 @@
                 const len = 30 * s;
                 const wid = 3 * s;
                 ctx.beginPath();
-                ctx.moveTo(tx + -sa * wid * 0.3, ty + ca * wid * 0.3);
+                ctx.moveTo(tx - sa * wid * 0.3, ty + ca * wid * 0.3);
                 ctx.lineTo(tx + ca * len - sa * wid, ty + sa * len + ca * wid);
                 ctx.lineTo(tx + ca * len, ty + sa * len);
                 ctx.lineTo(tx + sa * wid * 0.3, ty - ca * wid * 0.3);
                 ctx.fill();
             }
-            circle(tx, ty, 1.8 * s, fogged(DARK, dist));
+            circle(tx, ty, 1.8 * s, fogged([45, 48, 60], dist));
+            if (env.night > 0.1 && Math.sin(clock * 3 + seed) > 0) glow(tx, ty - 8 * s, Math.max(4, 6 * s), "255, 60, 60", env.night);
         }
 
         function herdItems(t, items) {
@@ -848,54 +1293,39 @@
         function balloonItems() {
             const items = [];
             for (const b of balloons) {
-                const x = cam.x + wrap(b.x + clock * 8 - cam.x);
-                const z = cam.z + wrap(b.z + clock * 3 - cam.z);
-                const y = b.y + Math.sin(clock * 0.4 + b.seed) * 8;
-                const p = toCamera([x, y, z]);
-                const dist = distTo(x, z);
+                if (b.popped) continue;
+                const pos = balloonPosition(b);
+                const p = toCamera(pos);
+                const dist = distTo(pos[0], pos[2]);
                 if (p[2] < 20 || dist > 5000) continue;
-                items.push({ depth: p[2], draw: () => drawBalloon(p, b.colors, dist) });
+                items.push({ depth: p[2], draw: () => drawBalloon(p, b.color, dist) });
             }
             return items;
         }
 
-        function drawBalloon(p, colors, dist) {
+        function drawBalloon(p, color, dist) {
             const [sx, sy] = screen(p);
             const s = F / p[2];
-            const r = 20 * s;
-            const [a, b] = colors.map(c => fogged(c, dist));
-            ctx.strokeStyle = fogged([90, 70, 50], dist);
-            ctx.lineWidth = Math.max(0.5, 0.4 * s);
+            const r = 18 * s;
+            ctx.strokeStyle = fogged([230, 230, 230], dist);
+            ctx.lineWidth = Math.max(0.5, 0.5 * s);
             ctx.beginPath();
-            ctx.moveTo(sx - r * 0.45, sy + r * 0.95);
-            ctx.lineTo(sx - r * 0.18, sy + r * 1.75);
-            ctx.moveTo(sx + r * 0.45, sy + r * 0.95);
-            ctx.lineTo(sx + r * 0.18, sy + r * 1.75);
+            ctx.moveTo(sx, sy + r * 1.15);
+            ctx.quadraticCurveTo(sx + r * 0.3 * Math.sin(clock * 2), sy + r * 1.8, sx, sy + r * 2.4);
             ctx.stroke();
-            ctx.fillStyle = a;
+            ctx.fillStyle = fogged(color, dist);
             ctx.beginPath();
-            ctx.moveTo(sx - r * 0.5, sy + r * 0.85);
-            ctx.lineTo(sx + r * 0.5, sy + r * 0.85);
-            ctx.lineTo(sx + r * 0.2, sy + r * 1.15);
-            ctx.lineTo(sx - r * 0.2, sy + r * 1.15);
+            ctx.ellipse(sx, sy, r, r * 1.15, 0, 0, Math.PI * 2);
             ctx.fill();
             ctx.beginPath();
-            ctx.ellipse(sx, sy, r, r * 1.08, 0, 0, Math.PI * 2);
+            ctx.moveTo(sx - r * 0.2, sy + r * 1.25);
+            ctx.lineTo(sx + r * 0.2, sy + r * 1.25);
+            ctx.lineTo(sx, sy + r * 1.05);
             ctx.fill();
-            ctx.fillStyle = b;
+            ctx.fillStyle = "rgba(255, 255, 255, " + 0.4 * (1 - env.night * 0.6) + ")";
             ctx.beginPath();
-            ctx.ellipse(sx, sy, r * 0.62, r * 1.08, 0, 0, Math.PI * 2);
+            ctx.ellipse(sx - r * 0.35, sy - r * 0.45, r * 0.22, r * 0.38, -0.4, 0, Math.PI * 2);
             ctx.fill();
-            ctx.fillStyle = a;
-            ctx.beginPath();
-            ctx.ellipse(sx, sy, r * 0.25, r * 1.08, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
-            ctx.beginPath();
-            ctx.ellipse(sx - r * 0.35, sy - r * 0.4, r * 0.25, r * 0.4, -0.3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = fogged([120, 80, 45], dist);
-            ctx.fillRect(sx - r * 0.2, sy + r * 1.72, r * 0.4, r * 0.3);
         }
 
         function cloudItems() {
@@ -912,8 +1342,8 @@
         }
 
         function drawCloud(cloud, x, z, fog) {
-            const top = mix(CLOUD, STORM, env.rain * 0.75);
-            const low = mix(CLOUD_SHADE, mix(STORM, [80, 85, 95], 0.5), env.rain * 0.8);
+            const top = nightShade(mix(CLOUD, STORM, env.rain * 0.75), 0.8);
+            const low = nightShade(mix(CLOUD_SHADE, mix(STORM, [80, 85, 95], 0.5), env.rain * 0.8), 0.8);
             const puffs = cloud.puffs
                 .map(p => ({ c: toCamera([x + p[0], cloud.y + p[1], z + p[2]]), r: p[3], low: p[1] < 0 }))
                 .filter(p => p.c[2] > 10)
@@ -934,19 +1364,89 @@
 
         function drawPlane() {
             if (crashed) return;
-            const faces = MESH.map(face => {
-                const world = face.pts.map(v => localToWorld(v, face.spin ? plane.prop : 0));
+            const eye = [cam.x, cam.y, cam.z];
+            const gearDown = plane.y < 90;
+            const moonLight = env.night;
+            const light = normalize(mix(SUN, MOON, moonLight));
+            const visible = [];
+            for (const f of MESH) {
+                if (f.gear && !gearDown) continue;
+                if (f.disc && plane.speed < 60) continue;
+                const world = f.pts.map(v => localToWorld(v, f.spin ? plane.prop : 0));
+                const cen = localToWorld(f.c, f.spin ? plane.prop : 0);
+                let n = rotateLocal(f.n);
+                const toEye = normalize(sub(eye, cen));
+                if (f.cull && dot(n, toEye) <= 0) continue;
+                if (!f.cull && dot(n, toEye) < 0) n = scale(n, -1);
                 const camPts = world.map(toCamera);
-                const n = normalize(cross(sub(world[1], world[0]), sub(world[2], world[0])));
-                const light = 0.62 + 0.38 * Math.abs(dot(n, SUN));
-                const depth = camPts.reduce((s, p) => s + p[2], 0) / camPts.length;
-                const alpha = face.alpha || 1;
-                return { camPts, depth, alpha, color: rgb(face.color.map(c => Math.min(255, c * light)), alpha) };
-            });
-            faces.sort((a, b) => b.depth - a.depth);
-            for (const face of faces) {
-                if (face.camPts.some(p => p[2] < NEAR)) continue;
-                fillPoly(face.camPts, face.color, face.alpha === 1);
+                if (camPts.some(p => p[2] < NEAR)) continue;
+                const diffuse = Math.max(0, dot(n, light));
+                const half = normalize(add(light, toEye));
+                const spec = Math.pow(Math.max(0, dot(n, half)), 28) * f.gloss * (1 - env.rain * 0.5);
+                const skyFill = 0.58 + 0.14 * Math.max(0, n[1]);
+                const base = f.color.map(c => c * (skyFill + 0.42 * diffuse) + 255 * spec * 0.6);
+                const color = rgb(nightShade(base, 0.6), f.alpha);
+                const depth = camPts.reduce((s, p) => s + p[2], 0) / camPts.length - (f.decal ? 0.05 * f.decal : 0);
+                visible.push({ camPts, depth, color, seam: f.alpha === 1 });
+            }
+            visible.sort((a, b) => b.depth - a.depth);
+            for (const f of visible) fillPoly(f.camPts, f.color, f.seam);
+            drawNavLights();
+        }
+
+        function drawNavLights() {
+            const lights = [[[-17.6, 0.2, 2.6], "255, 50, 50"], [[17.6, 0.2, 2.6], "60, 255, 110"], [[0, 1.6, -16], "255, 255, 255"]];
+            for (const [local, color] of lights) {
+                const p = toCamera(localToWorld(local));
+                if (p[2] < NEAR) continue;
+                const [sx, sy] = screen(p);
+                glow(sx, sy, 3 + 6 * env.night, color, 0.8);
+            }
+            if (Math.sin(clock * 6) > 0.85) {
+                for (const local of [[-17.6, 0.3, 1.8], [17.6, 0.3, 1.8]]) {
+                    const p = toCamera(localToWorld(local));
+                    if (p[2] < NEAR) continue;
+                    const [sx, sy] = screen(p);
+                    glow(sx, sy, 6 + 8 * env.night, "255, 255, 255", 0.9);
+                }
+            }
+            if (flashTimer > 0) {
+                for (const gun of GUNS) {
+                    const p = toCamera(localToWorld([gun[0], gun[1], gun[2] + 1.5]));
+                    if (p[2] < NEAR) continue;
+                    const [sx, sy] = screen(p);
+                    glow(sx, sy, 16, "255, 210, 120", 0.95);
+                }
+            }
+        }
+
+        function drawBullets() {
+            ctx.lineCap = "round";
+            for (const s of bullets) {
+                const tail = toCamera(sub(s.p, scale(s.v, 0.03)));
+                const head = toCamera(s.p);
+                if (tail[2] < NEAR || head[2] < NEAR) continue;
+                const [x1, y1] = screen(tail);
+                const [x2, y2] = screen(head);
+                const width = Math.max(1.2, (1.2 * F) / head[2]);
+                ctx.strokeStyle = "rgba(255, 170, 60, 0.45)";
+                ctx.lineWidth = width * 3;
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+                ctx.strokeStyle = "rgba(255, 245, 200, 0.95)";
+                ctx.lineWidth = width;
+                ctx.stroke();
+            }
+        }
+
+        function drawParticles() {
+            for (const p of particles) {
+                const c = toCamera(p.p);
+                if (c[2] < NEAR) continue;
+                const [sx, sy] = screen(c);
+                circle(sx, sy, Math.max(1, (p.size * F) / c[2]), rgb(p.color, Math.min(1, p.life * 1.5)));
             }
         }
 
@@ -995,6 +1495,22 @@
             ctx.stroke();
         }
 
+        function placeCrosshair() {
+            const aim = toCamera(add([plane.x, plane.y, plane.z], scale(forward(), 600)));
+            if (aim[2] <= NEAR || crashed) {
+                ui.crosshair.style.display = "none";
+                return;
+            }
+            const [x, y] = screen(aim);
+            const dx = x - W / 2;
+            const dy = y - H / 2;
+            const c = Math.cos(-cam.roll);
+            const s = Math.sin(-cam.roll);
+            ui.crosshair.style.display = "block";
+            ui.crosshair.style.left = W / 2 + dx * c - dy * s + "px";
+            ui.crosshair.style.top = H / 2 + dx * s + dy * c + "px";
+        }
+
         function render(dt) {
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             ctx.translate(W / 2, H / 2);
@@ -1002,29 +1518,37 @@
             ctx.translate(-W / 2, -H / 2);
             const horizonY = H / 2 + F * Math.tan(cam.pitch);
             drawSky(horizonY);
-            drawSun();
+            drawCelestial();
             drawLightning();
             const tiles = visibleTiles();
             drawGround(tiles);
             drawRunway();
+            drawRunwayLights();
             drawShadow();
             const items = sceneryItems(tiles).concat(cloudItems(), flockItems(), balloonItems(), [planeItem()]);
             items.sort((a, b) => b.depth - a.depth);
             items.forEach(item => item.draw());
+            drawBullets();
+            drawParticles();
             drawPrecipitation(dt);
+            placeCrosshair();
         }
 
         function updateHud() {
             ui.altitude.textContent = Math.round((plane.y - GROUND) * 3.28);
             ui.speed.textContent = Math.round(plane.speed);
             ui.heading.textContent = String(Math.round(((plane.yaw * 180) / Math.PI % 360 + 360) % 360)).padStart(3, "0");
-            ui.weather.textContent = weather.kind[0].toUpperCase() + weather.kind.slice(1);
+            ui.score.textContent = score;
             const airborne = plane.y > GROUND + 0.5;
             let warning = "";
             if (airborne && plane.y < 200 && plane.vy < -40) warning = "PULL UP";
             else if (airborne && plane.speed < 110) warning = "STALL";
             ui.warning.textContent = warning;
             ui.warning.style.display = warning && !crashed ? "block" : "none";
+            if (warning && !crashed && beepTimer <= 0) {
+                sounds.beep();
+                beepTimer = 0.5;
+            }
         }
 
         function loop(now) {
@@ -1032,8 +1556,10 @@
             last = now;
             clock += dt;
             update(dt);
-            updateWeather(dt);
+            updateShots(dt);
+            updateEnvironment(dt);
             updateCamera(dt);
+            updateAudio(dt);
             render(dt);
             updateHud();
             requestAnimationFrame(loop);
@@ -1041,15 +1567,21 @@
 
         document.addEventListener("keydown", e => {
             const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-            if (key.startsWith("Arrow")) e.preventDefault();
+            if (key.startsWith("Arrow") || key === " ") e.preventDefault();
+            initAudio();
             if (key === "r") reset();
-            if (key === "1") setWeather("clear");
-            if (key === "2") setWeather("rain");
-            if (key === "3") setWeather("snow");
+            if (key === "1") setToggle("rain", !settings.rain);
+            if (key === "2") setToggle("snow", !settings.snow);
+            if (key === "3") setToggle("night", !settings.night);
+            if (key === "m") setToggle("sound", !settings.sound);
             keys[key] = true;
         });
         document.addEventListener("keyup", e => {
             keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = false;
+        });
+        document.querySelectorAll("[data-toggle]").forEach(button => {
+            button.addEventListener("mousedown", e => e.preventDefault());
+            button.addEventListener("click", () => setToggle(button.dataset.toggle, !settings[button.dataset.toggle]));
         });
         window.addEventListener("resize", resize);
 
