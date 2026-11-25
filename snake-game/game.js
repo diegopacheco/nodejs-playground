@@ -18,25 +18,30 @@ const rows = H / box;
 const cols = W / box;
 const offsets = { LEFT: [-1, 0], RIGHT: [1, 0], UP: [0, -1], DOWN: [0, 1] };
 
-let snake = [{ x: 9 * box, y: 9 * box }];
+let snake = [{ x: 4 * box, y: Math.floor(rows / 2) * box }];
 let direction = "RIGHT";
+let moved = "RIGHT";
 let food = randomFood();
 let score = 0;
 
 document.addEventListener("keydown", changeDirection);
 
 function changeDirection(e) {
-  if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-  else if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-  else if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
-  else if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+  if (e.key === "ArrowLeft" && moved !== "RIGHT") direction = "LEFT";
+  else if (e.key === "ArrowUp" && moved !== "DOWN") direction = "UP";
+  else if (e.key === "ArrowRight" && moved !== "LEFT") direction = "RIGHT";
+  else if (e.key === "ArrowDown" && moved !== "UP") direction = "DOWN";
 }
 
 function randomFood() {
-  return {
-    x: Math.floor(Math.random() * cols) * box,
-    y: Math.floor(Math.random() * rows) * box
-  };
+  let spot;
+  do {
+    spot = {
+      x: Math.floor(Math.random() * cols) * box,
+      y: Math.floor(Math.random() * rows) * box
+    };
+  } while (snake.some(s => s.x === spot.x && s.y === spot.y));
+  return spot;
 }
 
 function dot(x, y) {
@@ -113,6 +118,7 @@ function draw() {
   }
 
   snake.unshift(head);
+  moved = direction;
 }
 
 const game = setInterval(draw, 160);

@@ -133,14 +133,14 @@
 
     function flipCard(e) {
       const card = e.target;
-      if (card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length >= 2) return;
+      if (flipped.includes(card) || card.classList.contains('matched') || flipped.length >= 2) return;
+      flipped.push(card);
       card.classList.add('flipping');
       setTimeout(() => {
         card.textContent = card.dataset.symbol;
         card.classList.remove('flipping');
         card.classList.add('flipped');
-        flipped.push(card);
-        if (flipped.length === 2) {
+        if (flipped[1] === card) {
           setTimeout(checkMatch, 1000);
         }
       }, 150);

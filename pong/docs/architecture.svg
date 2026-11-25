@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="460" viewBox="0 0 1240 460">
+<defs>
+<style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600');text{font-family:'Caveat','Comic Sans MS',cursive;fill:#1f2937}</style>
+<filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
+<marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1,1 L10,6 L1,11" fill="none" stroke="#374151" stroke-width="2"/></marker>
+<marker id="arrowStart" markerWidth="12" markerHeight="12" refX="2" refY="6" orient="auto"><path d="M11,1 L2,6 L11,11" fill="none" stroke="#374151" stroke-width="2"/></marker>
+</defs>
+<rect width="1240" height="460" fill="#fffdf7"/>
+<text x="20" y="34" font-size="30">pong architecture</text>
+<g filter="url(#wobble)">
+<line x1="256.0" y1="146.4" x2="494.0" y2="210.9" stroke="#374151" stroke-width="2.2" marker-start="url(#arrowStart)" marker-end="url(#arrow)"/>
+<text x="375.0" y="170.6" font-size="18" text-anchor="middle">playerMove / gameState</text>
+<line x1="256.0" y1="343.6" x2="494.0" y2="279.1" stroke="#374151" stroke-width="2.2" marker-start="url(#arrowStart)" marker-end="url(#arrow)"/>
+<text x="375.0" y="303.4" font-size="18" text-anchor="middle">playerMove / gameState</text>
+<line x1="746.0" y1="209.4" x2="954.0" y2="150.6" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="850.0" y="172.0" font-size="18" text-anchor="middle">paddles</text>
+<line x1="1080.0" y1="324.0" x2="1080.0" y2="166.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="1080.0" y="237.0" font-size="18" text-anchor="middle">moves ball</text>
+<rect x="30" y="70" width="220" height="90" rx="14" fill="#dbeafe" stroke="#374151" stroke-width="2.2"/>
+<text x="140" y="111" font-size="23" text-anchor="middle">Browser tab 1</text>
+<text x="140" y="135" font-size="19" text-anchor="middle">Player 1 cyan</text>
+<rect x="30" y="330" width="220" height="90" rx="14" fill="#fce7f3" stroke="#374151" stroke-width="2.2"/>
+<text x="140" y="371" font-size="23" text-anchor="middle">Browser tab 2</text>
+<text x="140" y="395" font-size="19" text-anchor="middle">Player 2 pink</text>
+<rect x="500" y="200" width="240" height="90" rx="14" fill="#fef9c3" stroke="#374151" stroke-width="2.2"/>
+<text x="620" y="241" font-size="23" text-anchor="middle">server.js</text>
+<text x="620" y="265" font-size="19" text-anchor="middle">express + socket.io</text>
+<rect x="960" y="70" width="240" height="90" rx="14" fill="#dcfce7" stroke="#374151" stroke-width="2.2"/>
+<text x="1080" y="111" font-size="23" text-anchor="middle">Game state</text>
+<text x="1080" y="135" font-size="19" text-anchor="middle">ball, paddles, score</text>
+<rect x="960" y="330" width="240" height="90" rx="14" fill="#ede9fe" stroke="#374151" stroke-width="2.2"/>
+<text x="1080" y="371" font-size="23" text-anchor="middle">Tick loop 60 fps</text>
+<text x="1080" y="395" font-size="19" text-anchor="middle">runs with 2 players</text>
+</g>
+</svg>

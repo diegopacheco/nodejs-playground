@@ -27,11 +27,18 @@ io.on('connection', (socket) => {
     console.log('A user connected');
 
     if (Object.keys(players).length < 2) {
+        const taken = Object.values(players).map(p => p.number);
+        const playerNumber = taken.includes(1) ? 2 : 1;
         players[socket.id] = {
             paddleY: 250,
-            score: 0
+            score: 0,
+            number: playerNumber
         };
-        const playerNumber = Object.keys(players).length;
+        if (Object.keys(players).length === 2) {
+            gameState.player1.score = 0;
+            gameState.player2.score = 0;
+            resetBall();
+        }
         socket.emit('playerNumber', playerNumber);
         console.log(`Player ${playerNumber} connected: ${socket.id}`);
     } else {
@@ -45,8 +52,7 @@ io.on('connection', (socket) => {
     socket.on('playerMove', (data) => {
         if (players[socket.id]) {
             players[socket.id].paddleY = data.paddleY;
-            const playerIndex = Object.keys(players).indexOf(socket.id) + 1;
-            gameState[`player${playerIndex}`].y = data.paddleY;
+            gameState[`player${players[socket.id].number}`].y = data.paddleY;
         }
     });
 
@@ -57,6 +63,7 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
+    if (Object.keys(players).length < 2) return;
     // Update ball position
     ball.x += ball.velocityX;
     ball.y += ball.velocityY;
