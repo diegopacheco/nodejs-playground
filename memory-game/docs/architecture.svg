@@ -1,20 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="420" viewBox="0 0 1450 420">
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="606" viewBox="0 0 1450 606">
 <defs>
 <style>@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600');text{font-family:'Caveat','Comic Sans MS',cursive;fill:#1f2937}</style>
 <filter id="wobble"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter>
 <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1,1 L10,6 L1,11" fill="none" stroke="#374151" stroke-width="2"/></marker>
 </defs>
-<rect width="1450" height="420" fill="#fffdf7"/>
+<rect width="1450" height="606" fill="#fffdf7"/>
 <text x="20" y="34" font-size="30">memory-game architecture</text>
 <g filter="url(#wobble)">
 <line x1="256.0" y1="118.0" x2="314.0" y2="118.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
 <line x1="546.0" y1="118.0" x2="604.0" y2="118.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
 <line x1="720.0" y1="172.0" x2="720.0" y2="264.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
-<text x="720.0" y="210.0" font-size="18" text-anchor="middle">boots</text>
+<text x="720.0" y="210.0" font-size="18" text-anchor="middle">deals</text>
 <line x1="256.0" y1="318.0" x2="314.0" y2="318.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
-<line x1="546.0" y1="320.8" x2="604.0" y2="322.2" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
-<line x1="836.0" y1="325.0" x2="894.0" y2="325.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<line x1="546.0" y1="322.8" x2="604.0" y2="325.2" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<line x1="836.0" y1="328.0" x2="894.0" y2="327.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
 <line x1="1126.0" y1="322.2" x2="1184.0" y2="320.8" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<line x1="1010.0" y1="386.0" x2="1010.0" y2="464.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
+<text x="1010.0" y="417.0" font-size="18" text-anchor="middle">bursts</text>
+<line x1="1101.7" y1="386.0" x2="1218.9" y2="464.0" stroke="#374151" stroke-width="2.2" marker-end="url(#arrow)"/>
 <rect x="30" y="70" width="220" height="96" rx="14" fill="#fef9c3" stroke="#374151" stroke-width="2.2"/>
 <text x="140" y="114" font-size="23" text-anchor="middle">start-all.sh</text>
 <text x="140" y="138" font-size="19" text-anchor="middle">scripts/</text>
@@ -26,20 +29,25 @@
 <text x="720" y="138" font-size="19" text-anchor="middle">loads index.html</text>
 <rect x="30" y="270" width="220" height="96" rx="14" fill="#fce7f3" stroke="#374151" stroke-width="2.2"/>
 <text x="140" y="314" font-size="23" text-anchor="middle">Mouse</text>
-<text x="140" y="338" font-size="19" text-anchor="middle">card clicks</text>
+<text x="140" y="338" font-size="19" text-anchor="middle">click + hover</text>
 <rect x="320" y="270" width="220" height="96" rx="14" fill="#fce7f3" stroke="#374151" stroke-width="2.2"/>
-<text x="430" y="314" font-size="23" text-anchor="middle">Input handlers</text>
-<text x="430" y="338" font-size="19" text-anchor="middle">card click</text>
-<rect x="610" y="270" width="220" height="110" rx="14" fill="#dcfce7" stroke="#374151" stroke-width="2.2"/>
-<text x="720" y="309" font-size="23" text-anchor="middle">Game state</text>
-<text x="720" y="333" font-size="19" text-anchor="middle">cards[], flipped[],</text>
-<text x="720" y="357" font-size="19" text-anchor="middle">matched, mistakes</text>
+<text x="430" y="314" font-size="23" text-anchor="middle">flipCard / tilt</text>
+<text x="430" y="338" font-size="19" text-anchor="middle">handlers</text>
+<rect x="610" y="270" width="220" height="120" rx="14" fill="#dcfce7" stroke="#374151" stroke-width="2.2"/>
+<text x="720" y="314" font-size="23" text-anchor="middle">Game state</text>
+<text x="720" y="338" font-size="19" text-anchor="middle">cards, flipped,</text>
+<text x="720" y="362" font-size="19" text-anchor="middle">combo, mistakes</text>
 <rect x="900" y="270" width="220" height="110" rx="14" fill="#ede9fe" stroke="#374151" stroke-width="2.2"/>
-<text x="1010" y="309" font-size="23" text-anchor="middle">Update loop</text>
-<text x="1010" y="333" font-size="19" text-anchor="middle">click events</text>
-<text x="1010" y="357" font-size="19" text-anchor="middle">no frame loop</text>
+<text x="1010" y="321" font-size="23" text-anchor="middle">checkMatch</text>
+<text x="1010" y="345" font-size="19" text-anchor="middle">match or miss</text>
 <rect x="1190" y="270" width="220" height="96" rx="14" fill="#ffedd5" stroke="#374151" stroke-width="2.2"/>
 <text x="1300" y="314" font-size="23" text-anchor="middle">DOM cards</text>
 <text x="1300" y="338" font-size="19" text-anchor="middle">CSS 3D flip</text>
+<rect x="900" y="470" width="220" height="96" rx="14" fill="#ffedd5" stroke="#374151" stroke-width="2.2"/>
+<text x="1010" y="514" font-size="23" text-anchor="middle">Canvas FX</text>
+<text x="1010" y="538" font-size="19" text-anchor="middle">rAF particles</text>
+<rect x="1190" y="470" width="220" height="96" rx="14" fill="#dbeafe" stroke="#374151" stroke-width="2.2"/>
+<text x="1300" y="514" font-size="23" text-anchor="middle">Web Audio</text>
+<text x="1300" y="538" font-size="19" text-anchor="middle">flip, match, win</text>
 </g>
 </svg>

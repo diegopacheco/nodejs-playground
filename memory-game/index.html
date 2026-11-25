@@ -2,183 +2,635 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Memory Game</title>
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --ink: #0b0820;
+      --night: #17113a;
+      --violet: #6d28d9;
+      --gold: #f5c86b;
+      --gold-deep: #b8862f;
+      --cream: #fff8e7;
+      --mint: #34d399;
+      --rose: #fb7185;
+      --text: #f5f0ff;
+      --muted: #b9addb;
     }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+      font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      color: var(--text);
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 0;
+    }
+    .aurora {
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(40% 35% at 20% 25%, rgba(124, 58, 237, 0.55), transparent 70%),
+        radial-gradient(35% 30% at 80% 20%, rgba(236, 72, 153, 0.35), transparent 70%),
+        radial-gradient(45% 40% at 70% 85%, rgba(56, 189, 248, 0.3), transparent 70%),
+        radial-gradient(40% 40% at 15% 85%, rgba(245, 200, 107, 0.18), transparent 70%);
+      filter: blur(30px);
+      animation: drift 22s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+    @keyframes drift {
+      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+      50% { transform: translate(3%, -2%) rotate(6deg) scale(1.05); }
+      100% { transform: translate(-3%, 2%) rotate(-5deg) scale(1.02); }
+    }
+    #fx {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .table {
+      position: relative;
+      z-index: 2;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      gap: 20px;
-      background: radial-gradient(circle at top, #4c1d95, #1e1b4b 65%);
-      color: #f5f3ff;
+      gap: 18px;
     }
     h1 {
       margin: 0;
-      font-size: 2.4rem;
-      letter-spacing: 1px;
+      font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: linear-gradient(180deg, #fff3cf, var(--gold) 55%, var(--gold-deep));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 4px 18px rgba(245, 200, 107, 0.35));
     }
-    .game-board {
+    .hud {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .pill {
+      min-width: 92px;
+      padding: 8px 16px;
+      border-radius: 14px;
+      background: rgba(15, 10, 40, 0.55);
+      border: 1px solid rgba(245, 200, 107, 0.22);
+      backdrop-filter: blur(8px);
+      text-align: center;
+    }
+    .pill small {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .pill b {
+      font-size: 1.3rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .pill.pop b { animation: pop 0.4s ease; display: inline-block; }
+    @keyframes pop {
+      40% { transform: scale(1.35); color: var(--gold); }
+    }
+    .lives { display: flex; gap: 6px; justify-content: center; font-size: 1.3rem; }
+    .life { display: inline-block; transition: transform 0.4s ease, opacity 0.4s ease, filter 0.4s ease; }
+    .life.lost { transform: scale(0.6) rotate(-25deg); opacity: 0.25; filter: grayscale(1); }
+    .life.breaking { animation: crack 0.5s ease; }
+    @keyframes crack {
+      30% { transform: scale(1.5); }
+      60% { transform: scale(0.8) rotate(15deg); }
+    }
+    .progress {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--gold-deep), var(--gold), #fff3cf);
+      box-shadow: 0 0 12px var(--gold);
+      transition: width 0.5s cubic-bezier(.2,.8,.2,1);
+    }
+    .board {
       display: grid;
-      grid-template-columns: repeat(4, 110px);
-      grid-gap: 14px;
-      padding: 20px;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      grid-template-columns: repeat(4, 116px);
+      gap: 16px;
+      padding: 22px;
+      border-radius: 26px;
+      background: linear-gradient(160deg, rgba(40, 28, 92, 0.7), rgba(15, 10, 40, 0.75));
+      border: 1px solid rgba(245, 200, 107, 0.25);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      perspective: 1000px;
+    }
+    .board.shake { animation: boardShake 0.45s ease; }
+    @keyframes boardShake {
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(7px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(3px); }
     }
     .card {
-      width: 110px;
-      height: 110px;
+      position: relative;
+      width: 116px;
+      height: 150px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.25s ease;
+      animation: deal 0.6s cubic-bezier(.2,.9,.25,1.2) both;
+      animation-delay: calc(var(--i) * 60ms);
+    }
+    @keyframes deal {
+      from { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(var(--fr)) scale(0.4); }
+      to { opacity: 1; transform: none; }
+    }
+    .inner {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(.3,1.4,.4,1);
+      transform: rotateY(0deg) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+    }
+    .card.flipped .inner, .card.matched .inner {
+      transform: rotateY(180deg);
+    }
+    .face {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 52px;
-      cursor: pointer;
-      user-select: none;
-      border-radius: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.25);
+      overflow: hidden;
+    }
+    .back {
       background:
-        radial-gradient(circle at center, rgba(255, 255, 255, 0.25) 0 10px, transparent 11px),
-        repeating-linear-gradient(45deg, #6d28d9 0 10px, #7c3aed 10px 20px);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35), inset 0 0 0 5px rgba(255, 255, 255, 0.08);
-      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+        radial-gradient(circle at 50% 50%, rgba(245, 200, 107, 0.9) 0 7px, transparent 8px),
+        radial-gradient(circle at 50% 50%, transparent 0 22px, rgba(245, 200, 107, 0.6) 23px 24px, transparent 25px),
+        conic-gradient(from 0deg at 50% 50%, rgba(245, 200, 107, 0.18) 0 10deg, transparent 10deg 30deg, rgba(245, 200, 107, 0.18) 30deg 40deg, transparent 40deg 60deg, rgba(245, 200, 107, 0.18) 60deg 70deg, transparent 70deg 90deg, rgba(245, 200, 107, 0.18) 90deg 100deg, transparent 100deg 120deg, rgba(245, 200, 107, 0.18) 120deg 130deg, transparent 130deg 150deg, rgba(245, 200, 107, 0.18) 150deg 160deg, transparent 160deg 180deg, rgba(245, 200, 107, 0.18) 180deg 190deg, transparent 190deg 210deg, rgba(245, 200, 107, 0.18) 210deg 220deg, transparent 220deg 240deg, rgba(245, 200, 107, 0.18) 240deg 250deg, transparent 250deg 270deg, rgba(245, 200, 107, 0.18) 270deg 280deg, transparent 280deg 300deg, rgba(245, 200, 107, 0.18) 300deg 310deg, transparent 310deg 330deg, rgba(245, 200, 107, 0.18) 330deg 340deg, transparent 340deg 360deg),
+        linear-gradient(160deg, #4c1d95, #2e1065 60%, #1e0b4b);
+      border: 2px solid var(--gold-deep);
+      box-shadow: inset 0 0 0 5px #2e1065, inset 0 0 0 6px rgba(245, 200, 107, 0.55), 0 10px 22px rgba(0, 0, 0, 0.45);
     }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.45), 0 0 18px rgba(167, 139, 250, 0.5);
+    .back::after {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.28) 50%, transparent 60%);
+      transform: translateX(-60%);
+      transition: transform 0.7s ease;
     }
-
-    .card.flipping {
-      transform: scaleX(0);
+    .card:hover .back::after { transform: translateX(60%); }
+    .card:hover .inner { box-shadow: none; }
+    .card:hover { transform: translateY(-6px); }
+    .front {
+      transform: rotateY(180deg);
+      background: linear-gradient(160deg, var(--cream), #f3e6c4);
+      border: 2px solid var(--gold);
+      box-shadow: inset 0 0 0 5px var(--cream), inset 0 0 0 6px rgba(184, 134, 47, 0.5), 0 10px 22px rgba(0, 0, 0, 0.45);
+      font-size: 56px;
     }
-
-    .card.flipped {
-      background: linear-gradient(145deg, #ffffff, #ede9fe);
-      border-color: #c4b5fd;
+    .front .glyph { filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25)); transition: transform 0.4s ease; }
+    .front .pip {
+      position: absolute;
+      font-size: 14px;
+      opacity: 0.75;
     }
-
-    .card.matched {
-      background: linear-gradient(145deg, #6ee7b7, #10b981);
-      border-color: #a7f3d0;
-      cursor: default;
-      box-shadow: 0 0 22px rgba(16, 185, 129, 0.6);
-      animation: matchPulse 0.6s ease-in-out;
+    .front .pip.tl { top: 9px; left: 10px; }
+    .front .pip.br { bottom: 9px; right: 10px; transform: rotate(180deg); }
+    .card.dealt { animation: none; }
+    .card.matched { cursor: default; }
+    .card.matched .front {
+      border-color: var(--mint);
+      background: linear-gradient(160deg, #ecfdf5, #a7f3d0);
+      box-shadow: inset 0 0 0 5px #ecfdf5, inset 0 0 0 6px rgba(16, 185, 129, 0.5), 0 0 28px rgba(52, 211, 153, 0.75);
     }
-
-    @keyframes matchPulse {
+    .card.matched .glyph { animation: bounce 0.7s cubic-bezier(.3,1.6,.4,1); }
+    .card.matched { animation: float 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * 120ms); }
+    @keyframes bounce {
       0% { transform: scale(1); }
-      50% { transform: scale(1.12); }
+      40% { transform: scale(1.4) rotate(-8deg); }
       100% { transform: scale(1); }
     }
-
-    .card.wrong {
-      background: linear-gradient(145deg, #fda4af, #e11d48);
-      border-color: #fecdd3;
-      animation: shake 0.5s ease-in-out;
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
     }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      75% { transform: translateX(6px); }
+    .card.wrong .front {
+      border-color: var(--rose);
+      background: linear-gradient(160deg, #fff1f2, #fecdd3);
+      box-shadow: inset 0 0 0 5px #fff1f2, inset 0 0 0 6px rgba(225, 29, 72, 0.5), 0 0 26px rgba(251, 113, 133, 0.75);
     }
-
-    .hidden {
-      visibility: hidden;
+    .card.wrong .glyph { animation: wobble 0.5s ease; }
+    @keyframes wobble {
+      25% { transform: rotate(-14deg); }
+      75% { transform: rotate(14deg); }
     }
-    .status {
-      font-size: 1.2rem;
-      font-weight: bold;
-      padding: 8px 22px;
+    .floater {
+      position: fixed;
+      z-index: 6;
+      pointer-events: none;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--gold);
+      text-shadow: 0 0 12px rgba(245, 200, 107, 0.8);
+      animation: rise 1s ease-out forwards;
+    }
+    @keyframes rise {
+      from { opacity: 1; transform: translate(-50%, 0) scale(0.8); }
+      to { opacity: 0; transform: translate(-50%, -70px) scale(1.2); }
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8, 5, 25, 0.55);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .overlay.show { opacity: 1; pointer-events: auto; }
+    .panel {
+      padding: 30px 44px;
+      border-radius: 24px;
+      text-align: center;
+      background: linear-gradient(160deg, rgba(46, 16, 101, 0.95), rgba(15, 10, 40, 0.95));
+      border: 1px solid rgba(245, 200, 107, 0.4);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 40px rgba(245, 200, 107, 0.15);
+      transform: scale(0.85) translateY(20px);
+      transition: transform 0.5s cubic-bezier(.2,1.4,.4,1);
+    }
+    .overlay.show .panel { transform: none; }
+    .panel h2 {
+      margin: 0 0 6px;
+      font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+      font-size: 2.4rem;
+    }
+    .panel.win h2 { color: var(--gold); }
+    .panel.lose h2 { color: var(--rose); }
+    .panel p { margin: 4px 0 18px; color: var(--muted); }
+    button {
+      font: inherit;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 12px 28px;
+      border: 0;
       border-radius: 999px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      color: #2a1600;
+      background: linear-gradient(180deg, #fff3cf, var(--gold) 60%, var(--gold-deep));
+      box-shadow: 0 8px 22px rgba(245, 200, 107, 0.35);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(245, 200, 107, 0.5); }
+    .hint { color: var(--muted); font-size: 0.85rem; letter-spacing: 1px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
 <body>
-  <h1>🎴 Memory Game</h1>
-  <div class="status" id="status">Mistakes: 0</div>
-  <div class="game-board" id="board"></div>
+  <div class="aurora"></div>
+  <canvas id="fx"></canvas>
+  <main class="table">
+    <h1>Memory</h1>
+    <div class="hud">
+      <div class="pill"><small>Lives</small><div class="lives" id="lives"></div></div>
+      <div class="pill" id="pairsPill"><small>Pairs</small><b id="pairs">0/6</b></div>
+      <div class="pill" id="scorePill"><small>Score</small><b id="score">0</b></div>
+      <div class="pill"><small>Moves</small><b id="moves">0</b></div>
+      <div class="pill"><small>Time</small><b id="time">0:00</b></div>
+    </div>
+    <div class="progress"><span id="progress"></span></div>
+    <div class="board" id="board"></div>
+    <div class="hint">Find the 6 pairs. 3 mistakes and the game is over.</div>
+  </main>
+  <div class="overlay" id="overlay">
+    <div class="panel" id="panel">
+      <h2 id="resultTitle"></h2>
+      <p id="resultText"></p>
+      <button id="again">Play Again</button>
+    </div>
+  </div>
 
   <script>
     const symbols = ['🎯', '🎮', '🎲', '🐉', '🏰', '🦀'];
-    let cards = [...symbols, ...symbols].sort(() => 0.5 - Math.random());
+    const MAX_MISTAKES = 3;
     const board = document.getElementById('board');
-    let flipped = [];
-    let matchedCount = 0;
-    let mistakes = 0;
-    const status = document.getElementById('status');
+    const ui = {
+      lives: document.getElementById('lives'),
+      pairs: document.getElementById('pairs'),
+      score: document.getElementById('score'),
+      moves: document.getElementById('moves'),
+      time: document.getElementById('time'),
+      progress: document.getElementById('progress'),
+      overlay: document.getElementById('overlay'),
+      panel: document.getElementById('panel'),
+      title: document.getElementById('resultTitle'),
+      text: document.getElementById('resultText')
+    };
+    const fx = document.getElementById('fx');
+    const ctx = fx.getContext('2d');
+    let particles = [];
+    let cards, flipped, matchedCount, mistakes, moves, score, combo, started, timer, over;
+    let audio = null;
 
-    function renderBoard() {
-      board.innerHTML = '';
-      cards.forEach((symbol, index) => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.dataset.index = index;
-        card.dataset.symbol = symbol;
-        card.addEventListener('click', flipCard);
-        board.appendChild(card);
-      });
+    function shuffle(list) {
+      const a = [...list];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     }
 
-    function flipCard(e) {
-      const card = e.target;
-      if (flipped.includes(card) || card.classList.contains('matched') || flipped.length >= 2) return;
-      flipped.push(card);
-      card.classList.add('flipping');
-      setTimeout(() => {
-        card.textContent = card.dataset.symbol;
-        card.classList.remove('flipping');
-        card.classList.add('flipped');
-        if (flipped[1] === card) {
-          setTimeout(checkMatch, 1000);
+    function tone(freq, duration, type = 'sine', volume = 0.12, delay = 0) {
+      if (!audio) return;
+      const t = audio.currentTime + delay;
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(volume, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+      osc.connect(gain).connect(audio.destination);
+      osc.start(t);
+      osc.stop(t + duration);
+    }
+
+    const sounds = {
+      flip: () => tone(520, 0.08, 'triangle', 0.08),
+      match: () => [660, 880, 1320].forEach((f, i) => tone(f, 0.25, 'sine', 0.1, i * 0.08)),
+      wrong: () => { tone(200, 0.25, 'sawtooth', 0.06); tone(150, 0.3, 'sawtooth', 0.06, 0.08); },
+      win: () => [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, 0.4, 'triangle', 0.1, i * 0.12)),
+      lose: () => [392, 330, 262, 196].forEach((f, i) => tone(f, 0.35, 'square', 0.05, i * 0.15))
+    };
+
+    function unlockAudio() {
+      if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+      if (audio.state === 'suspended') audio.resume();
+    }
+
+    function resize() {
+      fx.width = innerWidth * devicePixelRatio;
+      fx.height = innerHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+
+    function centerOf(el) {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+
+    function burst(x, y, colors, count = 28, speed = 5) {
+      for (let i = 0; i < count; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const v = Math.random() * speed + 1;
+        particles.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1.5, life: 1, decay: 0.015 + Math.random() * 0.02, size: 2 + Math.random() * 3, color: colors[i % colors.length], spin: Math.random() * 6, star: Math.random() < 0.5 });
+      }
+    }
+
+    function confetti() {
+      const colors = ['#f5c86b', '#fb7185', '#34d399', '#60a5fa', '#c084fc', '#fff3cf'];
+      for (let i = 0; i < 160; i++) {
+        particles.push({ x: Math.random() * innerWidth, y: -20 - Math.random() * innerHeight * 0.5, vx: (Math.random() - 0.5) * 2, vy: 2 + Math.random() * 3, life: 1, decay: 0.004, size: 4 + Math.random() * 4, color: colors[i % colors.length], spin: Math.random() * 6, rect: true });
+      }
+    }
+
+    function drawStar(p) {
+      ctx.beginPath();
+      for (let i = 0; i < 8; i++) {
+        const r = i % 2 ? p.size * 0.45 : p.size * 1.6;
+        const a = p.spin + i * Math.PI / 4;
+        ctx.lineTo(p.x + Math.cos(a) * r, p.y + Math.sin(a) * r);
+      }
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      particles = particles.filter(p => p.life > 0 && p.y < innerHeight + 40);
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.rect ? 0.02 : 0.12;
+        p.vx *= 0.99;
+        p.spin += 0.1;
+        p.life -= p.decay;
+        ctx.globalAlpha = Math.max(p.life, 0);
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = p.rect ? 0 : 10;
+        if (p.rect) {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.spin);
+          ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+          ctx.restore();
+        } else if (p.star) {
+          drawStar(p);
+        } else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
         }
-      }, 150);
+      }
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+      requestAnimationFrame(animate);
+    }
+
+    function floater(el, text) {
+      const c = centerOf(el);
+      const f = document.createElement('div');
+      f.className = 'floater';
+      f.textContent = text;
+      f.style.left = c.x + 'px';
+      f.style.top = c.y - 40 + 'px';
+      document.body.appendChild(f);
+      setTimeout(() => f.remove(), 1000);
+    }
+
+    function bump(id) {
+      const pill = document.getElementById(id);
+      pill.classList.remove('pop');
+      void pill.offsetWidth;
+      pill.classList.add('pop');
+    }
+
+    function renderLives() {
+      ui.lives.innerHTML = '';
+      for (let i = 0; i < MAX_MISTAKES; i++) {
+        const life = document.createElement('span');
+        life.className = 'life' + (i >= MAX_MISTAKES - mistakes ? ' lost' : '');
+        life.textContent = '💜';
+        ui.lives.appendChild(life);
+      }
+    }
+
+    function updateHud() {
+      ui.pairs.textContent = matchedCount / 2 + '/' + symbols.length;
+      ui.score.textContent = score;
+      ui.moves.textContent = moves;
+      ui.progress.style.width = (matchedCount / cards.length) * 100 + '%';
+    }
+
+    function tick() {
+      const s = Math.floor((Date.now() - started) / 1000);
+      ui.time.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    }
+
+    function buildCard(symbol, index) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.symbol = symbol;
+      card.style.setProperty('--i', index);
+      card.style.setProperty('--fx', (Math.random() - 0.5) * 600 + 'px');
+      card.style.setProperty('--fy', 300 + Math.random() * 200 + 'px');
+      card.style.setProperty('--fr', (Math.random() - 0.5) * 90 + 'deg');
+      card.innerHTML = '<div class="inner"><div class="face back"></div><div class="face front"><span class="pip tl">' + symbol + '</span><span class="glyph">' + symbol + '</span><span class="pip br">' + symbol + '</span></div></div>';
+      card.addEventListener('click', () => flipCard(card));
+      card.addEventListener('mousemove', e => tilt(card, e));
+      card.addEventListener('mouseleave', () => tilt(card));
+      card.addEventListener('animationend', e => { if (e.animationName === 'deal') card.classList.add('dealt'); });
+      return card;
+    }
+
+    function tilt(card, e) {
+      const inner = card.firstChild;
+      if (!e || card.classList.contains('matched')) {
+        inner.style.setProperty('--tx', '0deg');
+        inner.style.setProperty('--ty', '0deg');
+        return;
+      }
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      inner.style.setProperty('--tx', (-y * 14) + 'deg');
+      inner.style.setProperty('--ty', (x * 14) + 'deg');
+    }
+
+    function newGame() {
+      cards = shuffle([...symbols, ...symbols]);
+      flipped = [];
+      matchedCount = 0;
+      mistakes = 0;
+      moves = 0;
+      score = 0;
+      combo = 0;
+      over = false;
+      started = 0;
+      clearInterval(timer);
+      ui.time.textContent = '0:00';
+      ui.overlay.classList.remove('show');
+      board.innerHTML = '';
+      cards.forEach((symbol, i) => board.appendChild(buildCard(symbol, i)));
+      renderLives();
+      updateHud();
+    }
+
+    function flipCard(card) {
+      unlockAudio();
+      if (over || flipped.includes(card) || card.classList.contains('matched') || flipped.length >= 2) return;
+      if (!started) {
+        started = Date.now();
+        timer = setInterval(tick, 250);
+      }
+      flipped.push(card);
+      card.classList.add('flipped');
+      sounds.flip();
+      if (flipped.length === 2) {
+        moves++;
+        updateHud();
+        setTimeout(checkMatch, 700);
+      }
     }
 
     function checkMatch() {
       const [card1, card2] = flipped;
       if (card1.dataset.symbol === card2.dataset.symbol) {
-        card1.classList.remove('flipped');
-        card2.classList.remove('flipped');
-        card1.classList.add('matched');
-        card2.classList.add('matched');
+        combo++;
+        const gained = 100 * combo;
+        score += gained;
         matchedCount += 2;
-        if (matchedCount === cards.length) {
-          status.textContent = '🎉 You Win!';
-          status.style.color = '#4CAF50';
-        }
-      } else {
-        card1.classList.add('wrong');
-        card2.classList.add('wrong');
-        setTimeout(() => {
-          card1.textContent = '';
-          card2.textContent = '';
-          card1.classList.remove('flipped', 'wrong');
-          card2.classList.remove('flipped', 'wrong');
-          mistakes++;
-          if (mistakes >= 3) {
-            status.textContent = '💥 Game Over!';
-            status.style.color = '#f44336';
-            Array.from(document.querySelectorAll('.card')).forEach(c => c.removeEventListener('click', flipCard));
-            return;
-          }
-          status.textContent = `Mistakes: ${mistakes}`;
-        }, 600);
+        [card1, card2].forEach(c => {
+          c.classList.remove('flipped');
+          c.classList.add('matched');
+          tilt(c);
+          const p = centerOf(c);
+          burst(p.x, p.y, ['#f5c86b', '#34d399', '#fff3cf', '#a7f3d0']);
+        });
+        floater(card2, combo > 1 ? '+' + gained + ' x' + combo : '+' + gained);
+        sounds.match();
+        bump('scorePill');
+        bump('pairsPill');
+        updateHud();
+        flipped = [];
+        if (matchedCount === cards.length) finish(true);
+        return;
       }
-      flipped = [];
+      combo = 0;
+      mistakes++;
+      card1.classList.add('wrong');
+      card2.classList.add('wrong');
+      board.classList.add('shake');
+      sounds.wrong();
+      const lost = ui.lives.children[MAX_MISTAKES - mistakes];
+      if (lost) lost.classList.add('breaking', 'lost');
+      setTimeout(() => {
+        board.classList.remove('shake');
+        card1.classList.remove('flipped', 'wrong');
+        card2.classList.remove('flipped', 'wrong');
+        flipped = [];
+        if (mistakes >= MAX_MISTAKES) finish(false);
+      }, 650);
     }
-    renderBoard();
+
+    function finish(won) {
+      over = true;
+      clearInterval(timer);
+      if (started) tick();
+      ui.panel.className = 'panel ' + (won ? 'win' : 'lose');
+      ui.title.textContent = won ? 'You Win!' : 'Game Over';
+      ui.text.textContent = won
+        ? 'All ' + symbols.length + ' pairs in ' + moves + ' moves and ' + ui.time.textContent + ', score ' + score + '.'
+        : 'Out of lives with ' + matchedCount / 2 + ' of ' + symbols.length + ' pairs found.';
+      if (won) {
+        confetti();
+        sounds.win();
+      } else {
+        board.querySelectorAll('.card:not(.matched)').forEach((c, i) => setTimeout(() => c.classList.add('flipped'), i * 70));
+        sounds.lose();
+      }
+      setTimeout(() => ui.overlay.classList.add('show'), won ? 600 : 1200);
+    }
+
+    document.getElementById('again').addEventListener('click', newGame);
+    addEventListener('resize', resize);
+    resize();
+    animate();
+    newGame();
   </script>
 </body>
 </html>
