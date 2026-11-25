@@ -115,10 +115,11 @@
         <div class="stat"><span class="label">Altitude</span><span class="value"><span id="altitude">0</span><small>ft</small></span></div>
         <div class="stat"><span class="label">Speed</span><span class="value"><span id="speed">0</span><small>mph</small></span></div>
         <div class="stat"><span class="label">Heading</span><span class="value"><span id="heading">0</span><small>°</small></span></div>
+        <div class="stat"><span class="label">Weather</span><span class="value"><span id="weather">Clear</span></span></div>
     </div>
     <div class="brand">VIBE PLANE</div>
     <div id="warning" class="warning"></div>
-    <div class="help">↑ ↓ climb / dive · ← → bank and turn · W / S throttle · R restart</div>
+    <div class="help">↑ ↓ climb / dive · ← → bank and turn · W / S throttle · 1 clear · 2 rain · 3 snow · R restart</div>
     <div id="overlay" class="overlay">
         <h2>You crashed</h2>
         <p>Press R to fly again</p>
@@ -131,6 +132,7 @@
             altitude: document.getElementById("altitude"),
             speed: document.getElementById("speed"),
             heading: document.getElementById("heading"),
+            weather: document.getElementById("weather"),
             warning: document.getElementById("warning"),
             overlay: document.getElementById("overlay")
         };
@@ -139,11 +141,18 @@
         const RANGE = 12;
         const VIEW = TILE * RANGE;
         const NEAR = 1;
-        const GROUND = 3;
-        const CLOUD_AREA = 14000;
+        const GROUND = 5.5;
+        const AREA = 14000;
 
         const SKY_TOP = [37, 99, 235];
         const FOG = [206, 227, 241];
+        const RAIN_SKY = [74, 85, 104];
+        const RAIN_FOG = [150, 160, 172];
+        const SNOW_SKY = [148, 163, 184];
+        const SNOW_FOG = [226, 232, 240];
+        const SNOW_GROUND = [240, 244, 250];
+        const ICE = [200, 220, 236];
+        const STORM = [118, 124, 136];
         const FIELDS = [[92, 140, 58], [106, 154, 64], [127, 169, 74], [155, 179, 90], [190, 182, 98], [79, 125, 51], [140, 160, 80]];
         const LAKE = [64, 138, 199];
         const RUNWAY = [74, 78, 86];
@@ -153,55 +162,134 @@
         const LEAF_LIGHT = [62, 128, 58];
         const CLOUD = [255, 255, 255];
         const CLOUD_SHADE = [212, 222, 234];
-        const WHITE = [238, 242, 247];
-        const RED = [214, 40, 57];
-        const GLASS = [91, 192, 235];
-        const DARK = [43, 45, 66];
+        const WHITE = [240, 243, 248];
+        const RED = [204, 36, 52];
+        const NAVY = [30, 58, 110];
+        const GLASS = [40, 90, 140];
+        const DARK = [45, 48, 60];
+        const TIRE = [25, 25, 30];
+        const HOUSE_WALL = [236, 224, 200];
+        const HOUSE_ROOF = [150, 60, 50];
+        const BARN_WALL = [168, 48, 40];
+        const BARN_ROOF = [84, 86, 92];
+        const BALLOON_COLORS = [[[239, 68, 68], [250, 204, 21]], [[59, 130, 246], [255, 255, 255]], [[168, 85, 247], [251, 146, 60]], [[16, 185, 129], [250, 250, 250]], [[236, 72, 153], [56, 189, 248]]];
+        const WEATHER_CYCLE = ["clear", "rain", "clear", "snow"];
 
         const SUN = normalize([Math.cos(0.35) * Math.sin(0.6), Math.sin(0.35), Math.cos(0.35) * Math.cos(0.6)]);
-
-        const V = {
-            n: [0, 0, 17], a: [-2.5, 2.5, 8], b: [2.5, 2.5, 8], c: [2.5, -2, 8], d: [-2.5, -2, 8],
-            e: [-2, 2.2, -6], f: [2, 2.2, -6], g: [2, -1.5, -6], h: [-2, -1.5, -6], t: [0, 1.2, -15]
-        };
-        const BODY = [
-            ["nba", RED], ["ncb", RED], ["ndc", RED], ["nad", RED],
-            ["abfe", WHITE], ["bcgf", WHITE], ["cdhg", WHITE], ["daeh", WHITE],
-            ["eft", WHITE], ["fgt", WHITE], ["ght", WHITE], ["het", WHITE]
-        ].map(([keys, color]) => ({ pts: [...keys].map(k => V[k]), color }));
-        const PARTS = [
-            { pts: [[-2.5, 0, 5], [-18, 1, 2], [-18, 1, -1.5], [-2.5, 0, -3]], color: RED },
-            { pts: [[2.5, 0, 5], [18, 1, 2], [18, 1, -1.5], [2.5, 0, -3]], color: RED },
-            { pts: [[-1.5, 1, -10], [-7, 1.3, -12.5], [-7, 1.3, -14.5], [-1.5, 1, -14.5]], color: WHITE },
-            { pts: [[1.5, 1, -10], [7, 1.3, -12.5], [7, 1.3, -14.5], [1.5, 1, -14.5]], color: WHITE },
-            { pts: [[0, 2, -8], [0, 8.5, -13], [0, 8.5, -15.5], [0, 1.5, -15]], color: RED },
-            { pts: [[-1.6, 2.5, 7], [1.6, 2.5, 7], [1, 4.2, 3], [-1, 4.2, 3]], color: GLASS },
-            { pts: [[-1, 4.2, 3], [1, 4.2, 3], [1.6, 2.5, -1], [-1.6, 2.5, -1]], color: GLASS }
-        ];
-        const MESH = BODY.concat(PARTS);
-        const SHADOW = [MESH[4], MESH[0], MESH[8]].concat(PARTS.slice(0, 4));
+        const MESH = buildPlane();
+        const SHADOW = buildShadow();
 
         const keys = {};
         const plane = {};
         const cam = {};
+        const env = { sky: SKY_TOP, fog: FOG, rain: 0, snow: 0, view: VIEW, flash: 0, bolt: [] };
+        const weather = { kind: "clear", index: 0, timer: 0 };
         let crashed = false;
         let W = 0;
         let H = 0;
         let F = 0;
         let dpr = 1;
+        let clock = 0;
         let last = performance.now();
+        let yawShift = 0;
 
+        const rand = Math.random;
         const clouds = Array.from({ length: 45 }, () => ({
-            x: Math.random() * CLOUD_AREA,
-            z: Math.random() * CLOUD_AREA,
-            y: 700 + Math.random() * 900,
-            puffs: Array.from({ length: 6 }, () => [
-                (Math.random() - 0.5) * 300,
-                (Math.random() - 0.5) * 60,
-                (Math.random() - 0.5) * 180,
-                70 + Math.random() * 70
+            x: rand() * AREA,
+            z: rand() * AREA,
+            y: 700 + rand() * 900,
+            puffs: Array.from({ length: 6 }, () => [(rand() - 0.5) * 300, (rand() - 0.5) * 60, (rand() - 0.5) * 180, 70 + rand() * 70])
+        }));
+        const flocks = Array.from({ length: 10 }, () => ({
+            x: rand() * AREA,
+            z: rand() * AREA,
+            y: 120 + rand() * 450,
+            radius: 150 + rand() * 350,
+            speed: (0.12 + rand() * 0.12) * (rand() < 0.5 ? 1 : -1),
+            phase: rand() * Math.PI * 2,
+            birds: Array.from({ length: 5 + Math.floor(rand() * 6) }, (_, j) => [
+                (j % 2 ? 1 : -1) * Math.ceil(j / 2) * 7,
+                (rand() - 0.5) * 4,
+                -Math.ceil(j / 2) * 7,
+                rand() * Math.PI * 2
             ])
         }));
+        const balloons = Array.from({ length: 8 }, (_, i) => ({
+            x: rand() * AREA,
+            z: rand() * AREA,
+            y: 220 + rand() * 650,
+            colors: BALLOON_COLORS[i % BALLOON_COLORS.length],
+            seed: rand() * 10
+        }));
+        const drops = Array.from({ length: 600 }, () => ({ x: rand(), y: rand(), s: 0.6 + rand() * 0.8 }));
+        const flakes = Array.from({ length: 450 }, () => ({ x: rand(), y: rand(), s: 0.5 + rand() * 1 }));
+
+        function buildPlane() {
+            const faces = [];
+            const N = 10;
+            const stations = [[16.6, 1.3, 1.3, 0.2], [15.7, 2.4, 2.4, 0.2], [11, 2.7, 2.8, 0.3], [5, 2.65, 2.9, 0.4], [-2, 2.2, 2.5, 0.55], [-9, 1.3, 1.7, 0.95], [-15, 0.45, 0.7, 1.4]];
+            const rings = stations.map(([z, hw, hh, yc]) => Array.from({ length: N }, (_, k) => {
+                const a = (k / N) * Math.PI * 2;
+                return [Math.cos(a) * hw, yc + Math.sin(a) * hh, z];
+            }));
+            const tip = [0, 0.2, 18.2];
+            rings[0].forEach((p, k) => faces.push({ pts: [tip, rings[0][(k + 1) % N], p], color: RED }));
+            for (let i = 0; i < rings.length - 1; i++) {
+                for (let k = 0; k < N; k++) {
+                    let color = WHITE;
+                    if (i === 0) color = RED;
+                    else if (i === 1) color = DARK;
+                    else if (k === 0 || k === 4) color = RED;
+                    else if (k > 5 && k < 9 && i > 1) color = NAVY;
+                    faces.push({ pts: [rings[i][k], rings[i][(k + 1) % N], rings[i + 1][(k + 1) % N], rings[i + 1][k]], color });
+                }
+            }
+            faces.push({ pts: rings[rings.length - 1].slice().reverse(), color: WHITE });
+            for (const side of [1, -1]) {
+                wing(faces, side);
+                faces.push({ pts: [[1 * side, 1.4, -10], [7.5 * side, 1.7, -12.4], [7.5 * side, 1.7, -14.4], [1 * side, 1.4, -14.8]], color: WHITE });
+                faces.push({ pts: [[6.3 * side, 1.65, -12.1], [7.5 * side, 1.7, -12.4], [7.5 * side, 1.7, -14.4], [6.3 * side, 1.65, -14.5]], color: RED });
+                faces.push({ pts: [[2.9 * side, -1.8, 5.2], [3.3 * side, -1.8, 5.2], [3.5 * side, -4.6, 4.2], [3.1 * side, -4.6, 4.2]], color: DARK });
+                faces.push({ pts: Array.from({ length: 8 }, (_, k) => [3.5 * side, -5 + Math.sin((k / 8) * Math.PI * 2) * 1.1, 4.2 + Math.cos((k / 8) * Math.PI * 2) * 1.1]), color: TIRE });
+            }
+            faces.push({ pts: [[0, 2.1, -8], [0, 9, -12.8], [0, 9, -14.9], [0, 1.6, -15]], color: WHITE });
+            faces.push({ pts: [[0, 6.5, -11.6], [0, 9, -12.8], [0, 9, -14.9], [0, 6.5, -14.9]], color: RED });
+            const canopy = [[-1.6, 2.9, 7.5], [1.6, 2.9, 7.5], [1.1, 4.6, 4.5], [-1.1, 4.6, 4.5], [1.1, 4.6, 1], [-1.1, 4.6, 1], [1.7, 3.1, -1.5], [-1.7, 3.1, -1.5]];
+            const [c0, c1, c2, c3, c4, c5, c6, c7] = canopy;
+            faces.push({ pts: [c0, c1, c2, c3], color: GLASS }, { pts: [c3, c2, c4, c5], color: GLASS }, { pts: [c5, c4, c6, c7], color: GLASS });
+            faces.push({ pts: [c0, c3, c5, c7], color: GLASS }, { pts: [c1, c2, c4, c6], color: GLASS });
+            faces.push({ pts: Array.from({ length: 12 }, (_, k) => [Math.cos((k / 12) * Math.PI * 2) * 6.8, 0.2 + Math.sin((k / 12) * Math.PI * 2) * 6.8, 18]), color: [220, 225, 235], alpha: 0.16 });
+            for (const dir of [1, -1]) {
+                faces.push({ pts: [[-0.5, 0.2 + 0.9 * dir, 18.1], [0.5, 0.2 + 0.9 * dir, 18.1], [0.3, 0.2 + 6.6 * dir, 18.1], [-0.3, 0.2 + 6.6 * dir, 18.1]], color: DARK, alpha: 0.85, spin: true });
+            }
+            return faces;
+        }
+
+        function wing(faces, side) {
+            const span = 19 - 2.4;
+            const lead = x => 6 - ((x - 2.4) / span) * 2.5;
+            const trail = x => -2.5 + ((x - 2.4) / span) * 2;
+            const y = x => ((x - 2.4) / span) * 1.4;
+            const th = x => 0.5 - ((x - 2.4) / span) * 0.3;
+            const P = (x, z, top) => [x * side, y(x) + (top ? th(x) : -th(x)), z];
+            for (const [x0, x1, color] of [[2.4, 15.5, WHITE], [15.5, 19, RED]]) {
+                faces.push({ pts: [P(x0, lead(x0), true), P(x1, lead(x1), true), P(x1, trail(x1), true), P(x0, trail(x0), true)], color });
+                faces.push({ pts: [P(x0, lead(x0), false), P(x1, lead(x1), false), P(x1, trail(x1), false), P(x0, trail(x0), false)], color: [200, 205, 214] });
+                faces.push({ pts: [P(x0, lead(x0), true), P(x1, lead(x1), true), P(x1, lead(x1), false), P(x0, lead(x0), false)], color });
+                faces.push({ pts: [P(x0, trail(x0), true), P(x1, trail(x1), true), P(x1, trail(x1), false), P(x0, trail(x0), false)], color });
+            }
+            faces.push({ pts: [P(19, lead(19), true), P(19, trail(19), true), P(19, trail(19), false), P(19, lead(19), false)], color: RED });
+        }
+
+        function buildShadow() {
+            const body = [[0, 0, 18], [2.7, 0, 11], [2.6, 0, -2], [0.5, 0, -15], [-0.5, 0, -15], [-2.6, 0, -2], [-2.7, 0, 11]];
+            const shapes = [body];
+            for (const s of [1, -1]) {
+                shapes.push([[2.4 * s, 0, 6], [19 * s, 0, 3.5], [19 * s, 0, -0.5], [2.4 * s, 0, -2.5]]);
+                shapes.push([[1 * s, 0, -10], [7.5 * s, 0, -12.4], [7.5 * s, 0, -14.4], [1 * s, 0, -14.8]]);
+            }
+            return shapes;
+        }
 
         function reset() {
             Object.assign(plane, { x: 0, y: 350, z: -1800, yaw: 0, pitch: 0, roll: 0, speed: 190, vy: 0, prop: 0 });
@@ -230,12 +318,28 @@
             return [v[0] / len, v[1] / len, v[2] / len];
         }
 
+        function sub(a, b) {
+            return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+        }
+
+        function cross(a, b) {
+            return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+        }
+
+        function dot(a, b) {
+            return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+        }
+
         function mix(a, b, t) {
             return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
         }
 
         function rgb(c, alpha = 1) {
             return "rgba(" + Math.round(c[0]) + "," + Math.round(c[1]) + "," + Math.round(c[2]) + "," + alpha + ")";
+        }
+
+        function fogged(c, dist, snowAmount = 0) {
+            return rgb(mix(mix(c, SNOW_GROUND, env.snow * snowAmount), env.fog, fogAmount(dist)));
         }
 
         function angleDiff(a, b) {
@@ -249,8 +353,12 @@
             return (h >>> 0) / 4294967296;
         }
 
+        function wrap(v) {
+            return ((v % AREA) + AREA * 1.5) % AREA - AREA / 2;
+        }
+
         function fogAmount(dist) {
-            return Math.pow(clamp((dist - 600) / (VIEW - 600), 0, 1), 0.8);
+            return Math.pow(clamp((dist - 500) / (env.view - 500), 0, 1), 0.8);
         }
 
         function rotateToCamera(dx, dy, dz) {
@@ -269,6 +377,10 @@
 
         function screen(p) {
             return [W / 2 + (p[0] * F) / p[2], H / 2 - (p[1] * F) / p[2]];
+        }
+
+        function distTo(x, z) {
+            return Math.hypot(x - cam.x, z - cam.z);
         }
 
         function clipNear(pts) {
@@ -306,14 +418,25 @@
             }
         }
 
+        function circle(x, y, r, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
         function onRunway(x, z) {
             return Math.abs(x) < 120 && z > -500 && z < 1700;
         }
 
+        function isLake(ix, iz) {
+            return !onRunway(ix * TILE + TILE / 2, iz * TILE + TILE / 2) && hash(ix, iz, 3) < 0.05;
+        }
+
         function tileColor(ix, iz) {
             if (onRunway(ix * TILE + TILE / 2, iz * TILE + TILE / 2)) return FIELDS[1];
-            if (hash(ix, iz, 3) < 0.05) return LAKE;
-            return FIELDS[Math.floor(hash(ix, iz, 7) * FIELDS.length)];
+            if (isLake(ix, iz)) return mix(LAKE, ICE, env.snow);
+            return mix(FIELDS[Math.floor(hash(ix, iz, 7) * FIELDS.length)], SNOW_GROUND, env.snow * 0.85);
         }
 
         function localToWorld(v, spin) {
@@ -321,7 +444,7 @@
             if (spin) {
                 const cs = Math.cos(spin);
                 const ss = Math.sin(spin);
-                [x, y] = [x * cs - y * ss, x * ss + y * cs];
+                [x, y] = [x * cs - (y - 0.2) * ss, x * ss + (y - 0.2) * cs + 0.2];
             }
             const cr = Math.cos(plane.roll);
             const sr = Math.sin(plane.roll);
@@ -333,6 +456,41 @@
             const sy = Math.sin(plane.yaw);
             [x, z] = [x * cy + z * sy, -x * sy + z * cy];
             return [x + plane.x, y + plane.y, z + plane.z];
+        }
+
+        function setWeather(kind) {
+            weather.kind = kind;
+            weather.index = WEATHER_CYCLE.indexOf(kind);
+            weather.timer = 0;
+        }
+
+        function makeBolt() {
+            const points = [];
+            let x = (0.2 + rand() * 0.6) * W;
+            let y = -20;
+            while (y < H * 0.45) {
+                points.push([x, y]);
+                x += (rand() - 0.5) * 60;
+                y += 20 + rand() * 30;
+            }
+            points.push([x, y]);
+            return points;
+        }
+
+        function updateWeather(dt) {
+            weather.timer += dt;
+            if (weather.timer > 40) setWeather(WEATHER_CYCLE[(weather.index + 1) % WEATHER_CYCLE.length]);
+            const k = Math.min(1, dt * 0.5);
+            env.rain += ((weather.kind === "rain" ? 1 : 0) - env.rain) * k;
+            env.snow += ((weather.kind === "snow" ? 1 : 0) - env.snow) * k;
+            env.sky = mix(mix(SKY_TOP, RAIN_SKY, env.rain * 0.9), SNOW_SKY, env.snow * 0.8);
+            env.fog = mix(mix(FOG, RAIN_FOG, env.rain * 0.9), SNOW_FOG, env.snow * 0.9);
+            env.view = VIEW * (1 - 0.35 * (env.rain + env.snow));
+            if (env.rain > 0.6 && rand() < dt * 0.15) {
+                env.flash = 1;
+                env.bolt = makeBolt();
+            }
+            env.flash = Math.max(0, env.flash - dt * 2.5);
         }
 
         function update(dt) {
@@ -352,7 +510,7 @@
             plane.x += Math.sin(plane.yaw) * Math.cos(plane.pitch) * v * dt;
             plane.z += Math.cos(plane.yaw) * Math.cos(plane.pitch) * v * dt;
             plane.y += plane.vy * dt;
-            plane.prop += dt * (12 + plane.speed * 0.1);
+            plane.prop += dt * (14 + plane.speed * 0.12);
             if (plane.y <= GROUND) {
                 if (airborne && (plane.vy < -35 || Math.abs(plane.roll) > 0.45)) {
                     crashed = true;
@@ -365,7 +523,9 @@
 
         function updateCamera(dt) {
             const k = Math.min(1, dt * 3);
+            const before = cam.yaw;
             cam.yaw += angleDiff(plane.yaw, cam.yaw) * k;
+            yawShift = ((cam.yaw - before) * F) / Math.hypot(W, H);
             cam.pitch += (plane.pitch * 0.5 - 0.1 - cam.pitch) * k;
             cam.roll += (plane.roll * 0.3 - cam.roll) * k;
             cam.x = plane.x - Math.sin(cam.yaw) * 75;
@@ -376,22 +536,24 @@
         function drawSky(horizonY) {
             const D = Math.hypot(W, H);
             const sky = ctx.createLinearGradient(0, horizonY - H, 0, horizonY);
-            sky.addColorStop(0, rgb(SKY_TOP));
-            sky.addColorStop(1, rgb(FOG));
+            sky.addColorStop(0, rgb(env.sky));
+            sky.addColorStop(1, rgb(env.fog));
             ctx.fillStyle = sky;
             ctx.fillRect(-D, horizonY - 3 * D, W + 2 * D, 3 * D);
-            ctx.fillStyle = rgb(FOG);
+            ctx.fillStyle = rgb(env.fog);
             ctx.fillRect(-D, horizonY - 1, W + 2 * D, 3 * D);
         }
 
         function drawSun() {
+            const strength = 1 - env.rain - env.snow * 0.7;
+            if (strength <= 0.05) return;
             const p = rotateToCamera(SUN[0], SUN[1], SUN[2]);
             if (p[2] <= 0) return;
             const [x, y] = screen(p);
             const glow = ctx.createRadialGradient(x, y, 0, x, y, 220);
-            glow.addColorStop(0, "rgba(255, 253, 240, 1)");
-            glow.addColorStop(0.12, "rgba(255, 248, 210, 0.95)");
-            glow.addColorStop(0.35, "rgba(255, 240, 180, 0.35)");
+            glow.addColorStop(0, "rgba(255, 253, 240, " + strength + ")");
+            glow.addColorStop(0.12, "rgba(255, 248, 210, " + 0.95 * strength + ")");
+            glow.addColorStop(0.35, "rgba(255, 240, 180, " + 0.35 * strength + ")");
             glow.addColorStop(1, "rgba(255, 240, 180, 0)");
             ctx.fillStyle = glow;
             ctx.fillRect(x - 220, y - 220, 440, 440);
@@ -407,7 +569,7 @@
                     const iz = cz + j;
                     const mx = ix * TILE + TILE / 2;
                     const mz = iz * TILE + TILE / 2;
-                    const dist = Math.hypot(mx - cam.x, mz - cam.z);
+                    const dist = distTo(mx, mz);
                     if (dist > VIEW) continue;
                     const c = toCamera([mx, 0, mz]);
                     if (c[2] < -TILE) continue;
@@ -423,68 +585,85 @@
                 const x0 = t.ix * TILE;
                 const z0 = t.iz * TILE;
                 const corners = [[x0, 0, z0], [x0 + TILE, 0, z0], [x0 + TILE, 0, z0 + TILE], [x0, 0, z0 + TILE]];
-                fillPoly(corners.map(toCamera), rgb(mix(tileColor(t.ix, t.iz), FOG, fogAmount(t.dist))), true);
+                fillPoly(corners.map(toCamera), rgb(mix(tileColor(t.ix, t.iz), env.fog, fogAmount(t.dist))), true);
             }
         }
 
         function drawRunway() {
-            const dist = Math.hypot(cam.x, cam.z - 600);
-            const fog = fogAmount(dist);
-            fillPoly([[-30, 0.1, -300], [30, 0.1, -300], [30, 0.1, 1500], [-30, 0.1, 1500]].map(toCamera), rgb(mix(RUNWAY, FOG, fog)));
+            const dist = distTo(0, 600);
+            const runway = fogged(RUNWAY, dist, 0.3);
+            const mark = fogged(MARK, dist);
+            fillPoly([[-30, 0.1, -300], [30, 0.1, -300], [30, 0.1, 1500], [-30, 0.1, 1500]].map(toCamera), runway);
             for (let z = -260; z < 1460; z += 120) {
-                fillPoly([[-1.5, 0.2, z], [1.5, 0.2, z], [1.5, 0.2, z + 50], [-1.5, 0.2, z + 50]].map(toCamera), rgb(mix(MARK, FOG, fog)));
+                fillPoly([[-1.5, 0.2, z], [1.5, 0.2, z], [1.5, 0.2, z + 50], [-1.5, 0.2, z + 50]].map(toCamera), mark);
             }
             for (const x of [-24, -16, -8, 4, 12, 20]) {
-                fillPoly([[x, 0.2, -280], [x + 4, 0.2, -280], [x + 4, 0.2, -230], [x, 0.2, -230]].map(toCamera), rgb(mix(MARK, FOG, fog)));
+                fillPoly([[x, 0.2, -280], [x + 4, 0.2, -280], [x + 4, 0.2, -230], [x, 0.2, -230]].map(toCamera), mark);
             }
         }
 
         function drawShadow() {
-            const alpha = 0.35 * clamp(1 - plane.y / 1500, 0, 1);
+            const alpha = 0.35 * clamp(1 - plane.y / 1500, 0, 1) * (1 - env.rain * 0.7);
             if (alpha <= 0 || crashed) return;
             const color = "rgba(15, 30, 15, " + alpha + ")";
-            for (const face of SHADOW) {
-                const pts = face.pts.map(v => {
+            for (const shape of SHADOW) {
+                fillPoly(shape.map(v => {
                     const w = localToWorld(v);
                     return toCamera([w[0], 0.3, w[2]]);
-                });
-                fillPoly(pts, color);
+                }), color);
             }
         }
 
-        function treeItems(tiles) {
+        function sceneryItems(tiles) {
             const items = [];
             for (const t of tiles) {
-                if (t.dist > 2800 || tileColor(t.ix, t.iz) === LAKE) continue;
-                const count = Math.floor(hash(t.ix, t.iz, 11) * 6) - 2;
-                for (let k = 0; k < count; k++) {
-                    const x = t.ix * TILE + hash(t.ix, t.iz, 20 + k) * TILE;
-                    const z = t.iz * TILE + hash(t.ix, t.iz, 40 + k) * TILE;
-                    if (onRunway(x, z)) continue;
-                    const base = toCamera([x, 0, z]);
-                    if (base[2] < 5) continue;
-                    const height = 24 + hash(t.ix, t.iz, 60 + k) * 22;
-                    const fog = fogAmount(Math.hypot(x - cam.x, z - cam.z));
-                    items.push({ depth: base[2], draw: () => drawTree(base, height, fog) });
+                if (t.dist > 3600 || isLake(t.ix, t.iz)) continue;
+                const x0 = t.ix * TILE;
+                const z0 = t.iz * TILE;
+                if (onRunway(x0 + TILE / 2, z0 + TILE / 2)) continue;
+                const kind = hash(t.ix, t.iz, 5);
+                if (kind < 0.07) {
+                    const x = x0 + 100 + hash(t.ix, t.iz, 31) * 120;
+                    const z = z0 + 100 + hash(t.ix, t.iz, 32) * 120;
+                    const rot = hash(t.ix, t.iz, 33) * Math.PI;
+                    items.push(buildingItem(x, z, rot, 10, 8, 9, 7, HOUSE_WALL, HOUSE_ROOF));
+                    items.push(buildingItem(x + Math.cos(rot) * 60, z - Math.sin(rot) * 60, rot, 14, 22, 13, 10, BARN_WALL, BARN_ROOF));
+                } else if (kind < 0.1) {
+                    items.push(windmillItem(x0 + TILE / 2, z0 + TILE / 2, hash(t.ix, t.iz, 34) * 10));
                 }
+                if (t.dist < 2800) treeItems(t, items);
+                if (t.dist < 2000 && hash(t.ix, t.iz, 9) < 0.3) herdItems(t, items);
             }
-            return items;
+            return items.filter(Boolean);
         }
 
-        function drawTree(base, height, fog) {
+        function treeItems(t, items) {
+            const count = Math.floor(hash(t.ix, t.iz, 11) * 6) - 2;
+            for (let k = 0; k < count; k++) {
+                const x = t.ix * TILE + hash(t.ix, t.iz, 20 + k) * TILE;
+                const z = t.iz * TILE + hash(t.ix, t.iz, 40 + k) * TILE;
+                const base = toCamera([x, 0, z]);
+                if (base[2] < 5) continue;
+                const height = 24 + hash(t.ix, t.iz, 60 + k) * 22;
+                const dist = distTo(x, z);
+                items.push({ depth: base[2], draw: () => drawTree(base, height, dist) });
+            }
+        }
+
+        function drawTree(base, height, dist) {
             const [sx, sy] = screen(base);
             const s = F / base[2];
             const h = height * s;
             const w = height * 0.5 * s;
-            ctx.fillStyle = rgb(mix(TRUNK, FOG, fog));
+            ctx.fillStyle = fogged(TRUNK, dist);
             ctx.fillRect(sx - w * 0.07, sy - h * 0.3, w * 0.14, h * 0.3);
-            ctx.fillStyle = rgb(mix(LEAF, FOG, fog));
+            ctx.fillStyle = fogged(LEAF, dist, 0.35);
             ctx.beginPath();
             ctx.moveTo(sx, sy - h);
             ctx.lineTo(sx - w / 2, sy - h * 0.22);
             ctx.lineTo(sx + w / 2, sy - h * 0.22);
             ctx.fill();
-            ctx.fillStyle = rgb(mix(LEAF_LIGHT, FOG, fog));
+            ctx.fillStyle = fogged(LEAF_LIGHT, dist, 0.8);
             ctx.beginPath();
             ctx.moveTo(sx, sy - h);
             ctx.lineTo(sx - w * 0.32, sy - h * 0.5);
@@ -492,8 +671,231 @@
             ctx.fill();
         }
 
-        function wrap(v) {
-            return ((v % CLOUD_AREA) + CLOUD_AREA * 1.5) % CLOUD_AREA - CLOUD_AREA / 2;
+        function buildingItem(x, z, rot, w, d, h, rh, wall, roof) {
+            const center = toCamera([x, h / 2, z]);
+            if (center[2] < 10) return null;
+            return { depth: center[2], draw: () => drawBuilding(x, z, rot, w, d, h, rh, wall, roof) };
+        }
+
+        function drawBuilding(x, z, rot, w, d, h, rh, wall, roof) {
+            const c = Math.cos(rot);
+            const s = Math.sin(rot);
+            const P = (lx, ly, lz) => [x + lx * c + lz * s, ly, z - lx * s + lz * c];
+            const b = [P(-w, 0, -d), P(w, 0, -d), P(w, 0, d), P(-w, 0, d)];
+            const t = [P(-w, h, -d), P(w, h, -d), P(w, h, d), P(-w, h, d)];
+            const r = [P(0, h + rh, -d - 1), P(0, h + rh, d + 1)];
+            const e = [P(-w - 1.5, h - 1, -d - 1), P(w + 1.5, h - 1, -d - 1), P(w + 1.5, h - 1, d + 1), P(-w - 1.5, h - 1, d + 1)];
+            const faces = [
+                [[b[0], b[1], t[1], r[0], t[0]], wall],
+                [[b[2], b[3], t[3], r[1], t[2]], wall],
+                [[b[1], b[2], t[2], t[1]], wall],
+                [[b[3], b[0], t[0], t[3]], wall],
+                [[e[1], e[2], r[1], r[0]], roof],
+                [[e[3], e[0], r[0], r[1]], roof]
+            ];
+            const middle = [x, h / 2, z];
+            const eye = [cam.x, cam.y, cam.z];
+            const dist = distTo(x, z);
+            const visible = faces.map(([pts, color]) => {
+                const centroid = pts.reduce((a, p) => [a[0] + p[0] / pts.length, a[1] + p[1] / pts.length, a[2] + p[2] / pts.length], [0, 0, 0]);
+                let n = normalize(cross(sub(pts[1], pts[0]), sub(pts[2], pts[0])));
+                if (dot(n, sub(centroid, middle)) < 0) n = [-n[0], -n[1], -n[2]];
+                return { pts, color, n, centroid, facing: dot(n, sub(eye, centroid)) };
+            }).filter(f => f.facing > 0);
+            visible.sort((a, b2) => distTo(b2.centroid[0], b2.centroid[2]) - distTo(a.centroid[0], a.centroid[2]));
+            for (const f of visible) {
+                const light = 0.6 + 0.4 * Math.max(0, dot(f.n, SUN));
+                const snowy = f.color === roof ? 0.9 : 0;
+                fillPoly(f.pts.map(toCamera), fogged(f.color.map(v => v * light), dist, snowy), true);
+            }
+            if (dist < 1500) {
+                const door = [P(-2.5, 0, -d - 0.1), P(2.5, 0, -d - 0.1), P(2.5, 6, -d - 0.1), P(-2.5, 6, -d - 0.1)];
+                const nFront = [-s, 0, -c];
+                if (dot(nFront, sub(eye, door[0])) > 0) fillPoly(door.map(toCamera), fogged([70, 45, 30], dist));
+            }
+        }
+
+        function windmillItem(x, z, seed) {
+            const base = toCamera([x, 0, z]);
+            if (base[2] < 10) return null;
+            const top = toCamera([x, 55, z]);
+            const dist = distTo(x, z);
+            return { depth: base[2], draw: () => drawWindmill(base, top, seed, dist) };
+        }
+
+        function drawWindmill(base, top, seed, dist) {
+            const [bx, by] = screen(base);
+            const [tx, ty] = screen(top);
+            const s = F / base[2];
+            ctx.fillStyle = fogged([235, 232, 225], dist, 0.3);
+            ctx.beginPath();
+            ctx.moveTo(bx - 7 * s, by);
+            ctx.lineTo(bx + 7 * s, by);
+            ctx.lineTo(tx + 3.5 * s, ty);
+            ctx.lineTo(tx - 3.5 * s, ty);
+            ctx.fill();
+            ctx.fillStyle = fogged([120, 60, 45], dist, 0.9);
+            ctx.beginPath();
+            ctx.moveTo(tx - 5 * s, ty + 2 * s);
+            ctx.lineTo(tx + 5 * s, ty + 2 * s);
+            ctx.lineTo(tx, ty - 6 * s);
+            ctx.fill();
+            const angle = clock * 1.4 + seed;
+            ctx.fillStyle = fogged([250, 250, 250], dist);
+            for (let k = 0; k < 4; k++) {
+                const a = angle + (k * Math.PI) / 2;
+                const ca = Math.cos(a);
+                const sa = Math.sin(a);
+                const len = 30 * s;
+                const wid = 3 * s;
+                ctx.beginPath();
+                ctx.moveTo(tx + -sa * wid * 0.3, ty + ca * wid * 0.3);
+                ctx.lineTo(tx + ca * len - sa * wid, ty + sa * len + ca * wid);
+                ctx.lineTo(tx + ca * len, ty + sa * len);
+                ctx.lineTo(tx + sa * wid * 0.3, ty - ca * wid * 0.3);
+                ctx.fill();
+            }
+            circle(tx, ty, 1.8 * s, fogged(DARK, dist));
+        }
+
+        function herdItems(t, items) {
+            const cow = hash(t.ix, t.iz, 13) < 0.5;
+            const count = 3 + Math.floor(hash(t.ix, t.iz, 14) * 5);
+            const hx = t.ix * TILE + 80 + hash(t.ix, t.iz, 15) * 240;
+            const hz = t.iz * TILE + 80 + hash(t.ix, t.iz, 16) * 240;
+            for (let k = 0; k < count; k++) {
+                const seed = hash(t.ix, t.iz, 70 + k) * 50;
+                const x = hx + (hash(t.ix, t.iz, 80 + k) - 0.5) * 50 + Math.sin(clock * 0.15 + seed) * 12;
+                const z = hz + (hash(t.ix, t.iz, 90 + k) - 0.5) * 50 + Math.cos(clock * 0.11 + seed) * 12;
+                const base = toCamera([x, 0, z]);
+                if (base[2] < 5) continue;
+                const facing = Math.cos(clock * 0.15 + seed) > 0 ? 1 : -1;
+                const dist = distTo(x, z);
+                items.push({ depth: base[2], draw: () => drawAnimal(base, cow, facing, seed, dist) });
+            }
+        }
+
+        function drawAnimal(base, cow, facing, seed, dist) {
+            const [sx, sy] = screen(base);
+            const s = F / base[2];
+            const length = cow ? 5 : 3.2;
+            const bodyH = cow ? 2.6 : 1.9;
+            const legH = cow ? 1.6 : 1.1;
+            const bodyColor = fogged(cow ? [245, 245, 240] : [236, 236, 228], dist);
+            if (length * s < 2.5) {
+                ctx.fillStyle = bodyColor;
+                ctx.fillRect(sx - 1, sy - 2, 2, 2);
+                return;
+            }
+            const dark = fogged(cow ? [35, 30, 30] : [50, 50, 50], dist);
+            const bodyY = sy - (legH + bodyH / 2) * s;
+            ctx.strokeStyle = dark;
+            ctx.lineWidth = Math.max(1, 0.35 * s);
+            ctx.beginPath();
+            for (const lx of [-0.35, -0.2, 0.2, 0.35]) {
+                ctx.moveTo(sx + lx * length * s, bodyY);
+                ctx.lineTo(sx + lx * length * s, sy);
+            }
+            ctx.stroke();
+            ctx.fillStyle = bodyColor;
+            ctx.beginPath();
+            ctx.ellipse(sx, bodyY, (length / 2) * s, (bodyH / 2) * s, 0, 0, Math.PI * 2);
+            ctx.fill();
+            if (cow) {
+                circle(sx - length * 0.15 * s, bodyY - bodyH * 0.1 * s, bodyH * 0.28 * s, dark);
+                circle(sx + length * 0.2 * s, bodyY + bodyH * 0.12 * s, bodyH * 0.22 * s, dark);
+            }
+            const grazing = Math.sin(clock * 1.3 + seed) > 0.3;
+            const headY = bodyY + (grazing ? bodyH * 0.55 : -bodyH * 0.3) * s;
+            circle(sx + facing * length * 0.55 * s, headY, bodyH * 0.36 * s, dark);
+        }
+
+        function flockItems() {
+            const items = [];
+            for (const flock of flocks) {
+                const angle = clock * flock.speed + flock.phase;
+                const x = cam.x + wrap(flock.x - cam.x) + Math.cos(angle) * flock.radius;
+                const z = cam.z + wrap(flock.z - cam.z) + Math.sin(angle) * flock.radius;
+                const center = toCamera([x, flock.y, z]);
+                const dist = distTo(x, z);
+                if (center[2] < 5 || dist > 3500) continue;
+                const heading = angle + (flock.speed > 0 ? Math.PI / 2 : -Math.PI / 2);
+                items.push({ depth: center[2], draw: () => drawFlock(flock, x, z, heading, dist) });
+            }
+            return items;
+        }
+
+        function drawFlock(flock, x, z, heading, dist) {
+            const dx = Math.cos(heading);
+            const dz = Math.sin(heading);
+            ctx.strokeStyle = fogged([30, 35, 45], dist);
+            ctx.lineCap = "round";
+            for (const [ox, oy, oz, phase] of flock.birds) {
+                const p = toCamera([x + ox * dz + oz * dx, flock.y + oy, z - ox * dx + oz * dz]);
+                if (p[2] < 5) continue;
+                const [sx, sy] = screen(p);
+                const size = Math.max(1.5, (3 * F) / p[2]);
+                const flap = Math.sin(clock * 9 + phase);
+                ctx.lineWidth = Math.max(1, size * 0.22);
+                ctx.beginPath();
+                ctx.moveTo(sx - size, sy - flap * size * 0.6);
+                ctx.quadraticCurveTo(sx - size * 0.4, sy - size * 0.15, sx, sy);
+                ctx.quadraticCurveTo(sx + size * 0.4, sy - size * 0.15, sx + size, sy - flap * size * 0.6);
+                ctx.stroke();
+            }
+        }
+
+        function balloonItems() {
+            const items = [];
+            for (const b of balloons) {
+                const x = cam.x + wrap(b.x + clock * 8 - cam.x);
+                const z = cam.z + wrap(b.z + clock * 3 - cam.z);
+                const y = b.y + Math.sin(clock * 0.4 + b.seed) * 8;
+                const p = toCamera([x, y, z]);
+                const dist = distTo(x, z);
+                if (p[2] < 20 || dist > 5000) continue;
+                items.push({ depth: p[2], draw: () => drawBalloon(p, b.colors, dist) });
+            }
+            return items;
+        }
+
+        function drawBalloon(p, colors, dist) {
+            const [sx, sy] = screen(p);
+            const s = F / p[2];
+            const r = 20 * s;
+            const [a, b] = colors.map(c => fogged(c, dist));
+            ctx.strokeStyle = fogged([90, 70, 50], dist);
+            ctx.lineWidth = Math.max(0.5, 0.4 * s);
+            ctx.beginPath();
+            ctx.moveTo(sx - r * 0.45, sy + r * 0.95);
+            ctx.lineTo(sx - r * 0.18, sy + r * 1.75);
+            ctx.moveTo(sx + r * 0.45, sy + r * 0.95);
+            ctx.lineTo(sx + r * 0.18, sy + r * 1.75);
+            ctx.stroke();
+            ctx.fillStyle = a;
+            ctx.beginPath();
+            ctx.moveTo(sx - r * 0.5, sy + r * 0.85);
+            ctx.lineTo(sx + r * 0.5, sy + r * 0.85);
+            ctx.lineTo(sx + r * 0.2, sy + r * 1.15);
+            ctx.lineTo(sx - r * 0.2, sy + r * 1.15);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.ellipse(sx, sy, r, r * 1.08, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = b;
+            ctx.beginPath();
+            ctx.ellipse(sx, sy, r * 0.62, r * 1.08, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = a;
+            ctx.beginPath();
+            ctx.ellipse(sx, sy, r * 0.25, r * 1.08, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+            ctx.beginPath();
+            ctx.ellipse(sx - r * 0.35, sy - r * 0.4, r * 0.25, r * 0.4, -0.3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = fogged([120, 80, 45], dist);
+            ctx.fillRect(sx - r * 0.2, sy + r * 1.72, r * 0.4, r * 0.3);
         }
 
         function cloudItems() {
@@ -503,20 +905,22 @@
                 const z = cam.z + wrap(cloud.z - cam.z);
                 const center = toCamera([x, cloud.y, z]);
                 if (center[2] < -200) continue;
-                const fog = fogAmount(Math.hypot(x - cam.x, z - cam.z) * 0.8);
+                const fog = fogAmount(distTo(x, z) * 0.8);
                 items.push({ depth: center[2], draw: () => drawCloud(cloud, x, z, fog) });
             }
             return items;
         }
 
         function drawCloud(cloud, x, z, fog) {
+            const top = mix(CLOUD, STORM, env.rain * 0.75);
+            const low = mix(CLOUD_SHADE, mix(STORM, [80, 85, 95], 0.5), env.rain * 0.8);
             const puffs = cloud.puffs
                 .map(p => ({ c: toCamera([x + p[0], cloud.y + p[1], z + p[2]]), r: p[3], low: p[1] < 0 }))
                 .filter(p => p.c[2] > 10)
                 .sort((a, b) => b.c[2] - a.c[2]);
             for (const p of puffs) {
                 const [sx, sy] = screen(p.c);
-                ctx.fillStyle = rgb(mix(p.low ? CLOUD_SHADE : CLOUD, FOG, fog * 0.7), 0.92);
+                ctx.fillStyle = rgb(mix(p.low ? low : top, env.fog, fog * 0.7), 0.92);
                 ctx.beginPath();
                 ctx.arc(sx, sy, (p.r * F) / p.c[2], 0, Math.PI * 2);
                 ctx.fill();
@@ -530,31 +934,68 @@
 
         function drawPlane() {
             if (crashed) return;
-            const blade = { pts: [[-0.5, -6, 17.4], [0.5, -6, 17.4], [0.5, 6, 17.4], [-0.5, 6, 17.4]], color: DARK, spin: plane.prop };
-            const faces = MESH.concat([blade]).map(face => {
-                const world = face.pts.map(v => localToWorld(v, face.spin));
+            const faces = MESH.map(face => {
+                const world = face.pts.map(v => localToWorld(v, face.spin ? plane.prop : 0));
                 const camPts = world.map(toCamera);
                 const n = normalize(cross(sub(world[1], world[0]), sub(world[2], world[0])));
-                const light = 0.72 + 0.28 * Math.abs(n[0] * SUN[0] + n[1] * SUN[1] + n[2] * SUN[2]);
+                const light = 0.62 + 0.38 * Math.abs(dot(n, SUN));
                 const depth = camPts.reduce((s, p) => s + p[2], 0) / camPts.length;
-                return { camPts, depth, color: rgb(face.color.map(c => c * light), face.spin === undefined ? 1 : 0.55) };
+                const alpha = face.alpha || 1;
+                return { camPts, depth, alpha, color: rgb(face.color.map(c => Math.min(255, c * light)), alpha) };
             });
             faces.sort((a, b) => b.depth - a.depth);
             for (const face of faces) {
                 if (face.camPts.some(p => p[2] < NEAR)) continue;
-                fillPoly(face.camPts, face.color, face.spin === undefined);
+                fillPoly(face.camPts, face.color, face.alpha === 1);
             }
         }
 
-        function sub(a, b) {
-            return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+        function drawPrecipitation(dt) {
+            const D = Math.hypot(W, H);
+            const left = (W - D) / 2;
+            const topY = (H - D) / 2;
+            const rainCount = Math.floor(drops.length * env.rain);
+            if (rainCount > 0) {
+                const slant = 0.12 + plane.speed / 1800;
+                ctx.strokeStyle = "rgba(200, 210, 225, 0.45)";
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                for (let i = 0; i < rainCount; i++) {
+                    const d = drops[i];
+                    d.y = (d.y + dt * 1.6 * d.s) % 1;
+                    d.x = (((d.x - yawShift + dt * slant * 0.4) % 1) + 1) % 1;
+                    const sx = left + d.x * D;
+                    const sy = topY + d.y * D;
+                    const len = 22 * d.s;
+                    ctx.moveTo(sx, sy);
+                    ctx.lineTo(sx - slant * len, sy + len);
+                }
+                ctx.stroke();
+            }
+            const snowCount = Math.floor(flakes.length * env.snow);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+            for (let i = 0; i < snowCount; i++) {
+                const f = flakes[i];
+                f.y = (f.y + dt * 0.1 * f.s) % 1;
+                f.x = (((f.x - yawShift + Math.sin(clock * 1.5 + i) * dt * 0.02) % 1) + 1) % 1;
+                ctx.beginPath();
+                ctx.arc(left + f.x * D, topY + f.y * D, 1 + f.s * 1.6, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
-        function cross(a, b) {
-            return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+        function drawLightning() {
+            if (env.flash <= 0) return;
+            ctx.fillStyle = "rgba(235, 240, 255, " + env.flash * 0.35 + ")";
+            ctx.fillRect(-W, -H, W * 3, H * 3);
+            ctx.strokeStyle = "rgba(255, 255, 255, " + env.flash + ")";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            env.bolt.forEach(([x, y], i) => (i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)));
+            ctx.stroke();
         }
 
-        function render() {
+        function render(dt) {
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             ctx.translate(W / 2, H / 2);
             ctx.rotate(-cam.roll);
@@ -562,19 +1003,22 @@
             const horizonY = H / 2 + F * Math.tan(cam.pitch);
             drawSky(horizonY);
             drawSun();
+            drawLightning();
             const tiles = visibleTiles();
             drawGround(tiles);
             drawRunway();
             drawShadow();
-            const items = treeItems(tiles).concat(cloudItems(), [planeItem()]);
+            const items = sceneryItems(tiles).concat(cloudItems(), flockItems(), balloonItems(), [planeItem()]);
             items.sort((a, b) => b.depth - a.depth);
             items.forEach(item => item.draw());
+            drawPrecipitation(dt);
         }
 
         function updateHud() {
             ui.altitude.textContent = Math.round((plane.y - GROUND) * 3.28);
             ui.speed.textContent = Math.round(plane.speed);
             ui.heading.textContent = String(Math.round(((plane.yaw * 180) / Math.PI % 360 + 360) % 360)).padStart(3, "0");
+            ui.weather.textContent = weather.kind[0].toUpperCase() + weather.kind.slice(1);
             const airborne = plane.y > GROUND + 0.5;
             let warning = "";
             if (airborne && plane.y < 200 && plane.vy < -40) warning = "PULL UP";
@@ -586,9 +1030,11 @@
         function loop(now) {
             const dt = Math.max(0, Math.min(0.05, (now - last) / 1000));
             last = now;
+            clock += dt;
             update(dt);
+            updateWeather(dt);
             updateCamera(dt);
-            render();
+            render(dt);
             updateHud();
             requestAnimationFrame(loop);
         }
@@ -597,6 +1043,9 @@
             const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
             if (key.startsWith("Arrow")) e.preventDefault();
             if (key === "r") reset();
+            if (key === "1") setWeather("clear");
+            if (key === "2") setWeather("rain");
+            if (key === "3") setWeather("snow");
             keys[key] = true;
         });
         document.addEventListener("keyup", e => {

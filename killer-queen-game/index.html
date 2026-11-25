@@ -10,11 +10,14 @@
             overflow: hidden;
             margin: 0;
             height: 100%;
+        }
+
+        body {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
             background: radial-gradient(circle at top, #2e1065, #0a0a0a 70%);
             color: #f5f5f4;
@@ -30,45 +33,98 @@
             color: transparent;
         }
 
+        .board {
+            position: relative;
+        }
+
         canvas {
             display: block;
-            margin: 0 auto;
-            background-color: black;
             border-radius: 14px;
             border: 2px solid rgba(250, 204, 21, 0.4);
             box-shadow: 0 0 40px rgba(124, 58, 237, 0.35), 0 20px 60px rgba(0, 0, 0, 0.6);
-            max-height: calc(100vh - 70px);
+            max-height: calc(100vh - 110px);
             width: auto;
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border-radius: 14px;
+            text-align: center;
+            background: rgba(10, 6, 25, 0.78);
+        }
+
+        .overlay.hidden {
+            display: none;
+        }
+
+        .overlay h2 {
+            margin: 0;
+            font-size: 3rem;
+            letter-spacing: 4px;
+        }
+
+        .overlay p {
+            margin: 0;
+            color: #d6d3d1;
+            line-height: 1.6;
+        }
+
+        .overlay b {
+            color: #facc15;
+        }
+
+        .hint {
+            margin: 0;
+            color: #a8a29e;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 
 <body>
     <h1>KILLER QUEEN</h1>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="board">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="overlay" class="overlay">
+            <h2 id="title">KILLER QUEEN</h2>
+            <p>You are the <b>Gold Queen</b>. The Blue team is played by the computer.</p>
+            <p>Win with <b>8 berries</b> in your hive or <b>3 queen kills</b>.</p>
+            <p>Your workers carry berries home. Protect them and hunt the Blue Queen.</p>
+            <p><b>Enter</b> to play</p>
+        </div>
+    </div>
+    <p class="hint">Arrows or WASD move · Space attacks (queen) · Tab switches to a worker</p>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        const overlay = document.getElementById("overlay");
+        const title = document.getElementById("title");
 
+        const W = canvas.width;
+        const H = canvas.height;
+        const BERRIES_TO_WIN = 8;
+        const KILLS_TO_WIN = 3;
+        const MAX_BERRIES = 14;
         const TEAM_COLORS = {
-            gold: { main: "#facc15", dark: "#a16207", glow: "rgba(250, 204, 21, 0.35)" },
-            blue: { main: "#38bdf8", dark: "#0369a1", glow: "rgba(56, 189, 248, 0.35)" },
+            gold: { main: "#facc15", dark: "#a16207", glow: "rgba(250, 204, 21, 0.35)", splash: ["#fde047", "#facc15", "#f59e0b", "#ffffff"] },
+            blue: { main: "#38bdf8", dark: "#0369a1", glow: "rgba(56, 189, 248, 0.35)", splash: ["#7dd3fc", "#38bdf8", "#0284c7", "#ffffff"] }
+        };
+        const HIVES = {
+            gold: { x: 30, y: 250, width: 44, height: 110 },
+            blue: { x: W - 74, y: 250, width: 44, height: 110 }
         };
 
-        const yellowQueenImg = new Image();
-        yellowQueenImg.src = 'yellow-queen.png';
-
-        const blueQueenImg = new Image();
-        blueQueenImg.src = 'blue-queen.png';
-
         const keys = {};
-        document.addEventListener("keydown", e => {
-            keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = true;
-            if (e.key.startsWith("Arrow")) e.preventDefault();
-        });
-        document.addEventListener("keyup", e => {
-            keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = false;
-        });
+        let game = null;
+        let audio = null;
+        let last = performance.now();
+        let bgLayer, goldQueenLayer, blueQueenLayer;
 
         function prerender(img, width, height) {
             const layer = document.createElement("canvas");
@@ -78,274 +134,546 @@
             return layer;
         }
 
-        let bgLayer, yellowQueenLayer, blueQueenLayer;
-        const bg = new Image();
-        bg.src = 'killer-queen-bg.png';
-        const images = [bg, yellowQueenImg, blueQueenImg].map(img => img.decode());
-        Promise.all(images).then(() => {
-            bgLayer = prerender(bg, canvas.width, canvas.height);
-            yellowQueenLayer = prerender(yellowQueenImg, 64, 64);
-            blueQueenLayer = prerender(blueQueenImg, 64, 64);
-            startGame();
+        function loadImage(src) {
+            const img = new Image();
+            img.src = src;
+            return img.decode().then(() => img);
+        }
+
+        function unlockAudio() {
+            if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+            if (audio.state === "suspended") audio.resume();
+        }
+
+        function tone(from, to, duration, wave, volume, delay = 0) {
+            if (!audio) return;
+            const t = audio.currentTime + delay;
+            const osc = audio.createOscillator();
+            const gain = audio.createGain();
+            osc.type = wave;
+            osc.frequency.setValueAtTime(from, t);
+            osc.frequency.exponentialRampToValueAtTime(to, t + duration);
+            gain.gain.setValueAtTime(volume, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+            osc.connect(gain).connect(audio.destination);
+            osc.start(t);
+            osc.stop(t + duration);
+        }
+
+        function noise(duration, from, to, volume) {
+            if (!audio) return;
+            const t = audio.currentTime;
+            const length = Math.floor(audio.sampleRate * duration);
+            const buffer = audio.createBuffer(1, length, audio.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / length);
+            const source = audio.createBufferSource();
+            const filter = audio.createBiquadFilter();
+            const gain = audio.createGain();
+            source.buffer = buffer;
+            filter.type = "bandpass";
+            filter.frequency.setValueAtTime(from, t);
+            filter.frequency.exponentialRampToValueAtTime(to, t + duration);
+            gain.gain.value = volume;
+            source.connect(filter).connect(gain).connect(audio.destination);
+            source.start(t);
+        }
+
+        const sounds = {
+            pickup: () => tone(660, 990, 0.08, "triangle", 0.12),
+            deposit: () => [784, 988, 1175].forEach((f, i) => tone(f, f, 0.1, "square", 0.06, i * 0.07)),
+            swing: () => noise(0.15, 3000, 600, 0.35),
+            kill: () => {
+                noise(0.35, 900, 120, 0.6);
+                tone(300, 60, 0.35, "sawtooth", 0.15);
+            },
+            queenKill: () => {
+                noise(0.6, 1200, 80, 0.8);
+                tone(500, 50, 0.7, "sawtooth", 0.2);
+                tone(120, 40, 0.6, "sine", 0.4);
+            },
+            win: () => [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, f, 0.2, "square", 0.08, i * 0.13)),
+            lose: () => [392, 330, 262, 196].forEach((f, i) => tone(f, f * 0.97, 0.3, "triangle", 0.15, i * 0.22))
+        };
+
+        function makeUnit(team, role, x, y) {
+            const queen = role === "queen";
+            return {
+                team, role, x, y, homeX: x, homeY: y, vx: 0, vy: 0,
+                face: team === "gold" ? 1 : -1,
+                radius: queen ? 15 : 10,
+                speed: queen ? 230 : 175,
+                berry: false, alive: true, respawn: 0,
+                attackT: 0, cooldown: 0, think: 0,
+                seed: Math.random() * 10
+            };
+        }
+
+        function newGame() {
+            const units = [];
+            for (const team of ["gold", "blue"]) {
+                const left = team === "gold";
+                const x = left ? 130 : W - 130;
+                const wx = left ? 110 : W - 110;
+                units.push(makeUnit(team, "queen", x, 305));
+                units.push(makeUnit(team, "worker", wx, 170));
+                units.push(makeUnit(team, "worker", wx, 440));
+                units.push(makeUnit(team, "worker", wx + (left ? 50 : -50), 305));
+            }
+            units.filter(u => u.team === "blue").forEach(u => (u.speed *= 0.88));
+            game = {
+                units,
+                berries: [],
+                particles: [],
+                rings: [],
+                scores: { gold: { berries: 0, kills: 0 }, blue: { berries: 0, kills: 0 } },
+                controlled: units[0],
+                berryTimer: 0,
+                shake: 0,
+                running: true
+            };
+            for (let i = 0; i < 12; i++) spawnBerry();
+            overlay.classList.add("hidden");
+        }
+
+        function spawnBerry() {
+            game.berries.push({ x: 160 + Math.random() * (W - 320), y: 50 + Math.random() * (H - 100), radius: 6, seed: Math.random() * 10 });
+        }
+
+        function dist(a, b) {
+            return Math.hypot(a.x - b.x, a.y - b.y);
+        }
+
+        function hiveCenter(team) {
+            const h = HIVES[team];
+            return { x: h.x + h.width / 2, y: h.y + h.height / 2 };
+        }
+
+        function inHive(u) {
+            const h = HIVES[u.team];
+            return u.x > h.x - 12 && u.x < h.x + h.width + 12 && u.y > h.y - 12 && u.y < h.y + h.height + 12;
+        }
+
+        function enemyOf(team) {
+            return team === "gold" ? "blue" : "gold";
+        }
+
+        function queenOf(team) {
+            return game.units.find(u => u.team === team && u.role === "queen");
+        }
+
+        function toward(u, target) {
+            const dx = target.x - u.x;
+            const dy = target.y - u.y;
+            const d = Math.hypot(dx, dy) || 1;
+            return [dx / d, dy / d];
+        }
+
+        function nearest(u, list) {
+            let best = null;
+            let bestD = Infinity;
+            for (const item of list) {
+                const d = dist(u, item);
+                if (d < bestD) {
+                    best = item;
+                    bestD = d;
+                }
+            }
+            return best;
+        }
+
+        function attack(u) {
+            if (u.role !== "queen" || !u.alive || u.cooldown > 0) return;
+            u.attackT = 0.22;
+            u.cooldown = u.team === "gold" ? 0.45 : 0.7;
+            sounds.swing();
+        }
+
+        function playerDirection() {
+            const dx = (keys.ArrowRight || keys.d ? 1 : 0) - (keys.ArrowLeft || keys.a ? 1 : 0);
+            const dy = (keys.ArrowDown || keys.s ? 1 : 0) - (keys.ArrowUp || keys.w ? 1 : 0);
+            const len = Math.hypot(dx, dy);
+            return len ? [dx / len, dy / len] : [0, 0];
+        }
+
+        function workerBrain(u) {
+            const enemyQueen = queenOf(enemyOf(u.team));
+            if (enemyQueen.alive && dist(u, enemyQueen) < 110) {
+                const [ax, ay] = toward(u, enemyQueen);
+                return [-ax, -ay * 0.7 + (u.y < H / 2 ? 0.5 : -0.5)];
+            }
+            if (u.berry) return toward(u, hiveCenter(u.team));
+            const berry = nearest(u, game.berries);
+            return berry ? toward(u, berry) : toward(u, { x: u.homeX, y: u.homeY });
+        }
+
+        function queenBrain(u) {
+            const enemies = game.units.filter(e => e.team !== u.team && e.alive);
+            const enemyQueen = enemies.find(e => e.role === "queen");
+            let target = null;
+            if (enemyQueen && dist(u, enemyQueen) < 260) target = enemyQueen;
+            if (!target) target = nearest(u, enemies.filter(e => e.berry));
+            if (!target) target = nearest(u, enemies);
+            if (!target) return toward(u, { x: u.homeX, y: u.homeY });
+            if (dist(u, target) < 52 && Math.random() < 0.08) attack(u);
+            if (enemyQueen && enemyQueen.attackT > 0 && dist(u, enemyQueen) < 70 && Math.random() < 0.5) {
+                const [ax, ay] = toward(u, enemyQueen);
+                return [-ay, ax];
+            }
+            return toward(u, target);
+        }
+
+        function kill(victim, killer) {
+            victim.alive = false;
+            victim.respawn = victim.role === "queen" ? 3 : 2;
+            if (victim.berry) {
+                game.berries.push({ x: victim.x, y: victim.y, radius: 6, seed: Math.random() * 10 });
+                victim.berry = false;
+            }
+            const queen = victim.role === "queen";
+            splash(victim.x, victim.y, TEAM_COLORS[victim.team].splash, queen ? 70 : 30, queen ? 1.6 : 1);
+            game.shake = queen ? 0.45 : 0.18;
+            if (queen) {
+                game.scores[killer.team].kills++;
+                sounds.queenKill();
+            } else {
+                sounds.kill();
+            }
+            if (game.controlled === victim) {
+                game.controlled = game.units.find(u => u.team === "gold" && u.alive) || victim;
+            }
+        }
+
+        function splash(x, y, colors, count, power) {
+            for (let i = 0; i < count; i++) {
+                const a = Math.random() * Math.PI * 2;
+                const v = (60 + Math.random() * 260) * power;
+                game.particles.push({
+                    x, y,
+                    vx: Math.cos(a) * v,
+                    vy: Math.sin(a) * v - 80,
+                    life: 0.6 + Math.random() * 0.7,
+                    max: 1.3,
+                    size: 2 + Math.random() * 4 * power,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+            game.rings.push({ x, y, r: 6, life: 0.45, color: colors[1] });
+        }
+
+        function sparkle(x, y, color) {
+            for (let i = 0; i < 12; i++) {
+                const a = Math.random() * Math.PI * 2;
+                game.particles.push({ x, y, vx: Math.cos(a) * 90, vy: Math.sin(a) * 90 - 40, life: 0.5, max: 0.5, size: 2.5, color });
+            }
+        }
+
+        function updateUnit(u, dt) {
+            if (!u.alive) {
+                u.respawn -= dt;
+                if (u.respawn <= 0) {
+                    Object.assign(u, { alive: true, x: u.homeX, y: u.homeY, vx: 0, vy: 0, attackT: 0, cooldown: 0.5 });
+                    sparkle(u.x, u.y, TEAM_COLORS[u.team].main);
+                }
+                return;
+            }
+            u.attackT = Math.max(0, u.attackT - dt);
+            u.cooldown = Math.max(0, u.cooldown - dt);
+            let dir;
+            if (u === game.controlled) {
+                dir = playerDirection();
+            } else {
+                u.think -= dt;
+                if (u.think <= 0 || !u.dir) {
+                    u.dir = u.role === "queen" ? queenBrain(u) : workerBrain(u);
+                    u.think = 0.12 + Math.random() * 0.1;
+                }
+                dir = u.dir;
+            }
+            const boost = u.attackT > 0 ? 1.9 : 1;
+            const k = Math.min(1, dt * 10);
+            u.vx += (dir[0] * u.speed * boost - u.vx) * k;
+            u.vy += (dir[1] * u.speed * boost - u.vy) * k;
+            u.x = Math.max(u.radius, Math.min(W - u.radius, u.x + u.vx * dt));
+            u.y = Math.max(u.radius, Math.min(H - u.radius, u.y + u.vy * dt));
+            if (Math.abs(u.vx) > 20) u.face = Math.sign(u.vx);
+        }
+
+        function checkInteractions() {
+            for (const u of game.units) {
+                if (!u.alive) continue;
+                if (u.role === "worker" && !u.berry) {
+                    const index = game.berries.findIndex(b => dist(u, b) < u.radius + b.radius + 2);
+                    if (index >= 0) {
+                        game.berries.splice(index, 1);
+                        u.berry = true;
+                        if (u.team === "gold") sounds.pickup();
+                    }
+                }
+                if (u.berry && inHive(u)) {
+                    u.berry = false;
+                    game.scores[u.team].berries++;
+                    sparkle(u.x, u.y, "#fb923c");
+                    sounds.deposit();
+                }
+                if (u.role === "queen" && u.attackT > 0) {
+                    const tip = { x: u.x + u.face * 20, y: u.y };
+                    for (const v of game.units) {
+                        if (v.team === u.team || !v.alive) continue;
+                        if (dist(tip, v) < v.radius + 18 || dist(u, v) < u.radius + v.radius + 4) kill(v, u);
+                    }
+                }
+            }
+        }
+
+        function checkWinner() {
+            for (const team of ["gold", "blue"]) {
+                const s = game.scores[team];
+                if (s.berries >= BERRIES_TO_WIN || s.kills >= KILLS_TO_WIN) {
+                    game.running = false;
+                    const how = s.berries >= BERRIES_TO_WIN ? "berry victory" : "military victory";
+                    title.innerHTML = (team === "gold" ? "GOLD WINS" : "BLUE WINS") + "<br><small style='font-size:1rem;letter-spacing:2px'>" + how + "</small>";
+                    overlay.querySelectorAll("p").forEach((p, i) => (p.style.display = i === 3 ? "block" : "none"));
+                    overlay.querySelector("p:last-child").innerHTML = "<b>Enter</b> to play again";
+                    overlay.classList.remove("hidden");
+                    if (team === "gold") sounds.win();
+                    else sounds.lose();
+                    splash(W / 2, H / 2, TEAM_COLORS[team].splash, 120, 2);
+                }
+            }
+        }
+
+        function update(dt) {
+            if (!game) return;
+            game.particles.forEach(p => {
+                p.x += p.vx * dt;
+                p.y += p.vy * dt;
+                p.vy += 420 * dt;
+                p.vx *= 0.98;
+                p.life -= dt;
+            });
+            game.particles = game.particles.filter(p => p.life > 0);
+            game.rings.forEach(r => {
+                r.r += 260 * dt;
+                r.life -= dt;
+            });
+            game.rings = game.rings.filter(r => r.life > 0);
+            game.shake = Math.max(0, game.shake - dt);
+            if (!game.running) return;
+            game.berryTimer += dt;
+            if (game.berryTimer > 1.4 && game.berries.length < MAX_BERRIES) {
+                game.berryTimer = 0;
+                spawnBerry();
+            }
+            game.units.forEach(u => updateUnit(u, dt));
+            checkInteractions();
+            checkWinner();
+        }
+
+        function circle(x, y, r, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawBerry(x, y, radius) {
+            circle(x, y, radius + 5, "rgba(253, 186, 116, 0.35)");
+            circle(x, y, radius, "#fb923c");
+            circle(x - radius / 3, y - radius / 3, radius / 3, "rgba(255, 255, 255, 0.7)");
+        }
+
+        function drawHive(team) {
+            const hive = HIVES[team];
+            const colors = TEAM_COLORS[team];
+            ctx.fillStyle = colors.glow;
+            ctx.beginPath();
+            ctx.roundRect(hive.x - 10, hive.y - 10, hive.width + 20, hive.height + 20, 14);
+            ctx.fill();
+            ctx.fillStyle = "rgba(30, 20, 50, 0.85)";
+            ctx.beginPath();
+            ctx.roundRect(hive.x - 4, hive.y - 4, hive.width + 8, hive.height + 8, 10);
+            ctx.fill();
+            const r = 7;
+            const w = Math.sqrt(3) * r;
+            const filled = game.scores[team].berries;
+            let index = 0;
+            for (let row = 0; row < BERRIES_TO_WIN / 2; row++) {
+                for (let col = 0; col < 2; col++) {
+                    const cx = hive.x + w / 2 + 6 + col * w + (row % 2) * (w / 2);
+                    const cy = hive.y + r + 14 + row * r * 3.2;
+                    ctx.beginPath();
+                    for (let k = 0; k < 6; k++) {
+                        const a = Math.PI / 6 + (k * Math.PI) / 3;
+                        ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
+                    }
+                    ctx.closePath();
+                    ctx.fillStyle = index < filled ? "#fb923c" : "rgba(255, 255, 255, 0.12)";
+                    ctx.fill();
+                    ctx.strokeStyle = colors.main;
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                    index++;
+                }
+            }
+            ctx.fillStyle = colors.main;
+            ctx.font = "bold 11px system-ui";
+            ctx.textAlign = "center";
+            ctx.fillText("HIVE", hive.x + hive.width / 2, hive.y - 14);
+            ctx.textAlign = "left";
+        }
+
+        function drawWorker(u, now) {
+            const team = TEAM_COLORS[u.team];
+            const flap = Math.sin(now / 35 + u.seed) * 3;
+            ctx.fillStyle = "rgba(255, 255, 255, 0.65)";
+            ctx.beginPath();
+            ctx.ellipse(u.x - 5, u.y - 9, 5, 7 + flap / 2, -0.4, 0, Math.PI * 2);
+            ctx.ellipse(u.x + 5, u.y - 9, 5, 7 - flap / 2, 0.4, 0, Math.PI * 2);
+            ctx.fill();
+            circle(u.x, u.y, u.radius + 4, team.glow);
+            const body = ctx.createRadialGradient(u.x - 3, u.y - 3, 1, u.x, u.y, u.radius);
+            body.addColorStop(0, "#ffffff");
+            body.addColorStop(0.3, team.main);
+            body.addColorStop(1, team.dark);
+            circle(u.x, u.y, u.radius, body);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+            ctx.fillRect(u.x - 8, u.y - 1, 16, 3);
+            ctx.fillRect(u.x - 6, u.y + 4, 12, 2);
+            circle(u.x + u.face * 5, u.y - 4, 2, "#111827");
+            if (u.berry) drawBerry(u.x, u.y - 20, 5);
+        }
+
+        function drawQueen(u) {
+            const team = TEAM_COLORS[u.team];
+            circle(u.x, u.y, 24, team.glow);
+            ctx.save();
+            ctx.translate(u.x, u.y);
+            ctx.scale(u.face, 1);
+            ctx.drawImage(u.team === "gold" ? goldQueenLayer : blueQueenLayer, -20, -20, 40, 40);
+            ctx.restore();
+            if (u.attackT > 0) {
+                const k = 1 - u.attackT / 0.22;
+                ctx.strokeStyle = "rgba(255, 255, 255, " + (1 - k) + ")";
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.arc(u.x, u.y, 30, u.face > 0 ? -1.1 + k * 0.6 : Math.PI - 1.1 + k * 0.6, u.face > 0 ? 1.1 : Math.PI + 1.1);
+                ctx.stroke();
+                ctx.fillStyle = "#ffffff";
+                ctx.beginPath();
+                ctx.moveTo(u.x + u.face * 18, u.y - 4);
+                ctx.lineTo(u.x + u.face * 40, u.y);
+                ctx.lineTo(u.x + u.face * 18, u.y + 4);
+                ctx.fill();
+            }
+        }
+
+        function drawMarker(u, now) {
+            if (!u.alive) return;
+            const y = u.y - u.radius - 26 + Math.sin(now / 200) * 3;
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.moveTo(u.x - 7, y);
+            ctx.lineTo(u.x + 7, y);
+            ctx.lineTo(u.x, y + 8);
+            ctx.fill();
+            ctx.font = "bold 10px system-ui";
+            ctx.textAlign = "center";
+            ctx.fillText("YOU", u.x, y - 4);
+            ctx.textAlign = "left";
+        }
+
+        function drawPanel(team, x, align) {
+            const colors = TEAM_COLORS[team];
+            const s = game.scores[team];
+            ctx.fillStyle = "rgba(10, 10, 10, 0.65)";
+            ctx.beginPath();
+            ctx.roundRect(x, 10, 250, 44, 10);
+            ctx.fill();
+            ctx.fillStyle = colors.main;
+            ctx.font = "bold 14px system-ui";
+            ctx.textAlign = align;
+            const tx = align === "left" ? x + 12 : x + 238;
+            ctx.fillText(team === "gold" ? "GOLD · YOU" : "BLUE · CPU", tx, 28);
+            ctx.fillStyle = "#f5f5f4";
+            ctx.font = "12px system-ui";
+            ctx.fillText("Berries " + s.berries + "/" + BERRIES_TO_WIN + "   Queen kills " + s.kills + "/" + KILLS_TO_WIN, tx, 46);
+            ctx.textAlign = "left";
+        }
+
+        function draw(now) {
+            ctx.save();
+            if (game && game.shake > 0) {
+                const m = game.shake * 18;
+                ctx.translate((Math.random() - 0.5) * m, (Math.random() - 0.5) * m);
+            }
+            ctx.drawImage(bgLayer, 0, 0);
+            if (!game) {
+                ctx.restore();
+                return;
+            }
+            drawHive("gold");
+            drawHive("blue");
+            for (const b of game.berries) drawBerry(b.x, b.y + Math.sin(now / 400 + b.seed) * 2, b.radius);
+            for (const u of game.units) {
+                if (!u.alive) continue;
+                if (u.role === "queen") drawQueen(u);
+                else drawWorker(u, now);
+            }
+            if (game.running) drawMarker(game.controlled, now);
+            for (const r of game.rings) {
+                ctx.strokeStyle = r.color;
+                ctx.globalAlpha = r.life / 0.45;
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            for (const p of game.particles) {
+                ctx.globalAlpha = Math.min(1, p.life / 0.4);
+                circle(p.x, p.y, p.size, p.color);
+            }
+            ctx.globalAlpha = 1;
+            ctx.restore();
+            drawPanel("gold", 10, "left");
+            drawPanel("blue", W - 260, "right");
+        }
+
+        function loop(now) {
+            const dt = Math.max(0, Math.min(0.05, (now - last) / 1000));
+            last = now;
+            update(dt);
+            draw(now);
+            requestAnimationFrame(loop);
+        }
+
+        document.addEventListener("keydown", e => {
+            const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+            if (key.startsWith("Arrow") || key === " " || key === "Tab") e.preventDefault();
+            keys[key] = true;
+            unlockAudio();
+            if (key === "Enter" && (!game || !game.running)) newGame();
+            if (!game || !game.running) return;
+            if (key === " ") attack(game.controlled);
+            if (key === "Tab") {
+                const gold = game.units.filter(u => u.team === "gold" && u.alive);
+                game.controlled = gold[(gold.indexOf(game.controlled) + 1) % gold.length];
+            }
+        });
+        document.addEventListener("keyup", e => {
+            keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = false;
         });
 
-        function startGame() {
-            const game = {
-                players: [],
-                berries: [],
-                hive: { x: 700, y: 250, width: 40, height: 100 },
-                gates: [{ x: 300, y: 200 }, { x: 300, y: 400 }],
-                winCondition: {
-                    berries: 5,
-                    queenKills: 3,
-                },
-                scores: {
-                    gold: { berries: 0, queenKills: 0 },
-                    blue: { berries: 0, queenKills: 0 },
-                },
-                running: true,
-            };
-
-            class Player {
-                constructor(x, y, color, isQueen = false) {
-                    this.x = x;
-                    this.y = y;
-                    this.color = color;
-                    this.radius = 10;
-                    this.speed = isQueen ? 220 : 180;
-                    this.isQueen = isQueen;
-                    this.hasBerry = false;
-                    this.alive = true;
-                }
-
-                move(dx, dy) {
-                    if (!this.alive) return;
-                    this.x += dx * this.speed;
-                    this.y += dy * this.speed;
-                    this.x = Math.max(0, Math.min(canvas.width, this.x));
-                    this.y = Math.max(0, Math.min(canvas.height, this.y));
-                }
-
-                draw() {
-                    if (!this.alive) return;
-                    const team = TEAM_COLORS[this.color];
-                    if (this.isQueen) {
-                        const img = this.color === 'gold' ? yellowQueenLayer : blueQueenLayer;
-                        ctx.fillStyle = team.glow;
-                        ctx.beginPath();
-                        ctx.ellipse(this.x, this.y + 14, 16, 5, 0, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.fillStyle = team.glow;
-                        ctx.beginPath();
-                        ctx.arc(this.x, this.y, 20, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.drawImage(img, this.x - 16, this.y - 16, 32, 32);
-                    } else {
-                        const flap = Math.sin(performance.now() / 40) * 3;
-                        ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-                        ctx.beginPath();
-                        ctx.ellipse(this.x - 5, this.y - 9, 5, 7 + flap / 2, -0.4, 0, Math.PI * 2);
-                        ctx.ellipse(this.x + 5, this.y - 9, 5, 7 - flap / 2, 0.4, 0, Math.PI * 2);
-                        ctx.fill();
-                        const body = ctx.createRadialGradient(this.x - 3, this.y - 3, 1, this.x, this.y, this.radius);
-                        body.addColorStop(0, "#ffffff");
-                        body.addColorStop(0.3, team.main);
-                        body.addColorStop(1, team.dark);
-                        ctx.fillStyle = team.glow;
-                        ctx.beginPath();
-                        ctx.arc(this.x, this.y, this.radius + 5, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.fillStyle = body;
-                        ctx.beginPath();
-                        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
-                        ctx.fillRect(this.x - 8, this.y - 1, 16, 3);
-                        ctx.fillRect(this.x - 6, this.y + 4, 12, 2);
-                        if (this.hasBerry) {
-                            drawBerry(this.x, this.y - 18, 5);
-                        }
-                    }
-                }
-            }
-
-            function drawBerry(x, y, radius) {
-                ctx.fillStyle = "rgba(253, 186, 116, 0.35)";
-                ctx.beginPath();
-                ctx.arc(x, y, radius + 5, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = "#fb923c";
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
-                ctx.beginPath();
-                ctx.arc(x - radius / 3, y - radius / 3, radius / 3, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            function drawHive() {
-                const hive = game.hive;
-                ctx.fillStyle = "rgba(168, 85, 247, 0.3)";
-                ctx.beginPath();
-                ctx.roundRect(hive.x - 10, hive.y - 10, hive.width + 20, hive.height + 20, 14);
-                ctx.fill();
-                ctx.fillStyle = "rgba(76, 29, 149, 0.8)";
-                ctx.beginPath();
-                ctx.roundRect(hive.x - 4, hive.y - 4, hive.width + 8, hive.height + 8, 10);
-                ctx.fill();
-                const r = 6;
-                const w = Math.sqrt(3) * r;
-                for (let row = 0; row < 8; row++) {
-                    for (let col = 0; col < 2; col++) {
-                        const cx = hive.x + w / 2 + 3 + col * w + (row % 2) * (w / 2);
-                        const cy = hive.y + r + 4 + row * r * 1.5;
-                        ctx.beginPath();
-                        for (let k = 0; k < 6; k++) {
-                            const a = Math.PI / 6 + (k * Math.PI) / 3;
-                            ctx.lineTo(cx + r * Math.cos(a), cy + r * Math.sin(a));
-                        }
-                        ctx.closePath();
-                        ctx.fillStyle = "#facc15";
-                        ctx.fill();
-                        ctx.strokeStyle = "#a16207";
-                        ctx.stroke();
-                    }
-                }
-                ctx.fillStyle = "#f5f3ff";
-                ctx.font = "bold 11px system-ui";
-                ctx.textAlign = "center";
-                ctx.fillText("HIVE", hive.x + hive.width / 2, hive.y - 10);
-                ctx.textAlign = "left";
-            }
-
-            function drawScorePanel(team, label, y) {
-                const colors = TEAM_COLORS[team];
-                const score = game.scores[team];
-                ctx.fillStyle = "rgba(10, 10, 10, 0.65)";
-                ctx.beginPath();
-                ctx.roundRect(10, y, 230, 30, 8);
-                ctx.fill();
-                ctx.fillStyle = colors.main;
-                ctx.fillRect(10, y + 6, 4, 18);
-                ctx.font = "bold 14px system-ui";
-                ctx.fillText(label, 22, y + 20);
-                ctx.fillStyle = "#f5f5f4";
-                ctx.font = "13px system-ui";
-                ctx.fillText(score.berries + " berries · " + score.queenKills + " kills", 80, y + 20);
-            }
-
-            function spawnBerries() {
-                for (let i = 0; i < 10; i++) {
-                    game.berries.push({
-                        x: Math.random() * 700,
-                        y: Math.random() * 500,
-                        radius: 5,
-                        taken: false,
-                    });
-                }
-            }
-
-            function checkCollisions(player) {
-                if (!player.alive) return;
-
-                for (const berry of game.berries) {
-                    if (!berry.taken && Math.hypot(player.x - berry.x, player.y - berry.y) < player.radius + berry.radius) {
-                        berry.taken = true;
-                        player.hasBerry = true;
-                    }
-                }
-
-                const hive = game.hive;
-                if (
-                    player.hasBerry &&
-                    player.x > hive.x &&
-                    player.x < hive.x + hive.width &&
-                    player.y > hive.y &&
-                    player.y < hive.y + hive.height
-                ) {
-                    player.hasBerry = false;
-                    game.scores[player.color].berries++;
-                }
-
-                for (const other of game.players) {
-                    if (
-                        other !== player &&
-                        player.isQueen &&
-                        other.isQueen &&
-                        other.color !== player.color &&
-                        other.alive &&
-                        Math.hypot(player.x - other.x, player.y - other.y) < player.radius * 2
-                    ) {
-                        other.alive = false;
-                        game.scores[player.color].queenKills++;
-                    }
-                }
-            }
-
-            function drawGame() {
-                ctx.drawImage(bgLayer, 0, 0);
-
-                drawHive();
-
-                const t = performance.now() / 400;
-                for (const berry of game.berries) {
-                    if (!berry.taken) {
-                        drawBerry(berry.x, berry.y + Math.sin(t + berry.x) * 2, berry.radius);
-                    }
-                }
-
-                for (const p of game.players) {
-                    p.draw();
-                }
-
-                drawScorePanel("gold", "Gold", 10);
-                drawScorePanel("blue", "Blue", 46);
-
-                ctx.fillStyle = "rgba(10, 10, 10, 0.6)";
-                ctx.beginPath();
-                ctx.roundRect(canvas.width / 2 - 170, canvas.height - 36, 340, 26, 13);
-                ctx.fill();
-                ctx.fillStyle = "#d6d3d1";
-                ctx.font = "12px system-ui";
-                ctx.textAlign = "center";
-                ctx.fillText("Gold worker: Arrow keys  ·  Gold queen: W A S D", canvas.width / 2, canvas.height - 19);
-                ctx.textAlign = "left";
-            }
-
-            let lastTime = performance.now();
-
-            function moveFromKeys(player, up, down, left, right, dt) {
-                const dx = (keys[right] ? 1 : 0) - (keys[left] ? 1 : 0);
-                const dy = (keys[down] ? 1 : 0) - (keys[up] ? 1 : 0);
-                if (dx === 0 && dy === 0) return;
-                const len = Math.hypot(dx, dy);
-                player.move((dx / len) * dt, (dy / len) * dt);
-            }
-
-            function updateGame(now = performance.now()) {
-                const dt = Math.max(0, Math.min(0.05, (now - lastTime) / 1000));
-                lastTime = now;
-                moveFromKeys(game.players[0], "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", dt);
-                moveFromKeys(game.players[1], "w", "s", "a", "d", dt);
-                for (const p of game.players) {
-                    checkCollisions(p);
-                }
-                drawGame();
-                requestAnimationFrame(updateGame);
-            }
-
-            function setupGame() {
-                game.players.push(new Player(50, 100, "gold"));
-                game.players.push(new Player(100, 100, "gold", true));
-                game.players.push(new Player(50, 300, "blue"));
-                game.players.push(new Player(100, 300, "blue", true));
-                spawnBerries();
-                updateGame();
-            }
-
-            setupGame();
-        }
+        Promise.all(["killer-queen-bg.png", "yellow-queen.png", "blue-queen.png"].map(loadImage)).then(([bg, gold, blue]) => {
+            bgLayer = prerender(bg, W, H);
+            const shade = bgLayer.getContext("2d");
+            shade.fillStyle = "rgba(10, 5, 30, 0.25)";
+            shade.fillRect(0, 0, W, H);
+            goldQueenLayer = prerender(gold, 80, 80);
+            blueQueenLayer = prerender(blue, 80, 80);
+            requestAnimationFrame(loop);
+        });
     </script>
 </body>
+
 </html>
